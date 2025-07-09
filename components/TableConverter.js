@@ -1,11 +1,12 @@
 import { useState, useRef, useCallback } from 'react';
-import { CheckCircle, Copy, FileCheck, Microscope, X, Ghost } from 'lucide-react';
+import { CheckCircle, Copy, FileCheck, Microscope, X, Ghost, Download } from 'lucide-react';
 
 const TableConverter = () => {
     const [tableData, setTableData] = useState({ headers: [], rows: [] });
     const [loading, setLoading] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
     const [copied, setCopied] = useState(false);
+    const [downloaded, setDownloaded] = useState(false); 
     const fileInputRef = useRef(null);
     const [fileDropped, setFileDropped] = useState(false);
     const [imageDescription, setImageDescription] = useState('');
@@ -13,7 +14,6 @@ const TableConverter = () => {
     const [isDragging, setIsDragging] = useState(false);
     const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
 
-    // Function to convert tableData to HTML for richer formatting
     const tableDataToHTML = (data) => {
         if (!data || !data.headers || !data.rows) {
             return '<p>No data to display.</p>';
@@ -60,6 +60,33 @@ const TableConverter = () => {
         }
     };
 
+    const handleDownloadTable = () => {
+        if (!tableData || !tableData.headers || !tableData.rows || tableData.headers.length === 0 || tableData.rows.length === 0) {
+            console.error('No data to download.');
+            return;
+        }
+
+        const headers = tableData.headers.map(header => `"${header.replace(/"/g, '""')}"`).join(',');
+        const rows = tableData.rows.map(row =>
+            row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(',')
+        ).join('\n');
+
+        const csvContent = `${headers}\n${rows}`;
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        if (link.download !== undefined) {
+            const url = URL.createObjectURL(blob);
+            link.setAttribute('href', url);
+            link.setAttribute('download', 'medical_test_results.csv');
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            setDownloaded(true);
+            setTimeout(() => setDownloaded(false), 2000); 
+        }
+    };
+
     const handleSubmit = async (event) => {
         event.preventDefault();
         setErrorMessage('');
@@ -95,7 +122,7 @@ const TableConverter = () => {
                 const errorData = await response.json();
                 if (errorData.error === "No medical analysis data found in the document.") {
                     setErrorMessage(errorData.error);
-                    setIsErrorModalOpen(true); 
+                    setIsErrorModalOpen(true);
                 } else {
                     setErrorMessage(errorData.error || `File processing error: ${response.status}`);
                     setIsErrorModalOpen(false);
@@ -120,7 +147,7 @@ const TableConverter = () => {
 
         } catch (error) {
             setErrorMessage(error.message);
-            setIsErrorModalOpen(true); // Модальне вікно для загальних помилок (наприклад, мережа)
+            setIsErrorModalOpen(true); 
         } finally {
             setLoading(false);
         }
@@ -180,14 +207,14 @@ const TableConverter = () => {
     };
 
     const isOutOfRange = (result, range) => {
-        if (!range || !result) return false; 
+        if (!range || !result) return false;
 
         try {
-            const resultValue = parseFloat(result.replace(',', '.')); 
+            const resultValue = parseFloat(result.replace(',', '.'));
             if (isNaN(resultValue)) return false;
 
             const rangeParts = range.split('-').map(part => part.trim());
-            if (rangeParts.length === 2) { 
+            if (rangeParts.length === 2) {
                 const minRange = parseFloat(rangeParts[0].replace(',', '.'));
                 const maxRange = parseFloat(rangeParts[1].replace(',', '.'));
                 if (!isNaN(minRange) && !isNaN(maxRange)) {
@@ -201,7 +228,7 @@ const TableConverter = () => {
                     switch (operator[0]) {
                         case '<': return resultValue >= parsedRange;
                         case '>': return resultValue <= parsedRange;
-                        case '=': return resultValue !== parsedRange; 
+                        case '=': return resultValue !== parsedRange;
                         case '>=': return resultValue < parsedRange;
                         case '<=': return resultValue > parsedRange;
                     }
@@ -209,9 +236,9 @@ const TableConverter = () => {
             }
         } catch (error) {
             console.error("Error parsing values for range check:", error);
-            return false; 
+            return false;
         }
-        return false; 
+        return false;
     };
 
 
@@ -224,6 +251,10 @@ const TableConverter = () => {
                     <p className="text-slate-600 max-w-2xl mx-auto mb-4">
                         Convert your medical analyzes from various formats to structured tables.
                         PDF, DOCX and image support.
+                    </p>
+                    {}
+                    <p className="text-xs text-red-500 max-w-2xl mx-auto mt-2">
+                        Your personal data is not stored on our servers. Please be aware that Google may have access to the data for processing purposes.
                     </p>
                 </header>
 
@@ -342,7 +373,7 @@ const TableConverter = () => {
                         )}
 
                         {tableData.headers.length > 0 && (
-                            <div className="mb-4">
+                            <div className="flex justify-end gap-2 mb-4">
                                 <button
                                     onClick={handleCopyTable}
                                     className="inline-flex items-center px-4 py-2 bg-indigo-100 text-indigo-700 rounded-lg hover:bg-indigo-200 transition-colors"
@@ -353,6 +384,17 @@ const TableConverter = () => {
                                         <Copy className="w-5 h-5 mr-2" />
                                     )}
                                     {copied ? 'Copied successfully' : 'Copy the table'}
+                                </button>
+                                <button
+                                    onClick={handleDownloadTable}
+                                    className="inline-flex items-center px-4 py-2 bg-indigo-100 text-indigo-700 rounded-lg hover:bg-indigo-200 transition-colors"
+                                >
+                                    {downloaded ? ( 
+                                        <CheckCircle className="w-5 h-5 mr-2" />
+                                    ) : (
+                                        <Download className="w-5 h-5 mr-2" />
+                                    )}
+                                    {downloaded ? 'Downloaded!' : 'Download table'}
                                 </button>
                             </div>
                         )}

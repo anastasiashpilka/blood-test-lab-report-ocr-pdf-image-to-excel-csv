@@ -13,6 +13,7 @@ const TableConverter = () => {
     const [selectedFileName, setSelectedFileName] = useState(false);
     const [isDragging, setIsDragging] = useState(false);
     const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
+    const [retryTime, setRetryTime] = useState(null); 
 
     const tableDataToHTML = (data) => {
         if (!data || !data.headers || !data.rows) {
@@ -97,6 +98,7 @@ const TableConverter = () => {
         setSelectedFileName(false);
         setIsDragging(false);
         setIsErrorModalOpen(false);
+        setRetryTime(null);
 
         const file = fileInputRef.current.files[0];
 
@@ -120,7 +122,11 @@ const TableConverter = () => {
 
             if (!response.ok) {
                 const errorData = await response.json();
-                if (errorData.error === "No medical analysis data found in the document.") {
+                if (response.status === 429) { // <--- ADD: Check for Rate Limit status
+                    setErrorMessage(errorData.error);
+                    setRetryTime(errorData.retryAfter); // <--- ADD: Set the retry time from the response
+                    setIsErrorModalOpen(true); // <--- Ensure modal opens for rate limits
+                } else if (errorData.error === "No medical analysis data found in the document.") {
                     setErrorMessage(errorData.error);
                     setIsErrorModalOpen(true);
                 } else {
@@ -316,6 +322,11 @@ const TableConverter = () => {
                                 <div className="text-center mb-4 text-indigo-900">
                                     <div className="text-xl font-bold">Error</div>
                                     <div>{errorMessage}</div>
+                                    {retryTime && (
+                                        <p className="mt-2 text-sm text-gray-600">
+                                            Please try again in {retryTime} seconds.
+                                        </p>
+                                    )}
                                 </div>
                                 <div className="flex flex-col items-center mt-6">
                                     <button

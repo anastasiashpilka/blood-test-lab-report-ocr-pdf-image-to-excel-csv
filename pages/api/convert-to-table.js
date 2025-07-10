@@ -85,7 +85,22 @@ export default async function handler(req, res) {
             Return only the JSON.
         `;
 
-        const result = await model.generateContent([prompt, extractedContent]);
+        let result; 
+        try {
+            result = await model.generateContent([prompt, extractedContent]);
+        } catch (apiError) { 
+            console.error("Gemini API error:", apiError);
+            if (apiError.response && apiError.response.status === 429) {
+                const retryAfter = apiError.response.headers ? apiError.response.headers.get('Retry-After') : null;
+                res.setHeader('Content-Type', 'application/json');
+                return res.status(429).json({
+                    error: 'Rate limit exceeded. Please try again later.',
+                    retryAfter: retryAfter
+                });
+            }
+            throw apiError;
+        }
+
         const rawText = result.response.text();
         const cleanedText = rawText
             .replace(/```json/g, '')
@@ -94,7 +109,6 @@ export default async function handler(req, res) {
 
         const jsonOutput = JSON.parse(cleanedText);
 
-        // Check for empty array indicating no medical analysis data found
         if (Array.isArray(jsonOutput) && jsonOutput.length === 0) {
             return res.status(400).json({ error: 'No medical analysis data found in the document.' });
         }

@@ -2,6 +2,7 @@ import { useState, useRef, useCallback,  useEffect } from 'react';
 import { CheckCircle, Copy, FileCheck, Microscope, X, Ghost, Download, HelpCircle, ChevronDown, ChevronUp, Globe } from 'lucide-react';
 import translations from '../translations'; 
 import { useRouter } from 'next/router';
+import * as ga from '../lib/gtag';
 
 const TableConverter = ({ initialLang }) => {
     const [tableData, setTableData] = useState({ headers: [], rows: [] });
@@ -41,18 +42,42 @@ const TableConverter = ({ initialLang }) => {
     ];
 
     const toggleFaq = (index) => {
-        setOpenFaqIndex(openFaqIndex === index ? null : index);
+    setOpenFaqIndex(openFaqIndex === index ? null : index);
+    ga.event({
+        action: 'faq_toggle',
+        category: 'FAQ Interaction',
+        label: openFaqIndex === index ? `Close FAQ ${index + 1}` : `Open FAQ ${index + 1}`,
+    });
     };
 
     const scrollToFaq = () => {
-        faqSectionRef.current?.scrollIntoView({ behavior: 'smooth' });
-    };
+    faqSectionRef.current?.scrollIntoView({ behavior: 'smooth' });
+    ga.event({
+        action: 'scroll_to_faq',
+        category: 'Navigation',
+        label: 'FAQ Button Click',
+    });
+};
 
     const changeLanguage = (newLang) => {
-        if (newLang !== currentLang) {
-            router.push(router.pathname, router.asPath, { locale: newLang });
-        }
-    };
+    if (newLang !== currentLang) {
+        router.push(router.pathname, router.asPath, { locale: newLang });
+        ga.event({
+            action: 'language_change',
+            category: 'Language Selection',
+            label: `Change to ${newLang}`,
+        });
+    }
+};
+
+const handleLangMenuOpen = () => {
+    setIsLangMenuOpen(true);
+    ga.event({
+        action: 'language_menu_open',
+        category: 'Language Selection',
+        label: 'Open Language Menu',
+    });
+};
 
     useEffect(() => {
         if (router.locale && router.locale !== currentLang) {
@@ -210,49 +235,140 @@ const TableConverter = ({ initialLang }) => {
         }
     };
 
-    const handleDrop = (event) => {
-        event.preventDefault();
+        const handleFileUpload = async (file) => {
+        setLoading(true);
         setErrorMessage('');
-        setIsDragging(false);
-        const files = event.dataTransfer.files;
-        if (files.length > 0) {
-            fileInputRef.current.files = files;
-            handleSubmit({ preventDefault: () => { }, target: { files: files } });
+        setSelectedFileName(file.name);
+        setImageDescription(''); 
+
+        const formData = new FormData();
+        formData.append('file', file);
+
+        try {
+            const response = await fetch('/api/convert', {
+                method: 'POST',
+                body: formData,
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error || 'Server error');
+            }
+
+            const data = await response.json();
+            setTableData(data);
+            setLoading(false);
+
+            ga.event({
+                action: 'file_conversion',
+                category: 'Conversion',
+                label: 'Success',
+                value: file.size 
+            });
+
+        } catch (error) {
+            setErrorMessage(error.message);
+            setLoading(false);
+            ga.event({
+                action: 'file_conversion',
+                category: 'Conversion',
+                label: `Failure - ${error.message.substring(0, 50)}`
+            });
+            ga.event({
+                action: 'error_displayed',
+                category: 'UI Error',
+                label: `File conversion error: ${error.message.substring(0, 50)}`
+            });
         }
     };
+
+    const handleDrop = useCallback((e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+    setFileDropped(true);
+    ga.event({
+        action: 'file_drag',
+        category: 'File Upload',
+        label: 'Drop'
+    });
+    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+        handleFileUpload(e.dataTransfer.files[0]);
+    }
+}, [handleFileUpload]);
+
+    const handleDragEnter = useCallback((e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(true);
+    ga.event({
+        action: 'file_drag',
+        category: 'File Upload',
+        label: 'Drag Enter'
+    });
+}, []);
+
+    const handleDragLeave = useCallback((e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+    ga.event({
+        action: 'file_drag',
+        category: 'File Upload',
+        label: 'Drag Leave'
+    });
+}, []);
 
     const handleDragOver = (event) => {
         event.preventDefault();
         setIsDragging(true);
     };
 
-    const handleDragLeave = (event) => {
-        event.preventDefault();
-        setIsDragging(false);
-    };
+    const handleFileChange = useCallback((event) => {
+    if (event.target.files && event.target.files[0]) {
+        handleFileUpload(event.target.files[0]);
+    }
+    ga.event({
+        action: 'file_select_button_click',
+        category: 'File Upload',
+        label: 'File Selected via Input'
+    });
+}, [handleFileUpload]);
+
+
 
     const handleCellChange = useCallback((rowIndex, header, newValue) => {
-        setTableData(prevData => {
-            const newRows = prevData.rows.map((row, index) => {
-                if (index === rowIndex) {
-                    const updatedRow = [...row];
-                    const headerIndex = prevData.headers.indexOf(header);
-                    if (headerIndex !== -1) {
-                        updatedRow[headerIndex] = newValue;
-                    }
-                    return updatedRow;
+    setTableData(prevData => {
+        const newRows = prevData.rows.map((row, index) => {
+            if (index === rowIndex) {
+                const updatedRow = [...row];
+                const headerIndex = prevData.headers.indexOf(header);
+                if (headerIndex !== -1) {
+                    updatedRow[headerIndex] = newValue;
                 }
-                return row;
-            });
-            return { ...prevData, rows: newRows };
+                return updatedRow;
+            }
+            return row;
         });
-    }, []);
+        return { ...prevData, rows: newRows };
+    });
+    ga.event({
+        action: 'table_cell_edit',
+        category: 'Table Interaction',
+        label: `Edit Cell in Row ${rowIndex + 1}, Column ${header}`,
+    });
+}, []);
 
-    const closeErrorModal = () => {
+ const closeErrorModal = useCallback(() => {
         setIsErrorModalOpen(false);
         setErrorMessage('');
         setRetryTime(null);
-    };
+        ga.event({
+            action: 'error_modal_interaction',
+            category: 'UI Error',
+            label: 'Modal Closed'
+        });
+    }, []);
 
     const formatCellContent = (cellContent) => {
         if (typeof cellContent === 'string') {
@@ -352,7 +468,11 @@ const TableConverter = ({ initialLang }) => {
                         <span className="block mt-1 font-medium">
                             {translations[currentLang].header.googleCloudVision}
                         </span>
-                        <a href="/privacy-policy" className="text-indigo-600 hover:underline font-medium ml-1">
+                        <a href="/privacy-policy" className="text-indigo-600 hover:underline font-medium ml-1" onClick={() => ga.event({
+                            action: 'privacy_policy_click',
+                            category: 'Navigation',
+                            label: 'Privacy Policy Link',
+                        })}>
                             {translations[currentLang].header.privacyPolicyLink}
                         </a>
                     </p>

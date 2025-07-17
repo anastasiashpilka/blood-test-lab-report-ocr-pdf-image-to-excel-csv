@@ -1,5 +1,6 @@
 import { Html, Head, Main, NextScript } from 'next/document';
 import translations from '../translations'; 
+import { GA_MEASUREMENT_ID } from '../lib/gtag';
 
 export default function Document() {
   const currentLang = 'en';
@@ -72,6 +73,30 @@ export default function Document() {
             "description": translations[currentLang].header.description
           })}
         </script>
+
+        {GA_MEASUREMENT_ID && (
+          <>
+            <script
+              async
+              src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
+            />
+            <script
+              dangerouslySetInnerHTML={{
+                __html: `
+                  window.dataLayer = window.dataLayer || [];
+                  function gtag(){window.dataLayer.push(arguments);}
+                  gtag('js', new Date());
+
+                  // Ця конфігурація відправляє початковий перегляд сторінки
+                  gtag('config', '${GA_MEASUREMENT_ID}', {
+                    page_path: window.location.pathname, // Використовуємо поточний шлях
+                  });
+                `,
+              }}
+            />
+          </>
+        )}
+        
       </Head>
       <body>
         <Main />

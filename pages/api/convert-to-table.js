@@ -15,7 +15,6 @@ export const config = {
     },
 };
 
-// Unified content extraction function
 async function extractContent(buffer, mimeType) {
     try {
         if (mimeType === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' || mimeType === 'application/msword') {

@@ -1,23 +1,68 @@
-import { useState, useRef, useCallback } from 'react';
-import { CheckCircle, Copy, FileCheck, Microscope, X, Ghost, Download } from 'lucide-react';
+import { useState, useRef, useCallback,  useEffect } from 'react';
+import { CheckCircle, Copy, FileCheck, Microscope, X, Ghost, Download, HelpCircle, ChevronDown, ChevronUp, Globe } from 'lucide-react';
+import translations from '../translations'; 
+import { useRouter } from 'next/router';
 
-const TableConverter = () => {
+const TableConverter = ({ initialLang }) => {
     const [tableData, setTableData] = useState({ headers: [], rows: [] });
     const [loading, setLoading] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
     const [copied, setCopied] = useState(false);
-    const [downloaded, setDownloaded] = useState(false); 
+    const [downloaded, setDownloaded] = useState(false);
     const fileInputRef = useRef(null);
     const [fileDropped, setFileDropped] = useState(false);
     const [imageDescription, setImageDescription] = useState('');
-    const [selectedFileName, setSelectedFileName] = useState(false);
+    const [selectedFileName, setSelectedFileName] = useState(null);
     const [isDragging, setIsDragging] = useState(false);
     const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
-    const [retryTime, setRetryTime] = useState(null); 
+    const [retryTime, setRetryTime] = useState(null);
+    const [langMenuTimeout, setLangMenuTimeout] = useState(null);
+
+    const router = useRouter();
+    const currentLang = router.locale || 'en'; 
+
+    const faqSectionRef = useRef(null);
+    const [openFaqIndex, setOpenFaqIndex] = useState(null);
+    const [isLangMenuOpen, setIsLangMenuOpen] = useState(false); 
+
+    const faqItems = [
+        { questionKey: "q1", answerKey: "a1" },
+        { questionKey: "q2", answerKey: "a2" },
+        { questionKey: "q3", answerKey: "a3" },
+        { questionKey: "q4", answerKey: "a4" },
+        { questionKey: "q5", answerKey: "a5" },
+        { questionKey: "q6", answerKey: "a6" },
+        { questionKey: "q7", answerKey: "a7" },
+        { questionKey: "q8", answerKey: "a8" },
+        { questionKey: "q9", answerKey: "a9" },
+        { questionKey: "q10", answerKey: "a10" },
+        { questionKey: "q11", answerKey: "a11" },
+        { questionKey: "q12", answerKey: "a12" }
+    ];
+
+    const toggleFaq = (index) => {
+        setOpenFaqIndex(openFaqIndex === index ? null : index);
+    };
+
+    const scrollToFaq = () => {
+        faqSectionRef.current?.scrollIntoView({ behavior: 'smooth' });
+    };
+
+    const changeLanguage = (newLang) => {
+        if (newLang !== currentLang) {
+            router.push(router.pathname, router.asPath, { locale: newLang });
+        }
+    };
+
+    useEffect(() => {
+        if (router.locale && router.locale !== currentLang) {
+        setCurrentLang(router.locale);
+         }
+    }, [router.locale]);
 
     const tableDataToHTML = (data) => {
-        if (!data || !data.headers || !data.rows) {
-            return '<p>No data to display.</p>';
+        if (!data || !data.headers || !data.rows || data.headers.length === 0) {
+            return ''; 
         }
 
         let htmlTable = '<table style="border-collapse: collapse; width: 100%;">';
@@ -58,12 +103,16 @@ const TableConverter = () => {
         } catch (err) {
             console.error('Failed to copy table data as HTML:', err);
             setCopied(false);
+            setErrorMessage(translations[currentLang].tableDisplay.copyError);
+            setIsErrorModalOpen(true);
         }
     };
 
     const handleDownloadTable = () => {
         if (!tableData || !tableData.headers || !tableData.rows || tableData.headers.length === 0 || tableData.rows.length === 0) {
             console.error('No data to download.');
+            setErrorMessage(translations[currentLang].tableDisplay.downloadError);
+            setIsErrorModalOpen(true);
             return;
         }
 
@@ -78,13 +127,13 @@ const TableConverter = () => {
         if (link.download !== undefined) {
             const url = URL.createObjectURL(blob);
             link.setAttribute('href', url);
-            link.setAttribute('download', 'medical_test_results.csv');
+            link.setAttribute('download', 'blood_test_results.csv');
             link.style.visibility = 'hidden';
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
             setDownloaded(true);
-            setTimeout(() => setDownloaded(false), 2000); 
+            setTimeout(() => setDownloaded(false), 2000);
         }
     };
 
@@ -95,7 +144,7 @@ const TableConverter = () => {
         setImageDescription('');
         setLoading(true);
         setFileDropped(false);
-        setSelectedFileName(false);
+        setSelectedFileName(null);
         setIsDragging(false);
         setIsErrorModalOpen(false);
         setRetryTime(null);
@@ -104,7 +153,8 @@ const TableConverter = () => {
 
         if (!file) {
             setLoading(false);
-            setErrorMessage("Please select a file.");
+            setErrorMessage(translations[currentLang].error.selectAnotherFile);
+            setIsErrorModalOpen(true);
             return;
         }
 
@@ -122,38 +172,39 @@ const TableConverter = () => {
 
             if (!response.ok) {
                 const errorData = await response.json();
-                if (response.status === 429) { // <--- ADD: Check for Rate Limit status
+                if (response.status === 429) {
                     setErrorMessage(errorData.error);
-                    setRetryTime(errorData.retryAfter); // <--- ADD: Set the retry time from the response
-                    setIsErrorModalOpen(true); // <--- Ensure modal opens for rate limits
+                    setRetryTime(errorData.retryAfter);
+                    setIsErrorModalOpen(true);
                 } else if (errorData.error === "No medical analysis data found in the document.") {
-                    setErrorMessage(errorData.error);
+                    setErrorMessage(translations[currentLang].error.noMedicalData);
                     setIsErrorModalOpen(true);
                 } else {
-                    setErrorMessage(errorData.error || `File processing error: ${response.status}`);
-                    setIsErrorModalOpen(false);
+                    setErrorMessage(errorData.error || translations[currentLang].error.networkError(`File processing error: ${response.status}`));
+                    setIsErrorModalOpen(true);
                 }
                 return;
             }
 
             const data = await response.json();
 
-            if (data.type === "image") {
+            if (data.type === "image" && data.description) {
                 setImageDescription(data.description);
                 setTableData({ headers: [], rows: [] });
             } else if (data.headers && data.rows) {
                 setTableData(data);
                 setImageDescription('');
             } else {
-                console.log("Received JSON:", data);
-                setTableData(data);
+                console.log("Received unexpected JSON structure:", data);
+                setErrorMessage(translations[currentLang].error.unexpectedData);
+                setTableData({ headers: [], rows: [] });
                 setImageDescription('');
             }
 
-
         } catch (error) {
-            setErrorMessage(error.message);
-            setIsErrorModalOpen(true); 
+            console.error("Fetch error:", error);
+            setErrorMessage(translations[currentLang].error.networkError(error.message));
+            setIsErrorModalOpen(true);
         } finally {
             setLoading(false);
         }
@@ -162,14 +213,11 @@ const TableConverter = () => {
     const handleDrop = (event) => {
         event.preventDefault();
         setErrorMessage('');
-        setFileDropped(true);
         setIsDragging(false);
-        const file = event.dataTransfer.files[0];
-        if (file) {
-            fileInputRef.current.files = event.dataTransfer.files;
-            setSelectedFileName(file.name);
-            setFileDropped(true);
-            handleSubmit(event);
+        const files = event.dataTransfer.files;
+        if (files.length > 0) {
+            fileInputRef.current.files = files;
+            handleSubmit({ preventDefault: () => { }, target: { files: files } });
         }
     };
 
@@ -203,6 +251,7 @@ const TableConverter = () => {
     const closeErrorModal = () => {
         setIsErrorModalOpen(false);
         setErrorMessage('');
+        setRetryTime(null);
     };
 
     const formatCellContent = (cellContent) => {
@@ -216,10 +265,10 @@ const TableConverter = () => {
         if (!range || !result) return false;
 
         try {
-            const resultValue = parseFloat(result.replace(',', '.'));
+            const resultValue = parseFloat(String(result).replace(',', '.'));
             if (isNaN(resultValue)) return false;
 
-            const rangeParts = range.split('-').map(part => part.trim());
+            const rangeParts = String(range).split('-').map(part => part.trim());
             if (rangeParts.length === 2) {
                 const minRange = parseFloat(rangeParts[0].replace(',', '.'));
                 const maxRange = parseFloat(rangeParts[1].replace(',', '.'));
@@ -227,16 +276,18 @@ const TableConverter = () => {
                     return resultValue < minRange || resultValue > maxRange;
                 }
             } else {
-                const parsedRange = parseFloat(range.replace(/[<>= ]/g, '').replace(',', '.'));
-                const operator = range.match(/[<>=]/);
+                const parsedRange = parseFloat(String(range).replace(/[<>= ]/g, '').replace(',', '.'));
+                const operatorMatch = String(range).match(/[<>=]{1,2}/);
 
-                if (!isNaN(parsedRange) && operator) {
-                    switch (operator[0]) {
+                if (!isNaN(parsedRange) && operatorMatch) {
+                    const operator = operatorMatch[0];
+                    switch (operator) {
                         case '<': return resultValue >= parsedRange;
                         case '>': return resultValue <= parsedRange;
                         case '=': return resultValue !== parsedRange;
-                        case '>=': return resultValue < parsedRange;
                         case '<=': return resultValue > parsedRange;
+                        case '>=': return resultValue < parsedRange;
+                        default: return false;
                     }
                 }
             }
@@ -249,22 +300,75 @@ const TableConverter = () => {
 
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-blue-100">
+        <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-blue-100 relative">
             <div className="container mx-auto px-4 py-8">
-                <header className="text-center mb-12">
+                <header className="text-center mb-8 sm:mb-12">
+                    <div className="absolute top-4 right-4 z-40">
+<div className="relative">
+            <button
+                onClick={() => setIsLangMenuOpen(!isLangMenuOpen)}
+                onMouseEnter={() => { clearTimeout(langMenuTimeout); setIsLangMenuOpen(true); }}
+                onMouseLeave={() => setLangMenuTimeout(setTimeout(() => setIsLangMenuOpen(false), 300))}
+                className="relative z-20 flex items-center gap-2 px-4 py-2 text-indigo-700 bg-white rounded-md shadow-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all duration-200"
+            >
+                <Globe className="w-5 h-5" />
+                <span>{translations[currentLang]?.languageNames[currentLang] || 'Language'}</span>
+                {isLangMenuOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+            </button>
+            {isLangMenuOpen && (
+                <div
+                    onMouseEnter={() => clearTimeout(langMenuTimeout)}
+                    onMouseLeave={() => setLangMenuTimeout(setTimeout(() => setIsLangMenuOpen(false), 300))}
+                    className="absolute z-10 w-48 mt-2 bg-white border border-gray-200 rounded-md shadow-lg overflow-hidden py-1"
+                    style={{ top: '100%', right: 0 }} 
+                >
+                    {Object.keys(translations.en.languageNames).map((langCode) => (
+                        <button
+                            key={langCode}
+                            onClick={() => {
+                                changeLanguage(langCode); 
+                                setIsLangMenuOpen(false);
+                            }}
+                            className={`block w-full text-left px-4 py-2 text-sm ${langCode === currentLang ? 'bg-indigo-100 text-indigo-700 font-semibold' : 'text-gray-700 hover:bg-gray-100'}`}
+                        >
+                            {translations[currentLang]?.languageNames[langCode] || langCode.toUpperCase()}
+                        </button>
+                    ))}
+                </div>
+            )}
+        </div>
+        </div>
+
                     <Microscope className="w-12 h-12 mx-auto mb-4 text-indigo-600" />
-                    <h1 className="text-4xl font-bold text-indigo-900 mb-4">Converter of medical tests</h1>
-                    <p className="text-slate-600 max-w-2xl mx-auto mb-4">
-                        Convert your medical analyzes from various formats to structured tables.
-                        PDF, DOCX and image support.
+                    <h1 className="text-3xl sm:text-4xl font-bold text-indigo-900 mb-3">
+                        {translations[currentLang].header.title}
+                    </h1>
+                    <p className="text-slate-600 max-w-2xl mx-auto mb-4 text-base sm:text-lg">
+                        {translations[currentLang].header.description}
                     </p>
-                    {}
-                    <p className="text-xs text-red-500 max-w-2xl mx-auto mt-2">
-                        Your personal data is not stored on our servers. Please be aware that Google may have access to the data for processing purposes.
+
+                    <p className="text-xs text-gray-700 max-w-2xl mx-auto mt-4 p-2 bg-gray-100 rounded-lg border border-gray-200">
+                        <span dangerouslySetInnerHTML={{ __html: translations[currentLang].header.privacyNote.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') }}></span>
+                        <span className="block mt-1 font-medium">
+                            {translations[currentLang].header.googleCloudVision}
+                        </span>
+                        <a href="/privacy-policy" className="text-indigo-600 hover:underline font-medium ml-1">
+                            {translations[currentLang].header.privacyPolicyLink}
+                        </a>
                     </p>
+
                 </header>
 
-                <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-8 relative">
+                <button
+                    onClick={scrollToFaq}
+                    className="fixed bottom-4 right-4 bg-indigo-600 text-white p-4 rounded-full shadow-lg hover:bg-indigo-700 transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50 z-30"
+                    aria-label="Go to Frequently Asked Questions"
+                    title="Frequently Asked Questions"
+                >
+                    <HelpCircle className="w-8 h-8" />
+                </button>
+
+                <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-8 relative z-10">
                     <div
                         className={`flex flex-col items-center justify-center border-2 border-dashed border-indigo-200 rounded-lg bg-indigo-50/50 p-6 mb-4
                             ${loading ? 'opacity-50 pointer-events-none' : ''}
@@ -275,17 +379,17 @@ const TableConverter = () => {
                     >
                         {selectedFileName && fileDropped && (
                             <p className="mb-2 font-bold text-gray-900 text-center">
-                                File "{selectedFileName}" added!
+                                {translations[currentLang].fileUpload.fileAdded(selectedFileName)}
                             </p>
                         )}
                         {!selectedFileName && !fileDropped && !isDragging && (
                             <p className="text-sm text-slate-600 mb-4 text-center">
-                                Drag a file here or click to select.
+                                {translations[currentLang].fileUpload.dragOrClick}
                             </p>
                         )}
                         {isDragging && (
                             <p className="mb-4 font-bold text-indigo-900 text-center animate-pulse">
-                                Release file to upload!
+                                {translations[currentLang].fileUpload.releaseToUpload}
                             </p>
                         )}
                         <label className="relative cursor-pointer mb-4">
@@ -298,14 +402,14 @@ const TableConverter = () => {
                             />
                             <span className="inline-flex items-center px-8 py-4 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors">
                                 <FileCheck className="w-5 h-5 mr-2" />
-                                Select a file
+                                {translations[currentLang].fileUpload.selectFileButton}
                             </span>
                         </label>
-                        <p className="text-sm text-slate-600 text-center">Supported formats: PDF, DOCX, JPG, PNG, WebP</p>
+                        <p className="text-sm text-slate-600 text-center">{translations[currentLang].fileUpload.supportedFormats}</p>
                     </div>
 
                     {loading && (
-                        <div className="flex items-center justify-center fixed inset-0">
+                        <div className="flex items-center justify-center fixed inset-0 z-40 bg-white bg-opacity-75">
                             <div className="animate-spin rounded-full h-24 w-24 border-b-4 border-indigo-600"></div>
                         </div>
                     )}
@@ -320,20 +424,20 @@ const TableConverter = () => {
                                     <Ghost className="w-20 h-20 text-indigo-900" />
                                 </div>
                                 <div className="text-center mb-4 text-indigo-900">
-                                    <div className="text-xl font-bold">Error</div>
+                                    <div className="text-xl font-bold">{translations[currentLang].error.title}</div>
                                     <div>{errorMessage}</div>
                                     {retryTime && (
                                         <p className="mt-2 text-sm text-gray-600">
-                                            Please try again in {retryTime} seconds.
+                                            {translations[currentLang].error.retryTime(retryTime)}
                                         </p>
                                     )}
                                 </div>
                                 <div className="flex flex-col items-center mt-6">
                                     <button
-                                        onClick={() => fileInputRef.current.click()}
+                                        onClick={() => { fileInputRef.current.click(); closeErrorModal(); }}
                                         className="inline-flex items-center justify-center px-8 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors w-full max-w-xs"
                                     >
-                                        Select another file
+                                        {translations[currentLang].error.selectAnotherFile}
                                     </button>
                                 </div>
                             </div>
@@ -341,7 +445,6 @@ const TableConverter = () => {
                     )}
 
                     {errorMessage && !isErrorModalOpen && <div className="error-message text-red-500 text-center mb-4">{errorMessage}</div>}
-
 
                     <div className="overflow-hidden mb-4">
                         {/* Dynamic Table */}
@@ -360,8 +463,8 @@ const TableConverter = () => {
                                             <tr key={rowIndex} className="hover:bg-blue-50 transition-colors">
                                                 {row.map((cell, cellIndex) => {
                                                     const header = tableData.headers[cellIndex];
-                                                    const resultValue = header === "Результат" ? cell : null;
-                                                    const referenceRange = header === "Референтні інтервали" ? cell : null;
+                                                    const resultValue = (header === "Результат" || header === "Result") ? cell : null;
+                                                    const referenceRange = (header === "Референтні інтервали" || header === "Reference Range") ? cell : null;
                                                     const highlight = isOutOfRange(resultValue, referenceRange);
 
                                                     return (
@@ -382,6 +485,13 @@ const TableConverter = () => {
                                 </table>
                             </div>
                         )}
+                        {imageDescription && (
+                            <div className="p-4 bg-yellow-50 border border-yellow-200 text-yellow-800 rounded-lg">
+                                <h3 className="font-semibold mb-2">{translations[currentLang].tableDisplay.imageProcessingResult}</h3>
+                                <p>{imageDescription}</p>
+                                <p className="mt-2 text-sm">{translations[currentLang].tableDisplay.imageProcessingNote}</p>
+                            </div>
+                        )}
 
                         {tableData.headers.length > 0 && (
                             <div className="flex justify-end gap-2 mb-4">
@@ -394,26 +504,96 @@ const TableConverter = () => {
                                     ) : (
                                         <Copy className="w-5 h-5 mr-2" />
                                     )}
-                                    {copied ? 'Copied successfully' : 'Copy the table'}
+                                    {copied ? translations[currentLang].tableDisplay.copySuccess : translations[currentLang].tableDisplay.copyTable}
                                 </button>
                                 <button
                                     onClick={handleDownloadTable}
                                     className="inline-flex items-center px-4 py-2 bg-indigo-100 text-indigo-700 rounded-lg hover:bg-indigo-200 transition-colors"
                                 >
-                                    {downloaded ? ( 
+                                    {downloaded ? (
                                         <CheckCircle className="w-5 h-5 mr-2" />
                                     ) : (
                                         <Download className="w-5 h-5 mr-2" />
                                     )}
-                                    {downloaded ? 'Downloaded!' : 'Download table'}
+                                    {downloaded ? translations[currentLang].tableDisplay.downloadSuccess : translations[currentLang].tableDisplay.downloadTable}
                                 </button>
                             </div>
                         )}
                     </div>
                 </div>
+
+                {/* Additional Content Sections (How it works, Why Choose Us) */}
+                <section className="max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-8 mt-12">
+                    <h2 className="text-3xl font-bold text-indigo-800 mb-6 text-center">
+                        {translations[currentLang].howItWorks.title}
+                    </h2>
+                    <ol className="list-decimal list-inside text-slate-700 text-lg leading-relaxed">
+                        <li className="mb-4">
+                            <strong>{translations[currentLang].howItWorks.step1Title}</strong> {translations[currentLang].howItWorks.step1Desc}
+                        </li>
+                        <li className="mb-4">
+                            <strong>{translations[currentLang].howItWorks.step2Title}</strong> {translations[currentLang].howItWorks.step2Desc}
+                        </li>
+                        <li className="mb-4">
+                            <span dangerouslySetInnerHTML={{ __html: `<strong>${translations[currentLang].howItWorks.step3Title}</strong> ${translations[currentLang].howItWorks.step3Desc}` }}></span>
+                        </li>
+                    </ol>
+                </section>
+
+                <section className="max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-8 mt-12">
+                    <h2 className="text-3xl font-bold text-indigo-800 mb-6 text-center">
+                        {translations[currentLang].whyChooseUs.title}
+                    </h2>
+                    <ul className="list-disc list-inside text-slate-700 text-lg leading-relaxed">
+                        <li className="mb-3">
+                            {translations[currentLang].whyChooseUs.accuracySpeed}
+                        </li>
+                        <li className="mb-3">
+                            {translations[currentLang].whyChooseUs.formatSupport}
+                        </li>
+                        <li className="mb-3">
+                            {translations[currentLang].whyChooseUs.convenientExport}
+                        </li>
+                        <li className="mb-3">
+                            {translations[currentLang].whyChooseUs.dataSecurity}
+                        </li>
+                        <li className="mb-3">
+                            {translations[currentLang].whyChooseUs.freeOnline}
+                        </li>
+                    </ul>
+                </section>
+
+                <section ref={faqSectionRef} className="max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-8 mt-12">
+                    <h2 className="text-3xl font-bold text-indigo-800 mb-6 text-center">
+                        {translations[currentLang].faq.title}
+                    </h2>
+                    {faqItems.map((item, index) => (
+                        <div key={index} className="mb-4 bg-indigo-50 rounded-lg border border-indigo-200">
+                            <button
+                                onClick={() => toggleFaq(index)}
+                                className="w-full text-left p-4 flex justify-between items-center text-xl font-semibold text-indigo-700 focus:outline-none"
+                                aria-expanded={openFaqIndex === index}
+                                aria-controls={`faq-answer-${index}`}
+                            >
+                                {translations[currentLang].faq[item.questionKey]}
+                                <span className="text-indigo-500">
+                                    {openFaqIndex === index ? <ChevronUp className="w-6 h-6" /> : <ChevronDown className="w-6 h-6" />}
+                                </span>
+                            </button>
+                            <div
+                                id={`faq-answer-${index}`}
+                                className={`overflow-hidden transition-all duration-300 ease-in-out ${openFaqIndex === index ? 'max-h-screen opacity-100 p-4 pt-0' : 'max-h-0 opacity-0'}`}
+                            >
+                                <p className="text-slate-700" dangerouslySetInnerHTML={{ __html: translations[currentLang].faq[item.answerKey].replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') }}></p>
+                            </div>
+                        </div>
+                    ))}
+                    <p className="text-center text-sm text-gray-600 mt-6" dangerouslySetInnerHTML={{ __html: translations[currentLang].faq.moreInfo }}></p>
+                </section>
             </div>
         </div>
     );
 };
 
 export default TableConverter;
+

@@ -33,14 +33,20 @@ const translations = {
             downloadError: "No data available to download."
         },
         howItWorks: {
-            title: "How to Convert Blood Tests to a Spreadsheet: Simple Steps",
-            step1Title: "Upload your file:",
-            step1Desc: "Simply drag and drop your PDF, DOCX, JPG, PNG, or WebP file containing blood test results into the converter area, or click the \"Select Blood Test File\" button to choose a file from your device.",
-            step2Title: "Automatic Conversion:",
-            step2Desc: "Our intelligent system will instantly process your analysis data and transform it into a clear, structured table. You will see a preview directly on the page.",
-            step3Title: "Use the Converted Table:",
-            step3Desc: "Once the conversion is complete, you'll have the option to <strong>copy the entire table</strong> with a single click to paste it <strong>directly into Microsoft Excel or Google Sheets</strong>. Alternatively, for your convenience, you can <strong>download the ready-to-use table file</strong> (in CSV or XLSX format) to your computer for offline use."
-        },
+    title: "How to Convert Blood Tests to Spreadsheet: Simple Steps",
+    step1: {
+        title: "Upload Your File:",
+        description: "Simply drag and drop your PDF, DOCX, JPG, PNG, or WebP file containing blood test results into the converter area, or click the \"Select Blood Test File\" button to choose a file from your device."
+    },
+    step2: {
+        title: "Automatic Conversion:",
+        description: "Our intelligent system will instantly process your analysis data and transform it into a clear, structured table. You'll see a preview directly on the page."
+    },
+    step3: {
+        title: "Use the Converted Table:",
+        description: "Once the conversion is complete, you'll have the option to <strong>copy the entire table</strong> with a single click to easily paste it directly into Microsoft Excel or Google Sheets. Additionally, for your convenience, you can <strong>download the ready spreadsheet file</strong> (in CSV or XLSX format) to your computer for offline use."
+    }
+},
         whyChooseUs: {
             title: "Why Choose Our Online Blood Test Converter?",
             accuracySpeed: "Maximum Accuracy & Speed: Thanks to advanced algorithms, we ensure fast and reliable conversion of your blood test data into a tabular format without errors.",
@@ -116,13 +122,19 @@ const translations = {
             downloadError: "No hay datos disponibles para descargar."
         },
         howItWorks: {
-            title: "Cómo Convertir Análisis de Sangre a una Hoja de Cálculo: Pasos Simples",
-            step1Title: "Suba su archivo:",
-            step1Desc: "Simplemente arrastre y suelte su archivo PDF, DOCX, JPG, PNG o WebP que contiene los resultados del análisis de sangre en el área del convertidor, o haga clic en el botón \"Seleccionar Archivo de Análisis de Sangre\" para elegir un archivo de su dispositivo.",
-            step2Title: "Conversión Automática:",
-            step2Desc: "Nuestro sistema inteligente procesará instantáneamente los datos de su análisis y los transformará en una tabla clara y estructurada. Verá una vista previa directamente en la página.",
-            step3Title: "Use la Tabla Convertida:",
-            step3Desc: "Una vez completada la conversión, tendrá la opción de <strong>copiar la tabla completa</strong> con un solo clic para pegarla <strong>directamente en Microsoft Excel o Google Sheets</strong>. Alternativamente, para su conveniencia, puede <strong>descargar el archivo de tabla listo para usar</strong> (en formato CSV o XLSX) a su computadora para uso sin conexión."
+            title: "Cómo convertir análisis de sangre a hoja de cálculo: Pasos sencillos",
+            step1: {
+                title: "Sube tu archivo:",
+                description: "Simplemente arrastra y suelta tu archivo PDF, DOCX, JPG, PNG o WebP que contenga los resultados de los análisis de sangre en el área del convertidor, o haz clic en el botón \"Seleccionar archivo de análisis de sangre\" para elegir un archivo de tu dispositivo."
+            },
+            step2: {
+                title: "Conversión automática:",
+                description: "Nuestro sistema inteligente procesará instantáneamente los datos de tu análisis y los transformará en una tabla clara y estructurada. Verás una vista previa directamente en la página."
+            },
+            step3: {
+                title: "Usa la tabla convertida:",
+                description: "Una vez completada la conversión, tendrás la opción de <strong>copiar toda la tabla</strong> con un solo clic para pegarla fácilmente directamente en Microsoft Excel o Google Sheets. Además, para tu comodidad, puedes <strong>descargar el archivo de hoja de cálculo listo</strong> (en formato CSV o XLSX) a tu computadora para usarlo sin conexión."
+            }
         },
         whyChooseUs: {
             title: "¿Por qué Elegir Nuestro Convertidor de Análisis de Sangre Online?",
@@ -199,13 +211,19 @@ const translations = {
             downloadError: "Keine Daten zum Herunterladen verfügbar."
         },
         howItWorks: {
-            title: "So konvertieren Sie Bluttestergebnisse in eine Tabelle: Einfache Schritte",
-            step1Title: "Laden Sie Ihre Datei hoch:",
-            step1Desc: "Ziehen Sie einfach Ihre PDF-, DOCX-, JPG-, PNG- oder WebP-Datei mit Bluttestergebnissen in den Konverterbereich oder klicken Sie auf die Schaltfläche „Bluttest-Datei auswählen“, um eine Datei von Ihrem Gerät auszuwählen.",
-            step2Title: "Automatische Konvertierung:",
-            step2Desc: "Unser intelligentes System verarbeitet Ihre Analysedaten sofort und wandelt sie in eine klare, strukturierte Tabelle um. Sie sehen eine Vorschau direkt auf der Seite.",
-            step3Title: "Verwenden Sie die konvertierte Tabelle:",
-            step3Desc: "Nach Abschluss der Konvertierung haben Sie die Möglichkeit, die <strong>gesamte Tabelle</strong> mit einem einzigen Klick zu <strong>kopieren</strong> und sie <strong>direkt in Microsoft Excel oder Google Sheets einzufügen</strong>. Alternativ können Sie die <strong>fertige Tabellendatei</strong> (im CSV- oder XLSX-Format) auf Ihren Computer herunterladen, um sie offline zu verwenden."
+            title: "Bluttestergebnisse in eine Tabelle umwandeln: Einfache Schritte",
+            step1: {
+                title: "Laden Sie Ihre Datei hoch:",
+                description: "Ziehen Sie einfach Ihre PDF-, DOCX-, JPG-, PNG- oder WebP-Datei mit den Bluttestergebnissen in den Konverterbereich oder klicken Sie auf die Schaltfläche „Bluttestdatei auswählen“, um eine Datei von Ihrem Gerät auszuwählen."
+            },
+            step2: {
+                title: "Automatische Konvertierung:",
+                description: "Unser intelligentes System verarbeitet Ihre Analysedaten sofort und wandelt sie in eine klare, strukturierte Tabelle um. Sie sehen eine Vorschau direkt auf der Seite."
+            },
+            step3: {
+                title: "Verwenden Sie die konvertierte Tabelle:",
+                description: "Nach Abschluss der Konvertierung haben Sie die Möglichkeit, <strong>die gesamte Tabelle</strong> mit einem einzigen Klick zu kopieren, um sie einfach direkt in Microsoft Excel oder Google Tabellen einzufügen. Zusätzlich können Sie zur Ihrer Bequemlichkeit die <strong>fertige Tabellendatei</strong> (im CSV- oder XLSX-Format) auf Ihren Computer herunterladen, um sie offline zu verwenden."
+            }
         },
         whyChooseUs: {
             title: "Warum unseren Online-Bluttest-Konverter wählen?",
@@ -281,14 +299,20 @@ const translations = {
             copyError: "Échec de la copie du tableau. Veuillez réessayer.",
             downloadError: "Aucune donnée disponible à télécharger."
         },
-        howItWorks: {
-            title: "Comment convertir des tests sanguins en feuille de calcul : Étapes simples",
-            step1Title: "Téléchargez votre fichier :",
-            step1Desc: "Faites simplement glisser et déposez votre fichier PDF, DOCX, JPG, PNG ou WebP contenant les résultats des tests sanguins dans la zone du convertisseur, ou cliquez sur le bouton \"Sélectionner un fichier de test sanguin\" pour choisir un fichier depuis votre appareil.",
-            step2Title: "Conversion automatique :",
-            step2Desc: "Notre système intelligent traitera instantanément vos données d'analyse et les transformera en un tableau clair et structuré. Vous verrez un aperçu directement sur la page.",
-            step3Title: "Utilisez le tableau converti :",
-            step3Desc: "Une fois la conversion terminée, vous aurez la possibilité de <strong>copier l'intégralité du tableau</strong> en un seul clic pour le coller <strong>directement dans Microsoft Excel ou Google Sheets</strong>. Alternativement, pour votre commodité, vous pouvez <strong>télécharger le fichier de tableau prêt à l'emploi</strong> (au format CSV ou XLSX) sur votre ordinateur pour une utilisation hors ligne."
+       howItWorks: {
+            title: "Comment convertir les analyses de sang en feuille de calcul : Étapes simples",
+            step1: {
+                title: "Téléchargez votre fichier :",
+                description: "Faites simplement glisser et déposez votre fichier PDF, DOCX, JPG, PNG ou WebP contenant les résultats d'analyses sanguines dans la zone de conversion, ou cliquez sur le bouton « Sélectionner le fichier d'analyse sanguine » pour choisir un fichier depuis votre appareil."
+            },
+            step2: {
+                title: "Conversion automatique :",
+                description: "Notre système intelligent traitera instantanément vos données d'analyse et les transformera en un tableau clair et structuré. Vous verrez un aperçu directement sur la page."
+            },
+            step3: {
+                title: "Utilisez le tableau converti :",
+                description: "Une fois la conversion terminée, vous aurez la possibilité de <strong>copier l'intégralité du tableau</strong> en un seul clic pour le coller facilement directement dans Microsoft Excel ou Google Sheets. De plus, pour votre commodité, vous pouvez <strong>télécharger le fichier de feuille de calcul prêt</strong> (au format CSV ou XLSX) sur votre ordinateur pour une utilisation hors ligne."
+            }
         },
         whyChooseUs: {
             title: "Pourquoi choisir notre convertisseur de tests sanguins en ligne ?",
@@ -365,14 +389,20 @@ const translations = {
             downloadError: "Немає даних для завантаження."
         },
         howItWorks: {
-            title: "Як перетворити аналізи крові в електронну таблицю: Прості кроки",
-            step1Title: "Завантажте свій файл:",
-            step1Desc: "Просто перетягніть свій файл PDF, DOCX, JPG, PNG або WebP, що містить результати аналізів крові, в область конвертера або натисніть кнопку «Вибрати файл аналізу крові», щоб вибрати файл зі свого пристрою.",
-            step2Title: "Автоматична конвертація:",
-            step2Desc: "Наша інтелектуальна система миттєво обробить дані вашого аналізу та перетворить їх на чітку, структуровану таблицю. Ви побачите попередній перегляд безпосередньо на сторінці.",
-            step3Title: "Використовуйте конвертовану таблицю:",
-            step3Desc: "Після завершення конвертації у вас буде можливість <strong>скопіювати всю таблицю</strong> одним натисканням, щоб легко вставити її <strong>безпосередньо в Microsoft Excel або Google Таблиці</strong>. Крім того, для вашої зручності, ви можете <strong>завантажити готовий файл таблиці</strong> (у форматі CSV або XLSX) на свій комп'ютер для використання в автономному режимі."
-        },
+    title: "Як перетворити аналізи крові в електронну таблицю: Прості кроки",
+    step1: {
+        title: "Завантажте свій файл:",
+        description: "Просто перетягніть свій файл PDF, DOCX, JPG, PNG або WebP, що містить результати аналізів крові, в область конвертера або натисніть кнопку «Вибрати файл аналізу крові», щоб вибрати файл зі свого пристрою."
+    },
+    step2: {
+        title: "Автоматична конвертація:",
+        description: "Наша інтелектуальна система миттєво обробить дані вашого аналізу та перетворить їх на чітку, структуровану таблицю. Ви побачите попередній перегляд безпосередньо на сторінці."
+    },
+    step3: {
+        title: "Використовуйте конвертовану таблицю:",
+        description: "Після завершення конвертації у вас буде можливість <strong>скопіювати всю таблицю</strong> одним натисканням, щоб легко вставити її безпосередньо в Microsoft Excel або Google Таблиці. Крім того, для вашої зручності, ви можете <strong>завантажити готовий файл таблиці</strong> (у форматі CSV або XLSX) на свій комп'ютер для використання в автономному режимі."
+    }
+},
         whyChooseUs: {
             title: "Чому обрати наш онлайн-конвертер аналізів крові?",
             accuracySpeed: "Максимальна точність і швидкість: Завдяки передовим алгоритмам ми забезпечуємо швидку та надійну конвертацію ваших даних аналізів крові в табличний формат без помилок.",
@@ -448,13 +478,19 @@ const translations = {
             downloadError: "ダウンロードするデータがありません。"
         },
         howItWorks: {
-            title: "血液検査をスプレッドシートに変換する方法：簡単な手順",
-            step1Title: "ファイルをアップロード：",
-            step1Desc: "血液検査結果を含むPDF、DOCX、JPG、PNG、またはWebPファイルを変換エリアにドラッグ＆ドロップするか、「血液検査ファイルを選択」ボタンをクリックしてデバイスからファイルを選択します。",
-            step2Title: "自動変換：",
-            step2Desc: "当社のインテリジェントシステムは分析データを即座に処理し、明確で構造化されたテーブルに変換します。ページ上で直接プレビューが表示されます。",
-            step3Title: "変換されたテーブルの使用：",
-            step3Desc: "変換が完了すると、ワンクリックで<strong>テーブル全体をコピー</strong>して、<strong>Microsoft ExcelやGoogleスプレッドシートに直接貼り付ける</strong>オプションが利用できます。また、便利のために、<strong>すぐに使用できるテーブルファイル</strong>（CSVまたはXLSX形式）をコンピューターにダウンロードしてオフラインで使用できます。"
+            title: "血液検査結果をスプレッドシートに変換する方法：簡単なステップ",
+            step1: {
+                title: "ファイルをアップロード：",
+                description: "血液検査結果を含むPDF、DOCX、JPG、PNG、またはWebPファイルを変換エリアにドラッグ＆ドロップするか、「血液検査ファイルを選択」ボタンをクリックしてデバイスからファイルを選択するだけです。"
+            },
+            step2: {
+                title: "自動変換：",
+                description: "当社のインテリジェントシステムは、分析データを即座に処理し、明確で構造化されたテーブルに変換します。ページ上で直接プレビューが表示されます。"
+            },
+            step3: {
+                title: "変換されたテーブルを使用：",
+                description: "変換が完了すると、ワンクリックで<strong>テーブル全体をコピー</strong>して、Microsoft ExcelまたはGoogleスプレッドシートに直接簡単に貼り付けることができます。さらに、利便性のために、<strong>準備ができたスプレッドシートファイル</strong>（CSVまたはXLSX形式）をコンピューターにダウンロードしてオフラインで使用することもできます。"
+            }
         },
         whyChooseUs: {
             title: "当社のオンライン血液検査コンバーターを選ぶ理由は？",
@@ -532,13 +568,19 @@ zh: {
             downloadError: "没有可下载的数据。"
         },
         howItWorks: {
-            title: "如何将血液检测转换为电子表格：简单步骤",
-            step1Title: "上传您的文件：",
-            step1Desc: "只需将包含血液检测结果的PDF、DOCX、JPG、PNG或WebP文件拖放到转换区域，或点击“选择血液检测文件”按钮从您的设备中选择文件。",
-            step2Title: "自动转换：",
-            step2Desc: "我们的智能系统将立即处理您的分析数据，并将其转换为清晰、结构化的表格。您将在页面上直接看到预览。",
-            step3Title: "使用转换后的表格：",
-            step3Desc: "转换完成后，您可以选择**一键复制整个表格**，并将其**直接粘贴到Microsoft Excel或Google Sheets**。此外，为了您的方便，您可以将**可用的表格文件**（CSV或XLSX格式）下载到您的计算机以供离线使用。"
+            title: "如何将血液检测结果转换为电子表格：简单步骤",
+            step1: {
+                title: "上传您的文件：",
+                description: "只需将包含血液检测结果的PDF、DOCX、JPG、PNG或WebP文件拖放到转换区域，或点击“选择血液检测文件”按钮从您的设备中选择文件。"
+            },
+            step2: {
+                title: "自动转换：",
+                description: "我们的智能系统将立即处理您的分析数据，并将其转换为清晰、结构化的表格。您将直接在页面上看到预览。"
+            },
+            step3: {
+                title: "使用转换后的表格：",
+                description: "转换完成后，您可以选择<strong>一键复制整个表格</strong>，轻松将其直接粘贴到Microsoft Excel或Google表格中。此外，为了您的方便，您还可以将<strong>准备好的电子表格文件</strong>（CSV或XLSX格式）下载到您的计算机上以供离线使用。"
+            }
         },
         whyChooseUs: {
             title: "为什么选择我们的在线血液检测转换器？",

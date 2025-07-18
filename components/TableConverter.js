@@ -1,5 +1,5 @@
 import { useState, useRef, useCallback,  useEffect } from 'react';
-import { CheckCircle, Copy, FileCheck, Microscope, X, Ghost, Download, HelpCircle, ChevronDown, ChevronUp, Globe } from 'lucide-react';
+import { CheckCircle, ShieldCheck, Copy, FileCheck, Microscope, X, Ghost, Download, HelpCircle, ChevronDown, ChevronUp, Globe, Upload, Table, ArrowRight, ArrowDown } from 'lucide-react'
 import translations from '../translations'; 
 import { useRouter } from 'next/router';
 import * as ga from '../lib/gtag';
@@ -463,19 +463,24 @@ const handleLangMenuOpen = () => {
                         {translations[currentLang].header.description}
                     </p>
 
-                    <p className="text-xs text-gray-700 max-w-2xl mx-auto mt-4 p-2 bg-gray-100 rounded-lg border border-gray-200">
-                        <span dangerouslySetInnerHTML={{ __html: translations[currentLang].header.privacyNote.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') }}></span>
-                        <span className="block mt-1 font-medium">
-                            {translations[currentLang].header.googleCloudVision}
-                        </span>
-                        <a href="/privacy-policy" className="text-indigo-600 hover:underline font-medium ml-1" onClick={() => ga.event({
-                            action: 'privacy_policy_click',
-                            category: 'Navigation',
-                            label: 'Privacy Policy Link',
-                        })}>
-                            {translations[currentLang].header.privacyPolicyLink}
-                        </a>
-                    </p>
+                    <div className="bg-indigo-50 border-l-4 border-indigo-400 text-indigo-800 p-4 rounded-lg flex items-start space-x-3 mt-8 max-w-2xl mx-auto shadow-md">
+    {/* Іконка безпеки */}
+    <ShieldCheck className="w-6 h-6 flex-shrink-0 mt-0.5" />
+    <div>
+        {/* Основне повідомлення про конфіденційність */}
+        <p className="text-sm font-medium" dangerouslySetInnerHTML={{ __html: translations[currentLang].header.privacyNote.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') }}></p>
+        {/* Повідомлення про Google Cloud Vision API */}
+        <p className="text-xs mt-1" dangerouslySetInnerHTML={{ __html: translations[currentLang].header.googleCloudVision }}></p>
+        {/* Посилання на Політику конфіденційності */}
+        <a href="/privacy-policy" className="text-indigo-600 hover:underline font-medium text-xs mt-1 block" onClick={() => ga.event({
+            action: 'privacy_policy_click',
+            category: 'Navigation',
+            label: 'Privacy Policy Link',
+        })}>
+            {translations[currentLang].header.privacyPolicyLink}
+        </a>
+    </div>
+</div>
 
                 </header>
 
@@ -488,7 +493,7 @@ const handleLangMenuOpen = () => {
                     <HelpCircle className="w-8 h-8" />
                 </button>
 
-                <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-8 relative z-10">
+                <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-8 relative z-10 mb-12">
                     <div
                         className={`flex flex-col items-center justify-center border-2 border-dashed border-indigo-200 rounded-lg bg-indigo-50/50 p-6 mb-4
                             ${loading ? 'opacity-50 pointer-events-none' : ''}
@@ -643,22 +648,55 @@ const handleLangMenuOpen = () => {
                 </div>
 
                 {/* Additional Content Sections (How it works, Why Choose Us) */}
-                <section className="max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-8 mt-12">
-                    <h2 className="text-3xl font-bold text-indigo-800 mb-6 text-center">
-                        {translations[currentLang].howItWorks.title}
-                    </h2>
-                    <ol className="list-decimal list-inside text-slate-700 text-lg leading-relaxed">
-                        <li className="mb-4">
-                            <strong>{translations[currentLang].howItWorks.step1Title}</strong> {translations[currentLang].howItWorks.step1Desc}
-                        </li>
-                        <li className="mb-4">
-                            <strong>{translations[currentLang].howItWorks.step2Title}</strong> {translations[currentLang].howItWorks.step2Desc}
-                        </li>
-                        <li className="mb-4">
-                            <span dangerouslySetInnerHTML={{ __html: `<strong>${translations[currentLang].howItWorks.step3Title}</strong> ${translations[currentLang].howItWorks.step3Desc}` }}></span>
-                        </li>
-                    </ol>
-                </section>
+<section className="mb-20">
+    <h3 className="text-3xl font-bold text-indigo-800 text-center mb-8">
+        {translations[currentLang].howItWorks.title}
+    </h3>
+    <div className="max-w-5xl mx-auto px-4">
+        <div className="grid grid-cols-1 md:grid-cols-[1fr_max-content_1fr_max-content_1fr] gap-8">
+            {/* Крок 1: Завантаження */}
+            <div className="bg-white p-6 rounded-lg shadow-lg text-center flex flex-col items-center relative transition-all duration-300 hover:shadow-xl hover:scale-[1.02] cursor-pointer">
+                <div className="bg-indigo-100 text-indigo-600 rounded-full h-16 w-16 flex items-center justify-center mb-4">
+                    <Upload className="w-8 h-8" />
+                </div>
+                <h4 className="text-xl font-semibold text-gray-800 mb-2">{translations[currentLang].howItWorks.step1.title}</h4>
+                <p className="text-gray-600 text-sm" dangerouslySetInnerHTML={{ __html: translations[currentLang].howItWorks.step1.description }}></p>
+                {/* Стрілка вниз для мобільного: змінено на bottom-[-1rem] */}
+                <ArrowDown className="absolute md:hidden w-5.5 h-5.5 text-indigo-400 bottom-[-1.75rem] left-1/2 transform -translate-x-1/2 z-10" />
+            </div>
+
+            {/* Стрілка вправо для десктопу (як окрема колонка сітки) */}
+            <div className="hidden md:flex items-center justify-center">
+                <ArrowRight className="w-10 h-10 text-indigo-400" />
+            </div>
+
+            {/* Крок 2: Автоматична конвертація */}
+            <div className="bg-white p-6 rounded-lg shadow-lg text-center flex flex-col items-center relative transition-all duration-300 hover:shadow-xl hover:scale-[1.02] cursor-pointer">
+                <div className="bg-indigo-100 text-indigo-600 rounded-full h-16 w-16 flex items-center justify-center mb-4">
+                    <Microscope className="w-8 h-8" />
+                </div>
+                <h4 className="text-xl font-semibold text-gray-800 mb-2">{translations[currentLang].howItWorks.step2.title}</h4>
+                <p className="text-gray-600 text-sm" dangerouslySetInnerHTML={{ __html: translations[currentLang].howItWorks.step2.description }}></p>
+                {/* Стрілка вниз для мобільного: змінено на bottom-[-1rem] */}
+                <ArrowDown className="absolute md:hidden w-5.5 h-5.5 text-indigo-400 bottom-[-1.75rem] left-1/2 transform -translate-x-1/2 z-10" />
+            </div>
+
+            {/* Стрілка вправо для десктопу (як окрема колонка сітки) */}
+            <div className="hidden md:flex items-center justify-center">
+                <ArrowRight className="w-10 h-10 text-indigo-400" />
+            </div>
+
+            {/* Крок 3: Використання конвертованої таблиці (без стрілки після цього кроку) */}
+            <div className="bg-white p-6 rounded-lg shadow-lg text-center flex flex-col items-center transition-all duration-300 hover:shadow-xl hover:scale-[1.02] cursor-pointer">
+                <div className="bg-indigo-100 text-indigo-600 rounded-full h-16 w-16 flex items-center justify-center mb-4">
+                    <Table className="w-8 h-8" />
+                </div>
+                <h4 className="text-xl font-semibold text-gray-800 mb-2">{translations[currentLang].howItWorks.step3.title}</h4>
+                <p className="text-gray-600 text-sm" dangerouslySetInnerHTML={{ __html: translations[currentLang].howItWorks.step3.description }}></p>
+            </div>
+        </div>
+    </div>
+</section>
 
                 <section className="max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-8 mt-12">
                     <h2 className="text-3xl font-bold text-indigo-800 mb-6 text-center">

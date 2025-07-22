@@ -27,12 +27,8 @@ export default function Document() {
         <meta property="og:description" content={translations[currentLang].header.description} /> 
         <meta property="og:type" content="website" />
         <meta property="og:url" content={`https://tableconverter.com/${currentLang}/`} />
-        <meta property="og:image" content="/microscope.png" />
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content={translations[currentLang].header.title} /> 
-        <meta name="twitter:description" content={translations[currentLang].header.description} /> 
-        <meta name="twitter:image" content="/microscope.png" />
-
+        <meta property="og:image" content="/favicon.ico" />
+        
         <link rel="alternate" hrefLang="en" href="https://tableconverter.com/en/" />
         <link rel="alternate" hrefLang="es" href="https://tableconverter.com/es/" />
         <link rel="alternate" hrefLang="de" href="https://tableconverter.com/de/" />
@@ -42,7 +38,9 @@ export default function Document() {
         <link rel="alternate" hrefLang="zh" href="https://tableconverter.com/zh/" /> 
         <link rel="alternate" hrefLang="x-default" href="https://tableconverter.com/en/" />
 
-        <link rel="icon" type="image/png" href="/microscope.png" />
+<link rel="icon" type="image/x-icon" href="/favicon.ico" />
+  <link rel="shortcut icon" href="/favicon.ico" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
 
         <link
           rel="stylesheet"
@@ -52,8 +50,7 @@ export default function Document() {
           rel="stylesheet"
           href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Open+Sans:wght@400;600&family=Lato:wght@400;700&display=swap"
         />
-
-        <script type="application/ld+json">
+      <script type="application/ld+json">
           {JSON.stringify({
             "@context": "https://schema.org",
             "@type": "FAQPage",

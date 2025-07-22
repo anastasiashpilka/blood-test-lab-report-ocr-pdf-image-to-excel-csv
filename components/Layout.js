@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import translations from '../translations';
-import { Globe, FlaskConical, ScanHeart, ChevronDown, ChevronUp, Menu, X } from 'lucide-react';
+import { Globe, ScanHeart, ChevronDown, ChevronUp, Menu, X } from 'lucide-react';
 import Head from 'next/head';
 import Script from 'next/script';
 import { GA_MEASUREMENT_ID } from '../lib/gtag';

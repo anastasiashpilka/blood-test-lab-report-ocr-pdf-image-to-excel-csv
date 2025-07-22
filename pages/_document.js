@@ -23,14 +23,14 @@ export default function Document() {
         <meta name="robots" content="index, follow" />
         <meta name="author" content="TableConverter Team" />
  
-        <meta property="og:title" content={translations[currentLang].header.title} /> {/* Use header.title */}
-        <meta property="og:description" content={translations[currentLang].header.description} /> {/* Use header.description */}
+        <meta property="og:title" content={translations[currentLang].header.title} /> 
+        <meta property="og:description" content={translations[currentLang].header.description} /> 
         <meta property="og:type" content="website" />
         <meta property="og:url" content={`https://tableconverter.com/${currentLang}/`} />
         <meta property="og:image" content="/microscope.png" />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content={translations[currentLang].header.title} /> {/* Use header.title */}
-        <meta name="twitter:description" content={translations[currentLang].header.description} /> {/* Use header.description */}
+        <meta name="twitter:title" content={translations[currentLang].header.title} /> 
+        <meta name="twitter:description" content={translations[currentLang].header.description} /> 
         <meta name="twitter:image" content="/microscope.png" />
 
         <link rel="alternate" hrefLang="en" href="https://tableconverter.com/en/" />
@@ -43,6 +43,15 @@ export default function Document() {
         <link rel="alternate" hrefLang="x-default" href="https://tableconverter.com/en/" />
 
         <link rel="icon" type="image/png" href="/microscope.png" />
+
+        <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Source+Sans+Pro:wght@600&family=Cinzel:wght@600&family=Fira+Sans:wght@600&display=swap"
+        />
+        <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Open+Sans:wght@400;600&family=Lato:wght@400;700&display=swap"
+        />
 
         <script type="application/ld+json">
           {JSON.stringify({
@@ -73,29 +82,6 @@ export default function Document() {
             "description": translations[currentLang].header.description
           })}
         </script>
-
-        {GA_MEASUREMENT_ID && (
-          <>
-            <script
-              async
-              src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
-            />
-            <script
-              dangerouslySetInnerHTML={{
-                __html: `
-                  window.dataLayer = window.dataLayer || [];
-                  function gtag(){window.dataLayer.push(arguments);}
-                  gtag('js', new Date());
-
-                  // Ця конфігурація відправляє початковий перегляд сторінки
-                  gtag('config', '${GA_MEASUREMENT_ID}', {
-                    page_path: window.location.pathname, // Використовуємо поточний шлях
-                  });
-                `,
-              }}
-            />
-          </>
-        )}
         
       </Head>
       <body>

@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://onlinebloodtestconverter.com
+
+# Sitemaps
+Sitemap: https://onlinebloodtestconverter.com/sitemap.xml

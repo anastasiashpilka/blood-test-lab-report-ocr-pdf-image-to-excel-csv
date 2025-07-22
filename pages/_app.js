@@ -4,6 +4,9 @@ import translations from '../translations';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import * as ga from '../lib/gtag';
+import '../styles/globals.css'; 
+import Layout from '../components/Layout';
+
 
 export default function App({ Component, pageProps }) {
   const router = useRouter();
@@ -30,7 +33,9 @@ export default function App({ Component, pageProps }) {
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>{translations[currentLang]?.header?.title || translations.en.header.title}</title>
       </Head>
-      <Component {...pageProps} />
+     <Layout>
+            <Component {...pageProps} />
+        </Layout>
     </>
   );
 }

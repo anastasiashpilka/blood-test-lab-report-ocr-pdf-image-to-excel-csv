@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "next build && next-sitemap",
     "start": "next start",
     "lint": "next lint"
   },
@@ -15,6 +15,9 @@
     "@aws-sdk/types": "^3.734.0",
     "@aws-sdk/util-create-request": "^3.744.0",
     "@aws-sdk/util-format-url": "^3.734.0",
+    "@fortawesome/fontawesome-svg-core": "^6.7.2",
+    "@fortawesome/free-solid-svg-icons": "^6.7.2",
+    "@fortawesome/react-fontawesome": "^0.2.2",
     "@google/generative-ai": "^0.21.0",
     "@smithy/hash-node": "^4.0.1",
     "@smithy/node-http-handler": "^4.0.2",
@@ -28,6 +31,7 @@
     "mammoth": "^1.9.0",
     "multer": "^1.4.5-lts.1",
     "next": "15.1.6",
+    "next-sitemap": "^4.2.3",
     "node-fetch": "^3.3.2",
     "pdf-parse": "^1.1.1",
     "react": "^19.0.0",

@@ -40,7 +40,7 @@ const BiomarkersPage = () => {
             </Head>
 
             <main className="mx-auto px-4 py-12 w-full">
-                <h1 className="text-5xl lg:text-6xl font-extrabold text-indigo-900 text-center mb-6">
+                <h1 className="text-5xl lg:text-5xl font-extrabold text-indigo-800 text-center mb-6">
                     {translations[currentLang].biomarker.title}
                 </h1>
                 <p className="text-xl text-gray-700 text-center mb-12">

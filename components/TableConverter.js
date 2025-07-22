@@ -406,14 +406,14 @@ const TableConverter = () => {
             <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-blue-100 relative">
                 <div className="container mx-auto px-4 py-8">
                     <header className="text-center mb-8 sm:mb-12">
-                        <Microscope className="w-12 h-12 mx-auto mb-4 text-indigo-600" aria-label="Blood Test Converter Icon" />
+                        <Microscope className="w-12 h-12 mx-auto mb-4 text-indigo-800" aria-label="Blood Test Converter Icon" />
                         <h1 className="text-3xl sm:text-4xl font-bold text-indigo-900 mb-3">
                             {translations[currentLang].header.title || "Blood Test Table Converter"}
                         </h1>
                         <p className="text-slate-600 max-w-2xl mx-auto mb-4 text-base sm:text-lg">
                             {translations[currentLang].header.description || "Easily convert your blood test results into structured, editable tables. Upload PDF, DOCX, or images for instant results."}
                         </p>
-                        <div className="bg-indigo-50 border-l-4 border-indigo-400 text-indigo-800 p-4 rounded-lg flex items-start space-x-3 mt-8 max-w-2xl mx-auto shadow-md">
+                        <div className="bg-indigo-50 border-l-4 border-indigo-400 text-indigo-800 p-4 rounded-lg flex items-start space-x-3 mt-8 max-w-5xl mx-auto shadow-md">
                             <ShieldCheck className="w-6 h-6 flex-shrink-0 mt-0.5" aria-label="Privacy Assurance Icon" />
                             <div>
                                 <p className="text-sm font-medium" dangerouslySetInnerHTML={{ __html: translations[currentLang].header.privacyNote.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') }}></p>
@@ -431,7 +431,7 @@ const TableConverter = () => {
                         <HelpCircle className="w-8 h-8" aria-label="FAQ Icon" />
                     </button>
 
-                    <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-8 relative z-10 mb-12">
+                    <div className="max-w-5xl mx-auto bg-white rounded-xl shadow-lg p-8 relative z-10 mb-12">
                         <div
                             className={`flex flex-col items-center justify-center border-2 border-dashed border-indigo-200 rounded-lg bg-indigo-50/50 p-6 mb-4
                                 ${loading ? 'opacity-50 pointer-events-none' : ''}
@@ -588,7 +588,7 @@ const TableConverter = () => {
                         <h3 className="text-3xl font-bold text-indigo-800 text-center mb-8">
                             {translations[currentLang].howItWorks.title}
                         </h3>
-                        <div className="max-w-5xl mx-auto px-4">
+                        <div className="max-w-5xl mx-auto px-1">
                             <div className="grid grid-cols-1 md:grid-cols-[1fr_max-content_1fr_max-content_1fr] gap-8">
                                 <div className="bg-white p-6 rounded-lg shadow-lg text-center flex flex-col items-center relative transition-all duration-300 hover:shadow-xl hover:scale-[1.02] cursor-pointer">
                                     <div className="bg-indigo-100 text-indigo-600 rounded-full h-16 w-16 flex items-center justify-center mb-4">
@@ -623,7 +623,7 @@ const TableConverter = () => {
                         </div>
                     </section>
 
-                    <section className="max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-8 mt-12">
+                    <section className="max-w-5xl mx-auto bg-white rounded-xl shadow-lg p-8 mt-12">
                         <h2 className="text-3xl font-bold text-indigo-800 mb-6 text-center">
                             {translations[currentLang].whyChooseUs.title}
                         </h2>
@@ -646,7 +646,7 @@ const TableConverter = () => {
                         </ul>
                     </section>
 
-                    <section ref={faqSectionRef} className="max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-8 mt-12">
+                    <section ref={faqSectionRef} className="max-w-5xl mx-auto bg-white rounded-xl shadow-lg p-8 mt-12">
                         <h2 className="text-3xl font-bold text-indigo-800 mb-6 text-center">
                             {translations[currentLang].faq.title}
                         </h2>

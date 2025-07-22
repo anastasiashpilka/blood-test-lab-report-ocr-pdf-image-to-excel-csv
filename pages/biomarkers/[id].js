@@ -30,7 +30,7 @@ const BiomarkerDetailPage = () => {
                 <meta name="description" content={`Detailed information about biomarker: ${biomarker.name}`} />
             </Head>
 
-            <main className="container mx-auto px-4 py-12 max-w-4xl">
+            <main className="container mx-auto px-4 py-12 max-w-5xl">
                 <button
                     onClick={() => router.push('/biomarkers')} 
                     className="flex items-center text-blue-700 hover:text-blue-900 transition-colors duration-200 mb-10 font-semibold text-lg

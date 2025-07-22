@@ -38,10 +38,11 @@ export default function Document() {
         <link rel="alternate" hrefLang="zh" href="https://tableconverter.com/zh/" /> 
         <link rel="alternate" hrefLang="x-default" href="https://tableconverter.com/en/" />
 
-<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"/>
-<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png"/>
-<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"/>
-<link rel="manifest" href="/site.webmanifest"/>
+<link rel="apple-touch-icon" sizes="180x180" href="public/apple-touch-icon.png"/>
+<link rel="icon" type="image/png" sizes="32x32" href="/Users/anastasia/Desktop/konverter2/public/favicon.ico"/>
+<link rel="icon" type="image/png" sizes="16x16" href="public/favicon-16x16.png"/>
+
+
         <link
           rel="stylesheet"
           href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Source+Sans+Pro:wght@600&family=Cinzel:wght@600&family=Fira+Sans:wght@600&display=swap"

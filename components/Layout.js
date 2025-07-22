@@ -83,14 +83,14 @@ const Layout = ({ children, title }) => {
                 <nav className="max-w-7xl mx-auto flex justify-between items-center">
                     <Link href="/" className="flex items-center space-x-2">
                         <ScanHeart
-                            className="w-8 h-8 text-blue-700"
+                            className="w-8 h-8 text-indigo-700"
                             aria-label="Flask icon for Blood Test Converter"
                         />
                         <div className="font-sans">
                             <span className="text-2xl font-bold tracking-tight">
-                                <span className="bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent">Blood</span>
-                                <span className="bg-gradient-to-r from-blue-700 to-blue-900 bg-clip-text text-transparent">Test</span>
-                                <span className="bg-gradient-to-r from-blue-800 to-blue-950 bg-clip-text text-transparent">Converter</span>
+                                <span className="bg-gradient-to-r from-indigo-700 to-indigo-800 bg-clip-text text-transparent">Blood</span>
+                                <span className="bg-gradient-to-r from-indigo-800 to-indigo-900 bg-clip-text text-transparent">Test</span>
+                                <span className="bg-gradient-to-r from-indigo-900 to-indigo-950 bg-clip-text text-transparent">Converter</span>
                             </span>
                         </div>
                     </Link>

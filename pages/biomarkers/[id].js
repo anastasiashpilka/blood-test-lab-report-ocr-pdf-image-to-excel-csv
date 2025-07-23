@@ -44,7 +44,7 @@ const BiomarkerDetailPage = () => {
                 </button>
 
                 <div className="bg-white p-10 rounded-2xl shadow-3xl mb-14 border border-gray-100 transform transition-transform duration-300 ease-in-out hover:scale-[1.005]">
-                    <h1 className="text-4xl lg:text-5xl font-extrabold text-indigo-900 mb-4">{biomarker.name}</h1>
+                    <h1 className="text-4xl lg:text-5xl font-extrabold text-indigo-800 mb-4">{biomarker.name}</h1>
                     <p className="text-lg text-gray-700 mb-8 leading-relaxed">{biomarker.description}</p>
                     <div className="prose max-w-none text-gray-800 leading-relaxed text-base lg:text-lg" dangerouslySetInnerHTML={{ __html: biomarker.detailedInfo }}></div>
                 </div>

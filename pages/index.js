@@ -8,7 +8,7 @@ export default function HomePage() {
   const { locale } = router;
   const currentLang = locale || 'en';
 
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://tableconverter.com'; 
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://www.onlinebloodtestconverter.com/'; 
   const canonicalUrl = `${baseUrl}/${currentLang}/`; 
 
   return (
@@ -45,13 +45,13 @@ export default function HomePage() {
         <meta property="og:description" content={translations[currentLang]?.header?.description || translations.en.header.description} />
         <meta property="og:type" content="website" />
         <meta property="og:url" content={canonicalUrl} />
-        <meta property="og:image" content="/microscope.png" />
+        <meta property="og:image" content="/favicon.ico" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={translations[currentLang]?.header?.title || translations.en.header.title} />
         <meta name="twitter:description" content={translations[currentLang]?.header?.description || translations.en.header.description} />
-        <meta name="twitter:image" content="/microscope.png" />
+        <meta name="twitter:image" content="/favicon.ico" />
 
-        <link rel="icon" type="image/png" href="/microscope.png" />
+        <link rel="icon" type="image/png" href="/favicon.ico" />
 
         <script type="application/ld+json">
           {JSON.stringify({

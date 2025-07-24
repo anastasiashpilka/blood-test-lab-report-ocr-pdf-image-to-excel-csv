@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import translations from '../translations';
@@ -16,18 +16,14 @@ const Layout = ({ children, title }) => {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const langMenuRef = useRef(null);
     const mobileMenuButtonRef = useRef(null);
+    const [isClient, setIsClient] = useState(false);
 
-    const changeLanguage = (newLocale) => {
-        router.push(router.asPath, router.asPath, { locale: newLocale });
-        setIsLangMenuOpen(false);
-    };
-
-     useEffect(() => {
+    useEffect(() => {
+        setIsClient(true);
         const handleClickOutside = (event) => {
             if (langMenuRef.current && !langMenuRef.current.contains(event.target)) {
                 setIsLangMenuOpen(false);
             }
-
             if (isMobileMenuOpen) {
                 const clickedOutsideMobileMenu = (
                     !mobileMenuButtonRef.current ||
@@ -36,56 +32,58 @@ const Layout = ({ children, title }) => {
                     !document.querySelector('.mobile-menu') ||
                     !document.querySelector('.mobile-menu').contains(event.target)
                 );
-
                 if (clickedOutsideMobileMenu) {
                     setIsMobileMenuOpen(false);
                 }
             }
         };
         document.addEventListener('mousedown', handleClickOutside);
-        return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
-        };
+        return () => document.removeEventListener('mousedown', handleClickOutside);
     }, [isMobileMenuOpen]);
+
+    const changeLanguage = (newLocale) => {
+        router.push(router.asPath, router.asPath, { locale: newLocale });
+        setIsLangMenuOpen(false);
+    };
 
     const availableLocales = ['en', 'es', 'de', 'fr', 'uk', 'ja', 'zh'];
     const currentYear = new Date().getFullYear();
+
+    if (!isClient) return null;
 
     return (
         <div className="min-h-screen bg-gray-50 font-sans text-gray-800 flex flex-col">
             <Head>
                 <title>{title || t.header.defaultTitle || 'BloodTestConverter'}</title>
                 <meta name="description" content={t.header.defaultDescription || 'Medical insights and converters'} />
-                {GA_MEASUREMENT_ID && (
-                    <>
-                        <Script
-                            strategy="afterInteractive"
-                            src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
-                        />
-                        <Script
-                            id="gtag-init"
-                            strategy="afterInteractive"
-                            dangerouslySetInnerHTML={{
-                                __html: `
-                                    window.dataLayer = window.dataLayer || [];
-                                    function gtag(){dataLayer.push(arguments);}
-                                    gtag('js', new Date());
-                                    gtag('config', '${GA_MEASUREMENT_ID}', {
-                                      page_path: window.location.pathname,
-                                    });
-                                `,
-                            }}
-                        />
-                    </>
-                )}
+                <link rel="icon" href="/favicon.ico" />
             </Head>
+            {GA_MEASUREMENT_ID && (
+                <>
+                    <Script
+                        strategy="afterInteractive"
+                        src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
+                    />
+                    <Script
+                        id="gtag-init"
+                        strategy="afterInteractive"
+                        dangerouslySetInnerHTML={{
+                            __html: `
+                                window.dataLayer = window.dataLayer || [];
+                                function gtag(){dataLayer.push(arguments);}
+                                gtag('js', new Date());
+                                gtag('config', '${GA_MEASUREMENT_ID}', {
+                                    page_path: window.location.pathname,
+                                });
+                            `,
+                        }}
+                    />
+                </>
+            )}
             <header className="bg-white shadow-sm p-4 sticky top-0 z-50">
                 <nav className="max-w-7xl mx-auto flex justify-between items-center">
                     <Link href="/" className="flex items-center space-x-2">
-                        <ScanHeart
-                            className="w-8 h-8 text-indigo-700"
-                            aria-label="Flask icon for Blood Test Converter"
-                        />
+                        <ScanHeart className="w-8 h-8 text-indigo-700" aria-label="Flask icon for Blood Test Converter" />
                         <div className="font-sans">
                             <span className="text-2xl font-bold tracking-tight">
                                 <span className="bg-gradient-to-r from-indigo-700 to-indigo-800 bg-clip-text text-transparent">Blood</span>

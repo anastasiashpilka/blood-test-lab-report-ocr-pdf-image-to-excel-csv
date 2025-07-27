@@ -1,8 +1,5 @@
 import { Html, Head, Main, NextScript } from 'next/document';
 import translations from '../translations'; 
-import { GA_MEASUREMENT_ID } from '../lib/gtag';
-
-console.log('Server-side GA_MEASUREMENT_ID:', GA_MEASUREMENT_ID);
 
 export default function Document() {
   const currentLang = 'en';

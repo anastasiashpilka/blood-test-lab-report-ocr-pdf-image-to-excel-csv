@@ -7,7 +7,7 @@ const translations = {
             googleCloudVision: "We use Google Cloud Vision API for image processing, which temporarily accesses data for recognition and does not store it.",
         },
         fileUpload: {
-            fileAdded: (fileName) => `File "${fileName}" added!`,
+            fileAdded: "File {fileName} added!",
             dragOrClick: "Drag a file here or click to select.",
             releaseToUpload: "Release file to upload!",
             selectFileButton: "Select Blood Test File",
@@ -16,11 +16,11 @@ const translations = {
         loading: "Processing file...",
         error: {
             title: "Error!",
-            retryTime: (time) => `Please try again in ${time} seconds.`,
+            retryTime:"Please try again in {time} seconds.",
             selectAnotherFile: "Select another file",
             noMedicalData: "No medical analysis data found in the document.",
             unexpectedData: "Unexpected data format received from server.",
-            networkError: (message) => `Network error or problem connecting to server: ${message}`
+            networkError: "Network error or problem connecting to server: {message}"
         },
         tableDisplay: {
             imageProcessingResult: "Image Processing Result:",
@@ -82,7 +82,7 @@ const translations = {
             q12: "Can I integrate this tool into my own application or website?",
             a12: "This online converter is provided as a standalone web application for direct user use. We do not currently offer an API for third-party integrations."
         },
-        nav: { // Нова секція для навігації
+        nav: { 
             bloodTestConverter: "Blood Test Converter",
             unitConverter: "Unit Converter",
             biomarkers: "Biomarkers",
@@ -97,12 +97,15 @@ const translations = {
         
         unitConverter: {
             title: "Blood Biomarker Unit Converter",
+            aboutToolTitle: 'Discover Our Biomarker Unit Converter',
+            descriptionLong: 'Easily convert lab test results with our precise biomarker unit converter. Designed for medical professionals and individuals, this tool simplifies switching between units like mg/dL and mmol/L, ensuring accurate and reliable results for better health insights.',
             selectBiomarkerLabel: "Select Biomarker",
             inputValueLabel: "Enter Value",
             nputValuePlaceholder: "Enter a value, e.g., 100",
             sourceUnitLabel: "From Unit",
             targetUnitLabel: "To Unit",
             convertButton: "Convert",
+            resetButton: "Clear",
             resultLabel: "Result",
             selectPlaceholder: "Select a biomarker",
             selectUnitPlaceholder: "Select a unit",
@@ -112,6 +115,45 @@ const translations = {
                 selectUnits: "Please select both source and target units.",
                 conversionNotPossible: "Conversion not possible for these units/biomarker.",
             },
+            faq: {
+                title: "Frequently Asked Questions (FAQ)",
+                q1_question: "What is this blood biomarker unit converter for?",
+                q1_answer: "This tool is designed to help you easily convert blood biomarker results between various measurement units, such as from conventional (e.g., mg/dL) to SI units (e.g., mmol/L) or vice versa. It's ideal for understanding lab results from different regions or sources.",
+                q2_question: "How accurate are the conversions provided by this tool?",
+                q2_answer: "Our conversions are based on widely accepted scientific formulas and molecular weights. While we strive for high accuracy, this tool is for **informational purposes only** and should not replace professional medical advice. Always consult a healthcare professional for the interpretation of your lab results.",
+                q3_question: "Which specific biomarkers and units are supported?",
+                q3_answer: "We support a broad range of common blood biomarkers like Glucose, Creatinine, Cholesterol, Thyroid Hormones, and many more. The available units (e.g., mmol/L, mg/dL, µmol/L, IU/L) will automatically appear in the dropdown menus once you select a biomarker. If a unit is not listed for a specific biomarker, it means that conversion is not typically standard or not currently supported.",
+                q4_question: "Is my personal or health data saved or stored?",
+                q4_answer: "No. Your privacy is paramount. This unit converter operates entirely **client-side in your browser**, meaning no personal health data, values entered, or conversion results are sent to or stored on our servers. All operations are temporary and secure.",
+                q5_question: "What if my specific unit or biomarker isn't listed?",
+                q5_answer: "If a biomarker or a specific unit for that biomarker is not available in the dropdown lists, it means our database currently does not support it. We are continuously working to expand our coverage. Please check back later or contact us if you have a suggestion.",
+                q6_question: "Can I use this converter for other types of unit conversions (e.g., weight, length)?",
+                q6_answer: "No, this converter specializes exclusively in converting **blood biomarker** measurement units. It is designed for medical purposes and the analysis of laboratory values.",
+                q7_question: "What is the difference between Conventional Units and SI units?",
+                q7_answer: "Conventional Units are often used in the U.S., while SI units (Système International d'Unités) are an international standard. For example, glucose levels might be measured in mg/dL (conventional) or mmol/L (SI). Our converter allows you to easily switch between these systems, which is critical for healthcare professionals and patients working with data from different sources.",
+                q8_question: "Is there a mobile version or app for this converter?",
+                q8_answer: "Our converter is fully optimized for mobile devices and works perfectly in any modern browser on a smartphone or tablet. There is no separate mobile app currently, but you can add the website to your device's home screen for quick access.",
+                q9_question: "How often is the biomarker and unit database updated?",
+                q9_answer: "We are constantly working to expand and update our database of biomarkers and their units. Updates are released regularly to ensure the accuracy and timeliness of the data. We appreciate your suggestions for adding new biomarkers or units.",
+            },
+            noJsTitle: "JavaScript is Disabled",
+            noJsMessage: "This unit converter requires JavaScript to function. Please enable JavaScript in your browser settings to use the tool.",
+            availableBiomarkers: "Available Biomarkers",
+            howItWorks: {
+            title: "How It Works",
+            step1: {
+                title: "Select Biomarker",
+                description: "Choose the desired blood biomarker from the dropdown list that you wish to convert.",
+            },
+            step2: {
+                title: "Enter Value & Choose Units",
+                description: "Enter the numerical value of your result in the 'Value to Convert' field, then select the source and target units.",
+            },
+            step3: {
+                title: "Get Converted Result",
+                description: "Click the 'Convert' button to instantly get the accurate biomarker value, translated into the chosen unit.",
+            },
+        },
         },
         biomarkers: {
         "Glucose": "Glucose",
@@ -220,6 +262,11 @@ const translations = {
             "button_back": "Back to Biomarker Directory",
             "button_view_details": "View Details"
         },
+        disclaimer: {
+            title: "Important Disclaimer",
+            paragraph1: "This unit converter is provided for general informational purposes only and is not intended to be a substitute for professional medical advice, diagnosis, or treatment. Always seek the advice of your physician or other qualified health provider with any questions you may have regarding a medical condition.", 
+            paragraph2: "The conversions provided are based on standard scientific formulas. While we strive for accuracy, results should always be confirmed by a healthcare professional. We do not guarantee the accuracy or completeness of the information presented.", 
+        },
     units: {
       "mmol/L": "mmol/L",
       "mg/dL": "mg/dL",
@@ -279,7 +326,7 @@ const translations = {
             googleCloudVision: "Utilizamos la API de Google Cloud Vision para el procesamiento de imágenes, que accede temporalmente a los datos solo para el reconocimiento y no los almacena.",
         },
         fileUpload: {
-            fileAdded: (fileName) => `¡Archivo "${fileName}" añadido!`,
+            fileAdded: "¡Archivo {fileName} añadido!",
             dragOrClick: "Arrastre un archivo aquí o haga clic para seleccionar.",
             releaseToUpload: "¡Suelte el archivo para cargar!",
             selectFileButton: "Seleccionar Archivo de Análisis de Sangre",
@@ -288,11 +335,11 @@ const translations = {
         loading: "Procesando archivo...",
         error: {
             title: "¡Error!",
-            retryTime: (time) => `Por favor, inténtelo de nuevo en ${time} segundos.`,
+            retryTime:"Por favor, inténtelo de nuevo en {time} segundos.",
             selectAnotherFile: "Seleccionar otro archivo",
             noMedicalData: "No se encontraron datos de análisis médicos en el documento.",
             unexpectedData: "Formato de datos inesperado recibido del servidor.",
-            networkError: (message) => `Error de red o problema de conexión con el servidor: ${message}`
+            networkError:"Error de red o problema de conexión con el servidor: {message}"
         },
         tableDisplay: {
             imageProcessingResult: "Resultado del procesamiento de imagen:",
@@ -368,12 +415,15 @@ const translations = {
         },
         unitConverter: {
             title: "Blutbiomarker-Einheitenumrechner",
+            aboutToolTitle: 'Descubre Nuestro Conversor de Unidades de Biomarcadores',
+            descriptionLong: 'Convierte fácilmente los resultados de pruebas de laboratorio con nuestro conversor de unidades de biomarcadores preciso. Diseñado para profesionales médicos y particulares, esta herramienta simplifica el cambio entre unidades como mg/dL y mmol/L, garantizando resultados precisos y confiables para mejores conocimientos de salud.',
             selectBiomarkerLabel: "Biomarker auswählen",
             inputValueLabel: "Wert eingeben",
             inputValuePlaceholder: "Ingrese un valor, por ejemplo, 100",
             sourceUnitLabel: "Von Einheit",
             targetUnitLabel: "Nach Einheit",
             convertButton: "Umrechnen",
+            resetButton: "Borrar",
             resultLabel: "Ergebnis",
             selectPlaceholder: "Biomarker auswählen",
             selectUnitPlaceholder: "Einheit auswählen",
@@ -383,6 +433,42 @@ const translations = {
                 selectUnits: "Bitte wählen Sie sowohl die Ausgangs- als auch die Zieleinheit aus.",
                 conversionNotPossible: "Umrechnung für diese Einheiten/Biomarker nicht möglich.",
             },
+            faq: {
+                title: "Preguntas Frecuentes (FAQ)",
+                q1_question: "¿Para qué sirve este convertidor de unidades de biomarcadores sanguíneos?",
+                q1_answer: "Esta herramienta está diseñada para ayudarle a convertir fácilmente los resultados de biomarcadores sanguíneos entre varias unidades de medida, como de unidades convencionales (por ejemplo, mg/dL) a unidades SI (por ejemplo, mmol/L) o viceversa. Es ideal para comprender los resultados de laboratorio de diferentes regiones o fuentes.",
+                q2_question: "¿Qué tan precisas son las conversiones proporcionadas por esta herramienta?",
+                q2_answer: "Nuestras conversiones se basan en fórmulas científicas y pesos moleculares ampliamente aceptados. Si bien nos esforzamos por una alta precisión, esta herramienta es solo para **fines informativos** y no debe reemplazar el consejo médico profesional. Siempre consulte a un profesional de la salud para la interpretación de sus resultados de laboratorio.",
+                q3_question: "¿Qué biomarcadores y unidades específicas son compatibles?",
+                q3_answer: "Admitimos una amplia gama de biomarcadores sanguíneos comunes como glucosa, creatinina, colesterol, hormonas tiroideas y muchos más. Las unidades disponibles (por ejemplo, mmol/L, mg/dL, µmol/L, UI/L) aparecerán automáticamente en los menús desplegables una vez que seleccione un biomarcador. Si una unidad no aparece en la lista para un biomarcador específico, significa que esa conversión no es típicamente estándar o no es compatible actualmente.",
+                q4_question: "¿Se guardan o almacenan mis datos personales o de salud?",
+                q4_answer: "No. Su privacidad es primordial. Este convertidor de unidades funciona completamente **del lado del cliente en su navegador**, lo que significa que no se envían ni se almacenan datos personales de salud, valores introducidos o resultados de conversión en nuestros servidores. Todas las operaciones son temporales y seguras.",
+                q5_question: "¿Qué hago si mi unidad o biomarcador específico no aparece en la lista?",
+                q5_answer: "Si un biomarcador o una unidad específica para ese biomarcador no está disponible en las listas desplegables, significa que nuestra base de datos no lo admite actualmente. Trabajamos continuamente para ampliar nuestra cobertura. Vuelva a consultar más tarde o contáctenos si tiene alguna sugerencia.",
+                q6_question: "¿Puedo usar este conversor para otros tipos de conversiones de unidades (por ejemplo, peso, longitud)?",
+                q6_answer: "No, este conversor se especializa exclusivamente en la conversión de unidades de medida de **biomarcadores sanguíneos**. Está diseñado para fines médicos y el análisis de valores de laboratorio.",
+                q7_question: "¿Cuál es la diferencia entre Unidades Convencionales y unidades SI?",
+                q7_answer: "Las Unidades Convencionales se utilizan a menudo en EE. UU., mientras que las unidades SI (Système International d'Unités) son un estándar internacional. Por ejemplo, los niveles de glucosa podrían medirse en mg/dL (convencional) o mmol/L (SI). Nuestro conversor te permite cambiar fácilmente entre estos sistemas, lo cual es fundamental para los profesionales de la salud y los pacientes que trabajan con datos de diferentes fuentes.",
+                q8_question: "¿Hay una versión móvil o una aplicación para este conversor?",
+                q8_answer: "Nuestro conversor está completamente optimizado para dispositivos móviles y funciona perfectamente en cualquier navegador moderno de un smartphone o tablet. Actualmente no hay una aplicación móvil separada, pero puedes añadir el sitio web a la pantalla de inicio de tu dispositivo para un acceso rápido.",
+                q9_question: "¿Con qué frecuencia se actualiza la base de datos de biomarcadores y unidades?",
+                q9_answer: "Estamos trabajando constantemente para expandir y actualizar nuestra base de datos de biomarcadores y sus unidades. Las actualizaciones se lanzan regularmente para garantizar la precisión y actualidad de los datos. Agradecemos tus sugerencias para añadir nuevos biomarcadores o unidades.",
+            },
+            howItWorks: {
+            title: "Cómo funciona",
+            step1: {
+                title: "Seleccionar Biomarcador",
+                description: "Elija el biomarcador sanguíneo deseado de la lista desplegable que desea convertir.",
+            },
+            step2: {
+                title: "Ingresar Valor y Elegir Unidades",
+                description: "Ingrese el valor numérico de su resultado en el campo 'Valor a Convertir' y luego seleccione las unidades de origen y de destino.",
+            },
+            step3: {
+                title: "Obtener Resultado Convertido",
+                description: "Haga clic en el botón 'Convertir' para obtener instantáneamente el valor exacto del biomarcador, convertido a la unidad elegida.",
+            },
+        },
         },
         biomarkers: {
 "Glucose": "Glucosa",
@@ -491,6 +577,11 @@ const translations = {
             "button_back": "Volver al Directorio de Biomarcadores",
             "button_view_details": "Ver Detalles"
     },
+    disclaimer: {
+            title: "Aviso Legal Importante",
+            paragraph1: "Este convertidor de unidades se proporciona únicamente con fines informativos generales y no pretende ser un sustituto del consejo, diagnóstico o tratamiento médico profesional. Siempre busque el consejo de su médico u otro proveedor de salud calificado para cualquier pregunta que pueda tener con respecto a una condición médica.",
+            paragraph2: "Las conversiones proporcionadas se basan en fórmulas científicas estándar. Aunque nos esforzamos por la precisión, los resultados siempre deben ser confirmados por un profesional de la salud. No garantizamos la exactitud o integridad de la información presentada.",
+        },
     units: {
       "mmol/L": "mmol/L",
       "mg/dL": "mg/dL",
@@ -550,7 +641,7 @@ const translations = {
             googleCloudVision: "Wir verwenden die Google Cloud Vision API für die Bildverarbeitung, die vorübergehend auf Daten zur Erkennung zugreift und diese nicht speichert.",
         },
         fileUpload: {
-            fileAdded: (fileName) => `Datei „${fileName}“ hinzugefügt!`,
+            fileAdded:"Datei „{fileName}“ hinzugefügt!",
             dragOrClick: "Ziehen Sie eine Datei hierher oder klicken Sie, um auszuwählen.",
             releaseToUpload: "Datei zum Hochladen freigeben!",
             selectFileButton: "Bluttest-Datei auswählen",
@@ -559,11 +650,11 @@ const translations = {
         loading: "Datei wird verarbeitet...",
         error: {
             title: "Fehler!",
-            retryTime: (time) => `Bitte versuchen Sie es in ${time} Sekunden erneut.`,
+            retryTime: "Bitte versuchen Sie es in {time} Sekunden erneut.",
             selectAnotherFile: "Andere Datei auswählen",
             noMedicalData: "Keine medizinischen Analysedaten im Dokument gefunden.",
             unexpectedData: "Unerwartetes Datenformat vom Server empfangen.",
-            networkError: (message) => `Netzwerkfehler oder Verbindungsproblem zum Server: ${message}`
+            networkError: "Netzwerkfehler oder Verbindungsproblem zum Server: {message}"
         },
         tableDisplay: {
             imageProcessingResult: "Ergebnis der Bildverarbeitung:",
@@ -638,6 +729,8 @@ const translations = {
         },
         unitConverter: {
             title: "Blutbiomarker-Einheitenumrechner",
+            aboutToolTitle: 'Entdecken Sie Unseren Biomarkereinheiten-Konverter',
+            descriptionLong: 'Konvertieren Sie Laborergebnisse mühelos mit unserem präzisen Biomarkereinheiten-Konverter. Entwickelt für medizinisches Fachpersonal und Privatpersonen, erleichtert dieses Tool den Wechsel zwischen Einheiten wie mg/dL und mmol/L und liefert genaue und verlässliche Ergebnisse für bessere Gesundheitseinblicke.',
             selectBiomarkerLabel: "Biomarker auswählen",
             inputValueLabel: "Wert eingeben",
             inputValuePlaceholder: "Geben Sie einen Wert ein, z. B. 100",
@@ -653,6 +746,42 @@ const translations = {
                 selectUnits: "Bitte wählen Sie sowohl die Ausgangs- als auch die Zieleinheit aus.",
                 conversionNotPossible: "Umrechnung für diese Einheiten/Biomarker nicht möglich.",
             },
+            faq: {
+                title: "Häufig gestellte Fragen (FAQ)",
+                q1_question: "Wofür ist dieser Blutbiomarker-Einheitenumrechner?",
+                q1_answer: "Dieses Tool wurde entwickelt, um Ihnen die einfache Umrechnung von Blutbiomarker-Ergebnissen zwischen verschiedenen Maßeinheiten zu erleichtern, z.B. von konventionellen (z.B. mg/dL) in SI-Einheiten (z.B. mmol/L) oder umgekehrt. Es ist ideal, um Laborergebnisse aus verschiedenen Regionen oder Quellen zu verstehen.",
+                q2_question: "Wie genau sind die Umrechnungen, die dieses Tool bereitstellt?",
+                q2_answer: "Unsere Umrechnungen basieren auf allgemein anerkannten wissenschaftlichen Formeln und Molekulargewichten. Obwohl wir uns um hohe Genauigkeit bemühen, dient dieses Tool nur zu **Informationszwecken** und sollte keinen professionellen medizinischen Rat ersetzen. Konsultieren Sie immer einen Arzt für die Interpretation Ihrer Laborergebnisse.",
+                q3_question: "Welche spezifischen Biomarker und Einheiten werden unterstützt?",
+                q3_answer: "Wir unterstützen eine breite Palette gängiger Blutbiomarker wie Glukose, Kreatinin, Cholesterin, Schilddrüsenhormone und viele mehr. Die verfügbaren Einheiten (z.B. mmol/L, mg/dL, µmol/L, IE/L) erscheinen automatisch in den Dropdown-Menüs, sobald Sie einen Biomarker auswählen. Wenn eine Einheit für einen bestimmten Biomarker nicht aufgeführt ist, bedeutet dies, dass diese Umrechnung typischerweise nicht standardisiert oder derzeit nicht unterstützt wird.",
+                q4_question: "Werden meine persönlichen oder Gesundheitsdaten gespeichert?",
+                q4_answer: "Nein. Ihre Privatsphäre ist von größter Bedeutung. Dieser Einheitenumrechner arbeitet vollständig **clientseitig in Ihrem Browser**, was bedeutet, dass keine persönlichen Gesundheitsdaten, eingegebenen Werte oder Umrechnungsergebnisse an unsere Server gesendet oder dort gespeichert werden. Alle Vorgänge sind temporär und sicher.",
+                q5_question: "Was, wenn meine spezifische Einheit oder mein Biomarker nicht aufgeführt ist?",
+                q5_answer: "Wenn ein Biomarker oder eine bestimmte Einheit für diesen Biomarker in den Dropdown-Listen nicht verfügbar ist, bedeutet dies, dass unsere Datenbank ihn derzeit nicht unterstützt. Wir arbeiten kontinuierlich daran, unsere Abdeckung zu erweitern. Bitte schauen Sie später noch einmal vorbei oder kontaktieren Sie uns, wenn Sie einen Vorschlag haben.",
+                q6_question: "Kann ich diesen Umrechner auch für andere Arten von Einheitenumrechnungen (z.B. Gewicht, Länge) verwenden?",
+                q6_answer: "Nein, dieser Umrechner ist ausschließlich auf die Umrechnung von Maßeinheiten für **Blutbiomarker** spezialisiert. Er wurde für medizinische Zwecke und die Analyse von Laborwerten entwickelt.",
+                q7_question: "Was ist der Unterschied zwischen konventionellen Einheiten und SI-Einheiten?",
+                q7_answer: "Konventionelle Einheiten werden oft in den USA verwendet, während SI-Einheiten (Système International d'Unités) ein internationaler Standard sind. Zum Beispiel könnten Glukosespiegel in mg/dL (konventionell) oder mmol/L (SI) gemessen werden. Unser Umrechner ermöglicht Ihnen den einfachen Wechsel zwischen diesen Systemen, was für medizinisches Fachpersonal und Patienten, die mit Daten aus verschiedenen Quellen arbeiten, von entscheidender Bedeutung ist.",
+                q8_question: "Gibt es eine mobile Version oder App für diesen Umrechner?",
+                q8_answer: "Unser Umrechner ist vollständig für mobile Geräte optimiert und funktioniert perfekt in jedem modernen Browser auf einem Smartphone oder Tablet. Eine separate mobile App gibt es derzeit nicht, aber Sie können die Website für schnellen Zugriff zu Ihrem Startbildschirm hinzufügen.",
+                q9_question: "Wie oft wird die Biomarker- und Einheiten-Datenbank aktualisiert?",
+                q9_answer: "Wir arbeiten ständig daran, unsere Datenbank mit Biomarkern und deren Einheiten zu erweitern und zu aktualisieren. Updates werden regelmäßig veröffentlicht, um die Genauigkeit und Aktualität der Daten zu gewährleisten. Wir freuen uns über Ihre Vorschläge zum Hinzufügen neuer Biomarker oder Einheiten.",
+            },
+            howItWorks: {
+            title: "So funktioniert's",
+            step1: {
+                title: "Biomarker auswählen",
+                description: "Wählen Sie den gewünschten Blutbiomarker aus der Dropdown-Liste aus, den Sie umrechnen möchten.",
+            },
+            step2: {
+                title: "Wert eingeben & Einheiten wählen",
+                description: "Geben Sie den numerischen Wert Ihres Ergebnisses in das Feld 'Umzurechnender Wert' ein und wählen Sie dann die Quell- und Zieleinheit aus.",
+            },
+            step3: {
+                title: "Umrechnungsergebnis erhalten",
+                description: "Klicken Sie auf die Schaltfläche 'Umrechnen', um den genauen Biomarkerwert sofort in die ausgewählte Einheit umgerechnet zu erhalten.",
+            },
+        },
         },
         biomarkers: {
             "Glucose": "Glukose",
@@ -761,6 +890,11 @@ const translations = {
             "button_back": "Zurück zum Biomarker-Verzeichnis",
             "button_view_details": "Details anzeigen"
     },
+    disclaimer: {
+            title: "Wichtiger Haftungsausschluss",
+            paragraph1: "Dieser Einheitenumrechner dient nur zu allgemeinen Informationszwecken und ist nicht als Ersatz für professionelle medizinische Beratung, Diagnose oder Behandlung gedacht. Suchen Sie bei medizinischen Fragen immer den Rat Ihres Arztes oder einer anderen qualifizierten Gesundheitsfachkraft ein.",
+            paragraph2: "Die bereitgestellten Umrechnungen basieren auf wissenschaftlichen Standardformeln. Obwohl wir uns um Genauigkeit bemühen, sollten die Ergebnisse immer von einem Arzt bestätigt werden. Wir übernehmen keine Garantie für die Richtigkeit oder Vollständigkeit der präsentierten Informationen.",
+        },
     units: {
       "mmol/L": "mmol/L",
       "mg/dL": "mg/dL",
@@ -820,7 +954,7 @@ const translations = {
             googleCloudVision: "Nous utilisons l'API Google Cloud Vision pour le traitement d'images, qui accède temporairement aux données uniquement pour la reconnaissance et ne les stocke pas.",
         },
         fileUpload: {
-            fileAdded: (fileName) => `Fichier "${fileName}" ajouté !`,
+            fileAdded: "Fichier {fileName} ajouté !",
             dragOrClick: "Faites glisser un fichier ici ou cliquez pour sélectionner.",
             releaseToUpload: "Relâchez le fichier pour télécharger !",
             selectFileButton: "Sélectionner un Fichier de Test Sanguin",
@@ -829,11 +963,11 @@ const translations = {
         loading: "Traitement du fichier...",
         error: {
             title: "Erreur !",
-            retryTime: (time) => `Veuillez réessayer dans ${time} secondes.`,
+            retryTime: "Veuillez réessayer dans {time} secondes.",
             selectAnotherFile: "Sélectionner un autre fichier",
             noMedicalData: "Aucune donnée d'analyse médicale trouvée dans le document.",
             unexpectedData: "Format de données inattendu reçu du serveur.",
-            networkError: (message) => `Erreur réseau ou problème de connexion au serveur : ${message}`
+            networkError:"Erreur réseau ou problème de connexion au serveur : {message}"
         },
         tableDisplay: {
             imageProcessingResult: "Résultat du traitement d'image :",
@@ -909,12 +1043,15 @@ const translations = {
         },
         unitConverter: {
             title: "Convertisseur d'Unités de Biomarqueurs Sanguins",
+            aboutToolTitle: 'Découvrez Notre Convertisseur d’Unités de Biomarqueurs',
+            descriptionLong: 'Convertissez facilement les résultats de tests de laboratoire avec notre convertisseur d’unités de biomarqueurs précis. Conçu pour les professionnels de santé et les particuliers, cet outil simplifie le passage entre unités comme mg/dL et mmol/L, garantissant des résultats précis et fiables pour une meilleure compréhension de la santé.',
             selectBiomarkerLabel: "Sélectionner le Biomarqueur",
             inputValueLabel: "Saisir la Valeur",
             inputValuePlaceholder: "Entrez une valeur, par exemple 100",
             sourceUnitLabel: "De l'Unité",
             targetUnitLabel: "Vers l'Unité",
             convertButton: "Convertir",
+            resetButton: "Effacer", 
             resultLabel: "Résultat",
             selectPlaceholder: "Sélectionner un biomarqueur",
             selectUnitPlaceholder: "Sélectionner une unité",
@@ -924,6 +1061,42 @@ const translations = {
                 selectUnits: "Veuillez sélectionner les unités source et cible.",
                 conversionNotPossible: "Conversion impossible pour ces unités/biomarqueur.",
             },
+            faq: {
+                title: "Foire aux questions (FAQ)",
+                q1_question: "À quoi sert ce convertisseur d'unités de biomarqueurs sanguins ?",
+                q1_answer: "Cet outil est conçu pour vous aider à convertir facilement les résultats des biomarqueurs sanguins entre diverses unités de mesure, telles que des unités conventionnelles (par exemple, mg/dL) aux unités SI (par exemple, mmol/L) ou vice versa. Il est idéal pour comprendre les résultats de laboratoire de différentes régions ou sources.",
+                q2_question: "Quelle est la précision des conversions fournies par cet outil ?",
+                q2_answer: "Nos conversions sont basées sur des formules scientifiques et des poids moléculaires largement acceptés. Bien que nous nous efforcions d'atteindre une grande précision, cet outil est à des **fins d'information uniquement** et ne doit pas remplacer un avis médical professionnel. Consultez toujours un professionnel de la santé pour l'interprétation de vos résultats de laboratoire.",
+                q3_question: "Quels biomarqueurs et unités spécifiques sont pris en charge ?",
+                q3_answer: "Nous prenons en charge une large gamme de biomarqueurs sanguins courants tels que le glucose, la créatinine, le cholestérol, les hormones thyroïdiennes et bien d'autres. Les unités disponibles (par exemple, mmol/L, mg/dL, µmol/L, UI/L) apparaîtront automatiquement dans les menus déroulants une fois que vous aurez sélectionné un biomarqueur. Si une unité n'est pas répertoriée pour un biomarqueur spécifique, cela signifie que cette conversion n'est généralement pas standard ou n'est pas actuellement prise en charge.",
+                q4_question: "Mes données personnelles ou de santé sont-elles sauvegardées ou stockées ?",
+                q4_answer: "Non. Votre vie privée est primordiale. Ce convertisseur d'unités fonctionne entièrement **côté client dans votre navigateur**, ce qui signifie qu'aucune donnée de santé personnelle, valeur saisie ou résultat de conversion n'est envoyé ou stocké sur nos serveurs. Toutes les opérations sont temporaires et sécurisées.",
+                q5_question: "Que faire si mon unité ou mon biomarqueur spécifique n'est pas répertorié ?",
+                q5_answer: "Si un biomarqueur ou une unité spécifique pour ce biomarqueur n'est pas disponible dans les listes déroulantes, cela signifie que notre base de données ne le prend pas en charge actuellement. Nous travaillons continuellement à étendre notre couverture. Veuillez vérifier ultérieurement ou nous contacter si vous avez une suggestion.",
+                q6_question: "Puis-je utiliser ce convertisseur pour d'autres types de conversions d'unités (par exemple, poids, longueur)?",
+                q6_answer: "Non, ce convertisseur est spécialisé exclusivement dans la conversion des unités de mesure des **biomarqueurs sanguins**. Il est conçu à des fins médicales et pour l'analyse des valeurs de laboratoire.",
+                q7_question: "Quelle est la différence entre les unités conventionnelles et les unités SI?",
+                q7_answer: "Les unités conventionnelles sont souvent utilisées aux États-Unis, tandis que les unités SI (Système International d'Unités) sont une norme internationale. Par exemple, les niveaux de glucose peuvent être mesurés en mg/dL (conventionnel) ou en mmol/L (SI). Notre convertisseur vous permet de basculer facilement entre ces systèmes, ce qui est essentiel pour les professionnels de la santé et les patients qui travaillent avec des données de différentes sources.",
+                q8_question: "Existe-t-il une version mobile ou une application pour ce convertisseur?",
+                q8_answer: "Notre convertisseur est entièrement optimisé pour les appareils mobiles et fonctionne parfaitement dans n'importe quel navigateur moderne sur un smartphone ou une tablette. Il n'y a pas d'application mobile séparée actuellement, mais vous pouvez ajouter le site Web à l'écran d'accueil de votre appareil pour un accès rapide.",
+                q9_question: "À quelle fréquence la base de données des biomarqueurs et des unités est-elle mise à jour?",
+                q9_answer: "Nous travaillons constamment à l'expansion et à la mise à jour de notre base de données de biomarqueurs et de leurs unités. Les mises à jour sont publiées régulièrement pour garantir l'exactitude et l'actualité des données. Nous apprécions vos suggestions pour l'ajout de nouveaux biomarqueurs ou unités.",
+            },
+            howItWorks: {
+            title: "Comment ça marche",
+            step1: {
+                title: "Sélectionner le Biomarqueur",
+                description: "Choisissez le biomarqueur sanguin souhaité dans la liste déroulante que vous souhaitez convertir.",
+            },
+            step2: {
+                title: "Saisir la Valeur et Choisir les Unités",
+                description: "Saisissez la valeur numérique de votre résultat dans le champ 'Valeur à convertir', puis sélectionnez les unités source et cible.",
+            },
+            step3: {
+                title: "Obtenir le Résultat Converti",
+                description: "Cliquez sur le bouton 'Convertir' pour obtenir instantanément la valeur précise du biomarqueur, convertie dans l'unité choisie.",
+            },
+        },
         },
         biomarkers: {
             "Glucose": "Glucose",
@@ -1032,6 +1205,11 @@ const translations = {
             "button_back": "Retour à l'annuaire des biomarqueurs",
             "button_view_details": "Voir les détails"
     },
+    disclaimer: {
+            title: "Avis de non-responsabilité important",
+            paragraph1: "Ce convertisseur d'unités est fourni à titre d'information générale uniquement et n'est pas destiné à remplacer un avis médical professionnel, un diagnostic ou un traitement. Demandez toujours l'avis de votre médecin ou d'un autre fournisseur de soins de santé qualifié pour toute question que vous pourriez avoir concernant une condition médicale.",
+            paragraph2: "Les conversions fournies sont basées sur des formules scientifiques standard. Bien que nous nous efforcions d'être précis, les résultats doivent toujours être confirmés par un professionnel de la santé. Nous ne garantissons pas l'exactitude ou l'exhaustivité des informations présentées.",
+        },
     units: {
       "mmol/L": "mmol/L",
       "mg/dL": "mg/dL",
@@ -1091,7 +1269,7 @@ const translations = {
             googleCloudVision: "Ми використовуємо Google Cloud Vision API для обробки зображень, який тимчасово отримує доступ до даних лише для розпізнавання і не зберігає їх.",
         },
         fileUpload: {
-            fileAdded: (fileName) => `Файл "${fileName}" додано!`,
+            fileAdded: "Файл {fileName} додано!",
             dragOrClick: "Перетягніть файл сюди або натисніть, щоб вибрати.",
             releaseToUpload: "Відпустіть файл для завантаження!",
             selectFileButton: "Вибрати файл аналізу крові",
@@ -1100,11 +1278,11 @@ const translations = {
         loading: "Обробка файлу...",
         error: {
             title: "Помилка!",
-            retryTime: (time) => `Будь ласка, спробуйте ще раз через ${time} секунд.`,
+            retryTime: "Будь ласка, спробуйте ще раз через {time} секунд.",
             selectAnotherFile: "Вибрати інший файл",
             noMedicalData: "У документі не знайдено даних медичного аналізу.",
             unexpectedData: "Отримано неочікуваний формат даних від сервера.",
-            networkError: (message) => `Помилка мережі або проблема з підключенням до сервера: ${message}`
+            networkError:"Помилка мережі або проблема з підключенням до сервера: {message}"
         },
         tableDisplay: {
             imageProcessingResult: "Результат обробки зображення:",
@@ -1180,12 +1358,15 @@ const translations = {
         },
         unitConverter: {
             title: "Конвертер одиниць вимірювання біомаркерів крові",
+            aboutToolTitle: 'Відкрийте для себе наш конвертер одиниць біомаркерів',
+            descriptionLong: 'Легко конвертуйте результати лабораторних аналізів за допомогою нашого точного конвертера одиниць біомаркерів. Розроблений для медичних фахівців і звичайних користувачів, цей інструмент спрощує перемикання між одиницями, такими як мг/дл і ммоль/л, забезпечуючи точні та надійні результати для кращого розуміння здоров’я.',
             selectBiomarkerLabel: "Виберіть біомаркер",
             inputValueLabel: "Введіть значення",
             inputValuePlaceholder: "Введіть значення, наприклад, 100",
             sourceUnitLabel: "З одиниці",
             targetUnitLabel: "В одиницю",
             convertButton: "Конвертувати",
+            resetButton: "Очистити",
             resultLabel: "Результат",
             selectPlaceholder: "Виберіть біомаркер",
             selectUnitPlaceholder: "Виберіть одиницю",
@@ -1195,6 +1376,42 @@ const translations = {
                 selectUnits: "Будь ласка, виберіть вихідну та цільову одиниці.",
                 conversionNotPossible: "Конвертація неможлива для цих одиниць/біомаркера.",
             },
+            faq: {
+                title: "Часто задавані питання (FAQ)",
+                q1_question: "Що це за конвертер одиниць біомаркерів крові і для чого він мені потрібен?",
+                q1_answer: "Цей інструмент розроблений, щоб допомогти вам легко конвертувати результати біомаркерів крові між різними одиницями вимірювання, наприклад, зі звичайних (наприклад, мг/дл) в одиниці СІ (наприклад, ммоль/л) або навпаки. Це ідеально підходить для розуміння результатів лабораторних досліджень з різних регіонів або джерел.",
+                q2_question: "Наскільки точними є перетворення, що надаються цим інструментом?",
+                q2_answer: "Наші перетворення базуються на загальноприйнятих наукових формулах та молекулярних вагах. Хоча ми прагнемо високої точності, цей інструмент призначений лише для **інформаційних цілей** і не повинен замінювати професійну медичну консультацію. Завжди консультуйтеся з лікарем для інтерпретації ваших лабораторних результатів.",
+                q3_question: "Які конкретні біомаркери та одиниці вимірювання підтримуються?",
+                q3_answer: "Ми підтримуємо широкий спектр поширених біомаркерів крові, таких як Глюкоза, Креатинін, Холестерин, Гормони щитоподібної залози та багато інших. Доступні одиниці (наприклад, ммоль/л, мг/дл, мкмоль/л, МО/л) автоматично з'являться у випадаючих меню після вибору біомаркера. Якщо одиниця не вказана для певного біомаркера, це означає, що таке перетворення, як правило, не є стандартним або наразі не підтримується.",
+                q4_question: "Чи зберігаються мої особисті дані або дані про здоров'я?",
+                q4_answer: "Ні. Ваша конфіденційність є найважливішою. Цей конвертер одиниць працює повністю **на стороні клієнта у вашому браузері**, тобто жодні особисті медичні дані, введені значення або результати конвертації не надсилаються та не зберігаються на наших серверах. Усі операції є тимчасовими та безпечними.",
+                q5_question: "Що робити, якщо моєї конкретної одиниці або біомаркера немає в списку?",
+                q5_answer: "Якщо біомаркер або конкретна одиниця для цього біомаркера недоступні у випадаючих списках, це означає, що наша база даних наразі не підтримує їх. Ми постійно працюємо над розширенням нашого покриття. Будь ласка, перевірте пізніше або зв'яжіться з нами, якщо у вас є пропозиція.",
+                q6_question: "Чи можу я використовувати цей конвертер для конвертації одиниць в інших сферах (наприклад, вага, довжина)?",
+                q6_answer: "Ні, цей конвертер спеціалізується виключно на конвертації одиниць вимірювання **біомаркерів крові**. Він розроблений для медичних цілей та аналізу лабораторних показників.",
+                q7_question: "Яка різниця між звичайними одиницями та одиницями СІ (SI units)?",
+                q7_answer: "Звичайні одиниці (Conventional Units) часто використовуються в США, тоді як одиниці СІ (Système International d'Unités) є міжнародним стандартом. Наприклад, рівень глюкози може вимірюватися в мг/дЛ (звичайна) або ммоль/Л (СІ). Наш конвертер дозволяє легко перемикатися між цими системами, що є критично важливим для медичних працівників та пацієнтів, які працюють з даними з різних джерел.",
+                q8_question: "Чи є мобільна версія або додаток для цього конвертера?",
+                q8_answer: "Наш конвертер повністю адаптований для мобільних пристроїв і чудово працює у будь-якому сучасному браузері на смартфоні чи планшеті. Окремого мобільного додатку наразі немає, але ви можете додати сайт на головний екран свого пристрою для швидкого доступу.",
+                q9_question: "Як часто оновлюється база даних біомаркерів та одиниць?",
+                q9_answer: "Ми постійно працюємо над розширенням та оновленням нашої бази даних біомаркерів та їхніх одиниць. Оновлення випускаються регулярно, щоб забезпечити актуальність та точність даних. Ми цінуємо ваші пропозиції щодо додавання нових біомаркерів або одиниць.",
+            },
+            howItWorks: { 
+            title: "Як це працює: Конвертація одиниць біомаркерів",
+            step1: {
+                title: "Виберіть біомаркер",
+                description: "Оберіть бажаний біомаркер крові зі списку, який ви бажаєте конвертувати, наприклад, Глюкоза або Креатинін."
+            },
+            step2: {
+                title: "Введіть значення та оберіть одиниці",
+                description: "Введіть числове значення вашого результату у полі «Значення для конвертації». Потім оберіть вихідну одиницю (наприклад, ммоль/л) та цільову одиницю (наприклад, мг/дл)."
+            },
+            step3: {
+                title: "Отримайте конвертований результат",
+                description: "Натисніть кнопку «Конвертувати», щоб миттєво отримати точне значення біомаркера, переведене в обрану одиницю. Ви також можете натиснути «Очистити» для скидання."
+            }
+        },
         },
         biomarkers: {
 "Glucose": "Глюкоза",
@@ -1303,6 +1520,11 @@ const translations = {
             "button_back": "Повернутися до Каталогу Біомаркерів",
             "button_view_details": "Переглянути деталі"
     },
+    disclaimer: {
+            title: "Важливе Застереження", // ОНОВЛЕНО
+            paragraph1: "Цей конвертер одиниць надається лише для загальних інформаційних цілей і не призначений для заміни професійної медичної консультації, діагностики чи лікування. Завжди звертайтеся за порадою до свого лікаря або іншого кваліфікованого медичного працівника з будь-якими питаннями, які можуть виникнути у вас щодо медичного стану.", // ОНОВЛЕНО
+            paragraph2: "Надані перетворення базуються на стандартних наукових формулах. Хоча ми прагнемо до точності, результати завжди мають бути підтверджені медичним працівником. Ми не гарантуємо точність або повноту представленої інформації.", // ОНОВЛЕНО
+        },
     units: {
       "mmol/L": "ммоль/л",
       "mg/dL": "мг/дл",
@@ -1362,7 +1584,7 @@ const translations = {
             googleCloudVision: "画像処理にはGoogle Cloud Vision APIを使用しており、認識のために一時的にデータにアクセスしますが、保存はしません。",
         },
         fileUpload: {
-            fileAdded: (fileName) => `ファイル「${fileName}」が追加されました！`,
+            fileAdded: "ファイル{fileName}が追加されました！",
             dragOrClick: "ここにファイルをドラッグするか、クリックして選択します。",
             releaseToUpload: "ファイルを離してアップロード！",
             selectFileButton: "血液検査ファイルを選択",
@@ -1371,11 +1593,11 @@ const translations = {
         loading: "ファイル処理中...",
         error: {
             title: "エラー！",
-            retryTime: (time) => `${time}秒後に再試行してください。`,
+            retryTime: "秒後に再試行してください。",
             selectAnotherFile: "別のファイルを選択",
             noMedicalData: "ドキュメントに医療分析データが見つかりませんでした。",
             unexpectedData: "サーバーから予期しないデータ形式が受信されました。",
-            networkError: (message) => `ネットワークエラーまたはサーバー接続の問題：${message}`
+            networkError:"ネットワークエラーまたはサーバー接続の問題：{message}"
         },
         tableDisplay: {
             imageProcessingResult: "画像処理結果：",
@@ -1451,11 +1673,14 @@ const translations = {
         },
         unitConverter: {
             title: "血液バイオマーカー単位変換ツール",
+            aboutToolTitle: 'バイオマーカー単位変換ツールをご覧ください',
+            descriptionLong: '私たちの精密なバイオマーカー単位変換ツールで、検査結果を簡単に変換できます。医療専門家や個人向けに設計されたこのツールは、mg/dLやmmol/Lなどの単位間の切り替えを簡素化し、正確で信頼性の高い結果を提供して健康に関する洞察を向上させます。',
             selectBiomarkerLabel: "バイオマーカーを選択",
             inputValueLabel: "値を入力",
             inputValuePlaceholder: "値を入力してください、例: 100",
             sourceUnitLabel: "元の単位",
             targetUnitLabel: "変換後の単位",
+            resetButton: "クリア",
             convertButton: "変換",
             resultLabel: "結果",
             selectPlaceholder: "バイオマーカーを選択してください",
@@ -1466,6 +1691,42 @@ const translations = {
                 selectUnits: "元の単位と変換後の単位の両方を選択してください。",
                 conversionNotPossible: "これらの単位/バイオマーカーの変換はできません。",
             },
+            faq: {
+                title: "よくある質問 (FAQ)",
+                q1_question: "この血液バイオマーカー単位変換ツールは何ですか？",
+                q1_answer: "このツールは、血液バイオマーカーの結果を様々な測定単位間で簡単に変換するのに役立ちます。例えば、従来の単位（例：mg/dL）からSI単位（例：mmol/L）へ、またはその逆への変換が可能です。異なる地域や情報源からの検査結果を理解するのに最適です。",
+                q2_question: "このツールが提供する変換の精度はどのくらいですか？",
+                q2_answer: "当社の変換は、広く受け入れられている科学的な公式と分子量に基づいています。高い精度を目指していますが、このツールはあくまで**情報提供のみを目的**としており、専門的な医療アドバイスに代わるものではありません。検査結果の解釈については、必ず医療専門家にご相談ください。",
+                q3_question: "どの特定のバイオマーカーと単位がサポートされていますか？",
+                q3_answer: "グルコース、クレアチニン、コレステロール、甲状腺ホルモンなど、幅広い一般的な血液バイオマーカーをサポートしています。利用可能な単位（例：mmol/L、mg/dL、µmol/L、IU/L）は、バイオマーカーを選択するとドロップダウンメニューに自動的に表示されます。特定のバイオマーカーに対して単位がリストにない場合、その変換は通常標準的でないか、現在サポートされていないことを意味します。",
+                q4_question: "私の個人データや健康データは保存されますか？",
+                q4_answer: "いいえ。お客様のプライバシーは最優先事項です。この単位変換ツールは完全に**ブラウザのクライアント側で動作**します。つまり、個人健康データ、入力された値、変換結果が当社のサーバーに送信されたり保存されたりすることはありません。すべての操作は一時的で安全です。",
+                q5_question: "特定の単位やバイオマーカーがリストにない場合はどうすればよいですか？",
+                q5_answer: "バイオマーカーまたはその特定の単位がドロップダウンリストにない場合、当社のデータベースが現在それをサポートしていないことを意味します。当社は継続的にサポート範囲の拡大に取り組んでいます。後で再度確認するか、ご提案があればお問い合わせください。",
+                q6_question: "このコンバーターを他の種類の単位変換（例：体重、長さ）に使用できますか？",
+                q6_answer: "いいえ、このコンバーターは**血液バイオマーカー**の測定単位の変換に特化しています。医療目的および臨床検査値の分析のために設計されています。",
+                q7_question: "慣習単位とSI単位の違いは何ですか？",
+                q7_answer: "慣習単位は米国でよく使用されますが、SI単位（国際単位系）は国際標準です。例えば、血糖値はmg/dL（慣習単位）またはmmol/L（SI単位）で測定されることがあります。当社のコンバーターを使用すると、これらのシステム間を簡単に切り替えることができ、異なる情報源からのデータを扱う医療専門家や患者にとって非常に重要です。",
+                q8_question: "このコンバーターのモバイル版やアプリはありますか？",
+                q8_answer: "当社のコンバーターはモバイルデバイスに完全に最適化されており、スマートフォンやタブレットの最新のブラウザで問題なく動作します。現在、個別のモバイルアプリはありませんが、迅速なアクセスのためにお使いのデバイスのホーム画面にウェブサイトを追加することができます。",
+                q9_question: "バイオマーカーと単位のデータベースはどのくらいの頻度で更新されますか？",
+                q9_answer: "当社はバイオマーカーとその単位のデータベースを常に拡張および更新するよう努めています。データの正確性とタイムリー性を確保するため、定期的に更新がリリースされます。新しいバイオマーカーや単位の追加に関するご提案をお待ちしております。",
+            },
+            howItWorks: {
+            title: "Comment ça marche",
+            step1: {
+                title: "Sélectionner le Biomarqueur",
+                description: "Choisissez le biomarqueur sanguin souhaité dans la liste déroulante que vous souhaitez convertir.",
+            },
+            step2: {
+                title: "Saisir la Valeur et Choisir les Unités",
+                description: "Saisissez la valeur numérique de votre résultat dans le champ 'Valeur à convertir', puis sélectionnez les unités source et cible.",
+            },
+            step3: {
+                title: "Obtenir le Résultat Converti",
+                description: "Cliquez sur le bouton 'Convertir' pour obtenir instantanément la valeur précise du biomarqueur, convertie dans l'unité choisie.",
+            },
+        },
         },
         biomarkers: {
       "Glucose": "グルコース",
@@ -1574,6 +1835,11 @@ const translations = {
             "button_back": "バイオマーカーディレクトリに戻る",
             "button_view_details": "詳細を見る"
     },
+    disclaimer: {
+            title: "重要な免責事項",
+            paragraph1: "この単位換算ツールは、一般的な情報提供のみを目的としており、専門的な医療アドバイス、診断、または治療の代わりとなるものではありません。病状に関するご質問は、必ず医師またはその他の資格のある医療提供者にご相談ください。",
+            paragraph2: "提供される変換は標準的な科学的公式に基づいています。正確性を追求していますが、結果は常に医療専門家によって確認される必要があります。提示された情報の正確性または完全性を保証するものではありません。",
+        },
     units: {
       "mmol/L": "mmol/L",
       "mg/dL": "mg/dL",
@@ -1634,7 +1900,7 @@ zh: {
             privacyPolicyLink: "隐私政策"
         },
         fileUpload: {
-            fileAdded: (fileName) => `文件“${fileName}”已添加！`,
+            fileAdded:"文件{fileName}已添加！",
             dragOrClick: "拖放文件到此处或点击选择。",
             releaseToUpload: "释放文件以上传！",
             selectFileButton: "选择血液检测文件",
@@ -1643,11 +1909,11 @@ zh: {
         loading: "正在处理文件...",
         error: {
             title: "错误！",
-            retryTime: (time) => `请在 ${time} 秒后重试。`,
+            retryTime:"请在 {time} 秒后重试。",
             selectAnotherFile: "选择另一个文件",
             noMedicalData: "文档中未找到医疗分析数据。",
             unexpectedData: "从服务器接收到意外数据格式。",
-            networkError: (message) => `网络错误或连接服务器问题：${message}`
+            networkError: "网络错误或连接服务器问题：{message}"
         },
         tableDisplay: {
             imageProcessingResult: "图像处理结果：",
@@ -1722,12 +1988,15 @@ zh: {
         },
        unitConverter: {
             title: "血液生物标志物单位转换器",
+            aboutToolTitle: '探索我们的生物标志物单位转换器',
+            descriptionLong: '使用我们精准的生物标志物单位转换器轻松转换实验室检测结果。该工具专为医疗专业人员和个人设计，简化了mg/dL和mmol/L等单位之间的切换，确保准确可靠的结果，以获得更好的健康洞察。',
             selectBiomarkerLabel: "选择生物标志物",
             inputValueLabel: "输入数值",
             inputValuePlaceholder: "输入数值，例如：100",
             sourceUnitLabel: "从单位",
             targetUnitLabel: "到单位",
             convertButton: "转换",
+            resetButton: "清除",
             resultLabel: "结果",
             selectPlaceholder: "选择一个生物标志物",
             selectUnitPlaceholder: "选择一个单位",
@@ -1737,6 +2006,42 @@ zh: {
                 selectUnits: "请选择起始单位和目标单位。",
                 conversionNotPossible: "这些单位/生物标志物无法进行转换。",
             },
+            faq: {
+                title: "常见问题 (FAQ)",
+                q1_question: "这个血液生物标志物单位转换器有什么用？",
+                q1_answer: "此工具旨在帮助您轻松地在各种测量单位之间转换血液生物标志物结果，例如从常规单位（如 mg/dL）转换为 SI 单位（如 mmol/L），反之亦然。它非常适合理解来自不同地区或来源的实验室结果。",
+                q2_question: "此工具提供的转换有多准确？",
+                q2_answer: "我们的转换基于广泛接受的科学公式和分子量。尽管我们力求高准确性，但此工具仅供**参考之用**，不应替代专业的医疗建议。请务必咨询医疗专业人员以解释您的实验室结果。",
+                q3_question: "支持哪些具体的生物标志物和单位？",
+                q3_answer: "我们支持各种常见的血液生物标志物，如葡萄糖、肌酐、胆固醇、甲状腺激素等等。一旦您选择生物标志物，可用单位（例如 mmol/L、mg/dL、µmol/L、IU/L）将自动显示在下拉菜单中。如果某个生物标志物的特定单位未列出，则表示该转换通常不是标准或当前不支持。",
+                q4_question: "我的个人或健康数据会被保存或存储吗？",
+                q4_answer: "不会。您的隐私至关重要。此单位转换器完全在**您的浏览器客户端运行**，这意味着任何个人健康数据、输入值或转换结果都不会发送或存储到我们的服务器上。所有操作都是临时且安全的。",
+                q5_question: "如果我的特定单位或生物标志物未列出怎么办？",
+                q5_answer: "如果下拉列表中没有某个生物标志物或该生物标志物的特定单位，则表示我们的数据库目前不支持它。我们正在不断努力扩大覆盖范围。请稍后查看或如果您有建议，请联系我们。",
+                q6_question: "我可以使用此转换器进行其他类型的单位转换（例如，重量、长度）吗？",
+                q6_answer: "不，此转换器专门用于转换**血液生物标志物**的测量单位。它专为医疗目的和实验室值的分析而设计。",
+                q7_question: "常规单位和SI单位有什么区别？",
+                q7_answer: "常规单位常用于美国，而SI单位（国际单位制）是国际标准。例如，葡萄糖水平可能以 mg/dL（常规单位）或 mmol/L（SI单位）测量。我们的转换器让您可以在这些系统之间轻松切换，这对于处理来自不同来源数据的医疗专业人员和患者至关重要。",
+                q8_question: "此转换器有移动版或应用程序吗？",
+                q8_answer: "我们的转换器已完全针对移动设备进行了优化，可以在智能手机或平板电脑上的任何现代浏览器中完美运行。目前没有单独的移动应用程序，但您可以将网站添加到设备的主屏幕以快速访问。",
+                q9_question: "生物标志物和单位数据库多久更新一次？",
+                q9_answer: "我们正在不断努力扩展和更新生物标志物及其单位的数据库。更新会定期发布，以确保数据的准确性和及时性。我们感谢您对添加新生物标志物或单位的建议。",
+            },
+            howItWorks: {
+            title: "工作原理",
+            step1: {
+                title: "选择生物标志物",
+                description: "从下拉列表中选择您想要转换的血液生物标志物。",
+            },
+            step2: {
+                title: "输入数值并选择单位",
+                description: "在“要转换的值”字段中输入您的结果数值，然后选择源单位和目标单位。",
+            },
+            step3: {
+                title: "获取转换结果",
+                description: "点击“转换”按钮，即可立即获得精确转换后的生物标志物值。",
+            },
+        },
         },
     biomarkers: {
       "Glucose": "葡萄糖",
@@ -1844,6 +2149,11 @@ zh: {
             "titles": "您可能也感兴趣的其他生物标志物",
             "button_back": "返回生物标志物目录",
             "button_view_details": "查看详情"
+        },
+        disclaimer: {
+            title: "重要免责声明",
+            paragraph1: "本单位转换器仅供一般信息参考，无意替代专业的医疗建议、诊断或治疗。如有任何医疗问题，请务必咨询您的医生或其他合格的医疗服务提供者。",
+            paragraph2: "所提供的转换基于标准科学公式。尽管我们力求准确，但结果应始终由医疗保健专业人员确认。我们不保证所提供信息的准确性或完整性。",
         },
     units: {
       "mmol/L": "毫摩尔/升",

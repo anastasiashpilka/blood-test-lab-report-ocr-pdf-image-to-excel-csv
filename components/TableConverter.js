@@ -431,7 +431,7 @@ const TableConverter = () => {
                         <HelpCircle className="w-8 h-8" aria-label="FAQ Icon" />
                     </button>
 
-                    <div className="max-w-5xl mx-auto bg-white rounded-xl shadow-lg p-8 relative z-10 mb-12">
+                    <div className="max-w-5xl mx-auto bg-white rounded-lg shadow-lg p-8 relative z-10 mb-12">
                         <div
                             className={`flex flex-col items-center justify-center border-2 border-dashed border-indigo-200 rounded-lg bg-indigo-50/50 p-6 mb-4
                                 ${loading ? 'opacity-50 pointer-events-none' : ''}
@@ -473,7 +473,7 @@ const TableConverter = () => {
 
                         {loading && (
                             <div className="flex items-center justify-center fixed inset-0 z-40 bg-white bg-opacity-75">
-                                <div className="animate-spin rounded-full h-24 w-24 border-b-4 border-indigo-600"></div>
+                                <div className="animate-spin rounded-lg h-24 w-24 border-b-4 border-indigo-600"></div>
                             </div>
                         )}
 
@@ -602,7 +602,7 @@ const TableConverter = () => {
                                     <ArrowRight className="w-10 h-10 text-indigo-400" aria-label="Next Step Arrow" />
                                 </div>
                                 <div className="bg-white p-6 rounded-lg shadow-lg text-center flex flex-col items-center relative transition-all duration-300 hover:shadow-xl hover:scale-[1.02] cursor-pointer">
-                                    <div className="bg-indigo-100 text-indigo-600 rounded-full h-16 w-16 flex items-center justify-center mb-4">
+                                    <div className="bg-indigo-100 text-indigo-600 rounded-fuull h-16 w-16 flex items-center justify-center mb-4">
                                         <Microscope className="w-8 h-8" aria-label="Conversion Process Icon" />
                                     </div>
                                     <h4 className="text-xl font-semibold text-gray-800 mb-2">{translations[currentLang].howItWorks.step2.title}</h4>
@@ -623,7 +623,7 @@ const TableConverter = () => {
                         </div>
                     </section>
 
-                    <section className="max-w-5xl mx-auto bg-white rounded-xl shadow-lg p-8 mt-12">
+                    <section className="max-w-5xl mx-auto bg-white rounded-lg shadow-lg p-8 mt-12">
                         <h2 className="text-3xl font-bold text-indigo-800 mb-6 text-center">
                             {translations[currentLang].whyChooseUs.title}
                         </h2>
@@ -646,7 +646,7 @@ const TableConverter = () => {
                         </ul>
                     </section>
 
-                    <section ref={faqSectionRef} className="max-w-5xl mx-auto bg-white rounded-xl shadow-lg p-8 mt-12">
+                    <section ref={faqSectionRef} className="max-w-5xl mx-auto bg-white rounded-lg shadow-lg p-8 mt-12">
                         <h2 className="text-3xl font-bold text-indigo-800 mb-6 text-center">
                             {translations[currentLang].faq.title}
                         </h2>

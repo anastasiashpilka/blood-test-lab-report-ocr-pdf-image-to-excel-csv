@@ -121,7 +121,7 @@ const Layout = ({ children, title }) => {
                                 {isLangMenuOpen ? <ChevronUp className="w-4 h-4" aria-label="Collapse Language Menu Icon" /> : <ChevronDown className="w-4 h-4" aria-label="Expand Language Menu Icon" />}
                             </button>
                             {isLangMenuOpen && (
-                                <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg py-1 z-10">
+                                <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg py-1 z-10">
                                     {availableLocales.map((locale) => (
                                         <button
                                             key={locale}
@@ -166,7 +166,7 @@ const Layout = ({ children, title }) => {
                                 {isLangMenuOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
                             </button>
                             {isLangMenuOpen && (
-                                <div className="mt-2 w-full bg-white border border-gray-200 rounded-md shadow-lg py-1">
+                                <div className="mt-2 w-full bg-white border border-gray-200 rounded-lg shadow-lg py-1">
                                     {availableLocales.map((locale) => (
                                         <button
                                             key={locale}
@@ -188,7 +188,7 @@ const Layout = ({ children, title }) => {
             <main className="flex-grow">
                 {children}
             </main>
-            <footer className="bg-gray-800 text-white py-8 mt-12">
+            <footer className="bg-indigo-950 text-white py-8 mt-12">
                 <div className="max-w-5xl mx-auto px-4 text-center">
                     <p dangerouslySetInnerHTML={{ __html: t.footer.copyright.replace('{year}', currentYear) }} />
                 </div>

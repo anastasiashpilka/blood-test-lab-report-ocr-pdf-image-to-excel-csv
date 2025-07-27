@@ -24,8 +24,10 @@
     "@smithy/protocol-http": "^5.0.1",
     "@smithy/signature-v4": "^5.0.1",
     "axios": "^1.7.9",
+    "cookie": "^1.0.2",
     "dotenv": "^16.4.7",
     "formidable": "^3.5.2",
+    "js-cookie": "^3.0.5",
     "jsdom": "^26.0.0",
     "lucide-react": "^0.475.0",
     "mammoth": "^1.9.0",
@@ -37,7 +39,8 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "sharp": "^0.34.3",
-    "tesseract.js": "^6.0.0"
+    "tesseract.js": "^6.0.0",
+    "uuid": "^11.1.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

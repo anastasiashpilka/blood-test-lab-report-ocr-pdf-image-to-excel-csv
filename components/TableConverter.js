@@ -224,52 +224,56 @@ const TableConverter = () => {
         }
     };
 
-    const handleFileUpload = async (file) => {
-        setLoading(true);
-        setErrorMessage('');
-        setSelectedFileName(file.name);
-        setImageDescription(''); 
+const handleFileUpload = async (file) => {
+    setLoading(true);
+    setErrorMessage('');
+    setSelectedFileName(file.name);
+    setImageDescription('');
 
-        const formData = new FormData();
-        formData.append('file', file);
+    const formData = new FormData();
+    formData.append('file', file);
 
-        try {
-            const response = await fetch('/api/convert', {
-                method: 'POST',
-                body: formData,
-            });
+    try {
+        console.log('Sending request to /api/convert-to-table');
+        const response = await fetch('/api/convert-to-table', {
+            method: 'POST',
+            body: formData,
+        });
 
-            if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.error || 'Server error');
-            }
-
-            const data = await response.json();
-            setTableData(data);
-            setLoading(false);
-
-            ga.event({
-                action: 'file_conversion',
-                category: 'Conversion',
-                label: 'Success',
-                value: file.size 
-            });
-
-        } catch (error) {
-            setErrorMessage(error.message);
-            setLoading(false);
-            ga.event({
-                action: 'file_conversion',
-                category: 'Conversion',
-                label: `Failure - ${error.message.substring(0, 50)}`
-            });
-            ga.event({
-                action: 'error_displayed',
-                category: 'UI Error',
-                label: `File conversion error: ${error.message.substring(0, 50)}`
-            });
+        if (!response.ok) {
+            const errorData = await response.json();
+            console.error('Error data:', errorData);
+            throw new Error(errorData.error || 'Server error');
         }
-    };
+
+        const data = await response.json();
+        console.log('Received data:', data);
+        setTableData(data);
+        setLoading(false);
+
+        ga.event({
+            action: 'file_conversion',
+            category: 'Conversion',
+            label: 'Success',
+            value: file.size
+        });
+
+    } catch (error) {
+        console.error('Fetch error:', error);
+        setErrorMessage(error.message);
+        setLoading(false);
+        ga.event({
+            action: 'file_conversion',
+            category: 'Conversion',
+            label: `Failure - ${error.message.substring(0, 50)}`
+        });
+        ga.event({
+            action: 'error_displayed',
+            category: 'UI Error',
+            label: `File conversion error: ${error.message.substring(0, 50)}`
+        });
+    }
+};
 
     const handleDrop = useCallback((e) => {
         e.preventDefault();

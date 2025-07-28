@@ -1521,7 +1521,7 @@ const translations = {
             "button_view_details": "Переглянути деталі"
     },
     disclaimer: {
-            title: "Важливе Застереження", // ОНОВЛЕНО
+            title: "Важливе Застереження",
             paragraph1: "Цей конвертер одиниць надається лише для загальних інформаційних цілей і не призначений для заміни професійної медичної консультації, діагностики чи лікування. Завжди звертайтеся за порадою до свого лікаря або іншого кваліфікованого медичного працівника з будь-якими питаннями, які можуть виникнути у вас щодо медичного стану.", // ОНОВЛЕНО
             paragraph2: "Надані перетворення базуються на стандартних наукових формулах. Хоча ми прагнемо до точності, результати завжди мають бути підтверджені медичним працівником. Ми не гарантуємо точність або повноту представленої інформації.", // ОНОВЛЕНО
         },
@@ -1713,19 +1713,19 @@ const translations = {
                 q9_answer: "当社はバイオマーカーとその単位のデータベースを常に拡張および更新するよう努めています。データの正確性とタイムリー性を確保するため、定期的に更新がリリースされます。新しいバイオマーカーや単位の追加に関するご提案をお待ちしております。",
             },
             howItWorks: {
-            title: "Comment ça marche",
-            step1: {
-                title: "Sélectionner le Biomarqueur",
-                description: "Choisissez le biomarqueur sanguin souhaité dans la liste déroulante que vous souhaitez convertir.",
-            },
-            step2: {
-                title: "Saisir la Valeur et Choisir les Unités",
-                description: "Saisissez la valeur numérique de votre résultat dans le champ 'Valeur à convertir', puis sélectionnez les unités source et cible.",
-            },
-            step3: {
-                title: "Obtenir le Résultat Converti",
-                description: "Cliquez sur le bouton 'Convertir' pour obtenir instantanément la valeur précise du biomarqueur, convertie dans l'unité choisie.",
-            },
+  title: "使い方",
+  step1: {
+    title: "バイオマーカーを選択",
+    description: "変換したい血液バイオマーカーをドロップダウンリストから選択します。",
+  },
+  step2: {
+    title: "値と単位を入力",
+    description: "「変換する値」フィールドに結果の数値を入力し、元の単位と変換後の単位を選択します。",
+  },
+  step3: {
+    title: "変換結果を取得",
+    description: "「変換」ボタンをクリックして、選択した単位に変換された正確なバイオマーカーの値を即座に取得します。",
+  },
         },
         },
         biomarkers: {

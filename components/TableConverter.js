@@ -441,10 +441,10 @@ const TableConverter = () => {
                             onDragLeave={handleDragLeave}
                         >
                             {selectedFileName && fileDropped && (
-                                <p className="mb-2 font-bold text-gray-900 text-center">
-                                    {translations[currentLang].fileUpload.fileAdded(selectedFileName)}
-                                </p>
-                            )}
+  <p className="mb-2 font-bold text-gray-900 text-center">
+    {translations[currentLang].fileUpload.fileAdded.replace('{fileName}', selectedFileName)}
+  </p>
+)}
                             {!selectedFileName && !fileDropped && !isDragging && (
                                 <p className="text-sm text-slate-600 mb-4 text-center">
                                     {translations[currentLang].fileUpload.dragOrClick}
@@ -472,10 +472,10 @@ const TableConverter = () => {
                         </div>
 
                         {loading && (
-                            <div className="flex items-center justify-center fixed inset-0 z-40 bg-white bg-opacity-75">
-                                <div className="animate-spin rounded-lg h-24 w-24 border-b-4 border-indigo-600"></div>
-                            </div>
-                        )}
+                        <div className="flex items-center justify-center fixed inset-0 z-40 bg-white bg-opacity-75">
+                            <div className="animate-spin rounded-full h-24 w-24 border-b-4 border-indigo-600"></div>
+                        </div>
+                    )}
 
                         {isErrorModalOpen && (
                             <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex justify-center items-center z-50">

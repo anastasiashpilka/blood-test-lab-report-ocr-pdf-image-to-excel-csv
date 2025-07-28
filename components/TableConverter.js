@@ -123,33 +123,45 @@ const TableConverter = () => {
     };
 
     const handleDownloadTable = () => {
-        if (!tableData || !data.headers || !tableData.rows || tableData.headers.length === 0 || tableData.rows.length === 0) {
-            console.error('No data to download.');
-            setErrorMessage(translations[currentLang].tableDisplay.downloadError);
-            setIsErrorModalOpen(true);
-            return;
-        }
+    // Перевірка наявності даних
+    if (!tableData || !tableData.headers || !tableData.rows || tableData.headers.length === 0 || tableData.rows.length === 0) {
+        console.error('No data to download:', tableData);
+        setErrorMessage(translations[currentLang]?.tableDisplay?.downloadError || 'No data available for download');
+        setIsErrorModalOpen(true);
+        return;
+    }
 
+    try {
+        // Формування CSV
         const headers = tableData.headers.map(header => `"${header.replace(/"/g, '""')}"`).join(',');
         const rows = tableData.rows.map(row =>
             row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(',')
         ).join('\n');
 
         const csvContent = `${headers}\n${rows}`;
-        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        // Додаємо BOM для коректного відображення UTF-8
+        const bom = '\uFEFF';
+        const blob = new Blob([bom + csvContent], { type: 'text/csv;charset=utf-8' });
+
+        // Створення посилання для завантаження
         const link = document.createElement('a');
-        if (link.download !== undefined) {
-            const url = URL.createObjectURL(blob);
-            link.setAttribute('href', url);
-            link.setAttribute('download', 'blood_test_results.csv');
-            link.style.visibility = 'hidden';
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            setDownloaded(true);
-            setTimeout(() => setDownloaded(false), 2000);
-        }
-    };
+        const url = URL.createObjectURL(blob);
+        link.setAttribute('href', url);
+        link.setAttribute('download', 'blood_test_results.csv');
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url); // Очищення URL
+
+        setDownloaded(true);
+        setTimeout(() => setDownloaded(false), 2000);
+    } catch (error) {
+        console.error('Error downloading table:', error);
+        setErrorMessage(translations[currentLang]?.tableDisplay?.downloadError || 'Failed to download table');
+        setIsErrorModalOpen(true);
+    }
+};
 
     const handleSubmit = async (event) => {
         event.preventDefault();

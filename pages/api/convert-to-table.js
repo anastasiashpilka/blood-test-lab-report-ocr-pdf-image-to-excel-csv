@@ -47,7 +47,7 @@ export default async function handler(req, res) {
 
     try {
         // Handle file upload using multer
-        await new Promise((resolve, reject) => {
+        await new Promise((resolve) => {
             upload.single('file')(req, res, (err) => {
                 if (err) {
                     console.error("Multer error:", err);
@@ -63,7 +63,15 @@ export default async function handler(req, res) {
         const extractedContent = await extractContent(fileBuffer, mimeType);
 
         const genAI = new GoogleGenerativeAI(apiKey);
-        const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+
+        // Free Gemini models in order of preference — fallback if rate limit exceeded
+        // Ordered: best quality first, highest daily quota last (gemini-3.1-flash-lite-preview = 500 RPD)
+        const FREE_MODELS = [
+            "gemini-2.5-flash",              // 5 RPM, 20 RPD — best quality
+            "gemini-3-flash-preview",        // 5 RPM, 20 RPD
+            "gemini-2.5-flash-lite",         // 10 RPM, 20 RPD
+            "gemini-3.1-flash-lite-preview", // 15 RPM, 500 RPD — largest free quota
+        ];
 
         // Unified prompt for JSON output to Gemini API
         const prompt = `
@@ -79,25 +87,39 @@ export default async function handler(req, res) {
                     ["Row 2 Cell 1", "Row 2 Cell 2", ...]
                 ]
             }
-            IGNORE any text that is NOT part of the medical results. 
+            IGNORE any text that is NOT part of the medical results.
             If no medical analysis results are found, return an empty JSON array []
             Return only the JSON.
         `;
 
-        let result; 
-        try {
-            result = await model.generateContent([prompt, extractedContent]);
-        } catch (apiError) { 
-            console.error("Gemini API error:", apiError);
-            if (apiError.response && apiError.response.status === 429) {
-                const retryAfter = apiError.response.headers ? apiError.response.headers.get('Retry-After') : null;
-                res.setHeader('Content-Type', 'application/json');
-                return res.status(429).json({
-                    error: 'Rate limit exceeded. Please try again later.',
-                    retryAfter: retryAfter
-                });
+        let result;
+        let lastError;
+        for (const modelName of FREE_MODELS) {
+            try {
+                console.log(`Trying model: ${modelName}`);
+                const model = genAI.getGenerativeModel({ model: modelName });
+                result = await model.generateContent([prompt, extractedContent]);
+                console.log(`Success with model: ${modelName}`);
+                break;
+            } catch (apiError) {
+                console.error(`Model ${modelName} failed:`, apiError.message || apiError);
+                const status = apiError.status || (apiError.response && apiError.response.status);
+                // 429 = rate limit, 503 = overloaded — try next model
+                if (status === 429 || status === 503 || (apiError.message && (apiError.message.includes('429') || apiError.message.includes('quota') || apiError.message.includes('RESOURCE_EXHAUSTED')))) {
+                    lastError = apiError;
+                    continue;
+                }
+                throw apiError;
             }
-            throw apiError;
+        }
+
+        if (!result) {
+            const retryAfter = lastError?.response?.headers ? lastError.response.headers.get('Retry-After') : null;
+            res.setHeader('Content-Type', 'application/json');
+            return res.status(429).json({
+                error: 'All available models are rate limited. Please try again later.',
+                retryAfter: retryAfter
+            });
         }
 
         const rawText = result.response.text();

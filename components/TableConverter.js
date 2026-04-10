@@ -123,7 +123,6 @@ const TableConverter = () => {
     };
 
     const handleDownloadTable = () => {
-    // Перевірка наявності даних
     if (!tableData || !tableData.headers || !tableData.rows || tableData.headers.length === 0 || tableData.rows.length === 0) {
         console.error('No data to download:', tableData);
         setErrorMessage(translations[currentLang]?.tableDisplay?.downloadError || 'No data available for download');
@@ -132,18 +131,14 @@ const TableConverter = () => {
     }
 
     try {
-        // Формування CSV
         const headers = tableData.headers.map(header => `"${header.replace(/"/g, '""')}"`).join(',');
         const rows = tableData.rows.map(row =>
             row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(',')
         ).join('\n');
 
         const csvContent = `${headers}\n${rows}`;
-        // Додаємо BOM для коректного відображення UTF-8
         const bom = '\uFEFF';
         const blob = new Blob([bom + csvContent], { type: 'text/csv;charset=utf-8' });
-
-        // Створення посилання для завантаження
         const link = document.createElement('a');
         const url = URL.createObjectURL(blob);
         link.setAttribute('href', url);
@@ -152,7 +147,7 @@ const TableConverter = () => {
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
-        URL.revokeObjectURL(url); // Очищення URL
+        URL.revokeObjectURL(url); 
 
         setDownloaded(true);
         setTimeout(() => setDownloaded(false), 2000);

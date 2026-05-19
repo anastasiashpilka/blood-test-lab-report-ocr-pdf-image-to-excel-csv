@@ -16,7 +16,9 @@ const Layout = ({ children, title }) => {
 
     const [isLangMenuOpen, setIsLangMenuOpen] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
     const langMenuRef = useRef(null);
+    const userMenuRef = useRef(null);
     const mobileMenuButtonRef = useRef(null);
     const [isClient, setIsClient] = useState(false);
 
@@ -32,6 +34,9 @@ const Layout = ({ children, title }) => {
         const handleClickOutside = (event) => {
             if (langMenuRef.current && !langMenuRef.current.contains(event.target)) {
                 setIsLangMenuOpen(false);
+            }
+            if (userMenuRef.current && !userMenuRef.current.contains(event.target)) {
+                setIsUserMenuOpen(false);
             }
             if (isMobileMenuOpen) {
                 const clickedOutsideMobileMenu = (
@@ -94,10 +99,8 @@ const Layout = ({ children, title }) => {
                     <Link href="/" className="flex items-center space-x-2">
                         <ScanHeart className="w-8 h-8 text-indigo-700" aria-label="Flask icon for Blood Test Converter" />
                         <div className="font-sans">
-                            <span className="text-2xl font-bold tracking-tight">
-                                <span className="bg-gradient-to-r from-indigo-700 to-indigo-800 bg-clip-text text-transparent">Blood</span>
-                                <span className="bg-gradient-to-r from-indigo-800 to-indigo-900 bg-clip-text text-transparent">Test</span>
-                                <span className="bg-gradient-to-r from-indigo-900 to-indigo-950 bg-clip-text text-transparent">Converter</span>
+                            <span className="text-2xl font-bold tracking-tight bg-gradient-to-r from-indigo-500 to-indigo-800 bg-clip-text text-transparent">
+                                BloodTestConverter
                             </span>
                         </div>
                     </Link>
@@ -144,22 +147,32 @@ const Layout = ({ children, title }) => {
                             )}
                         </div>
                         {currentUser ? (
-                          <div className="flex items-center space-x-3">
-                            <Link
-                              href="/my-tests"
-                              className={`text-lg font-medium hover:text-indigo-600 transition-colors ${router.pathname.startsWith('/my-tests') ? 'text-indigo-700' : 'text-gray-600'}`}
-                            >
-                              {t.nav.myTests}
-                            </Link>
+                          <div className="relative" ref={userMenuRef}>
                             <button
-                              onClick={handleSignOut}
-                              className="text-lg font-medium text-gray-600 hover:text-indigo-600 transition-colors"
+                              onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
+                              className="flex items-center justify-center w-9 h-9 bg-indigo-100 hover:bg-indigo-200 rounded-full transition-colors focus:outline-none"
+                              aria-label="Account menu"
                             >
-                              {t.nav.signOut}
-                            </button>
-                            <div className="flex items-center justify-center w-8 h-8 bg-indigo-100 rounded-full">
                               <User className="w-5 h-5 text-indigo-700" />
-                            </div>
+                            </button>
+                            {isUserMenuOpen && (
+                              <div className="absolute right-0 mt-2 w-44 bg-white border border-gray-200 rounded-xl shadow-lg py-1 z-10">
+                                <Link
+                                  href="/my-tests"
+                                  className="block px-4 py-2.5 text-sm text-gray-700 hover:bg-indigo-50 hover:text-indigo-700"
+                                  onClick={() => setIsUserMenuOpen(false)}
+                                >
+                                  {t.nav.myTests}
+                                </Link>
+                                <div className="border-t border-gray-100 my-1" />
+                                <button
+                                  onClick={() => { handleSignOut(); setIsUserMenuOpen(false); }}
+                                  className="block w-full text-left px-4 py-2.5 text-sm text-gray-700 hover:bg-red-50 hover:text-red-600"
+                                >
+                                  {t.nav.signOut}
+                                </button>
+                              </div>
+                            )}
                           </div>
                         ) : (
                           <div className="flex items-center space-x-3">
@@ -252,7 +265,7 @@ const Layout = ({ children, title }) => {
                             </Link>
                             <Link
                               href="/auth/signup"
-                              className="text-lg font-medium text-gray-600 hover:text-indigo-700"
+                              className="inline-block px-5 py-2.5 bg-indigo-600 text-white rounded-lg text-base font-medium hover:bg-indigo-700 transition-colors text-center"
                               onClick={() => setIsMobileMenuOpen(false)}
                             >
                               {t.nav.signUp}

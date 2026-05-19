@@ -14,11 +14,17 @@ import { db } from './config';
 
 const getUserTestsRef = (userId) => collection(db, 'users', userId, 'tests');
 
+const encodeRows = (rows) => rows.map((row) => JSON.stringify(row));
+const decodeRows = (rows) => {
+  if (!rows) return [];
+  return rows.map((row) => (typeof row === 'string' ? JSON.parse(row) : row));
+};
+
 export const saveTest = (userId, { label, headers, rows, interpretationSummary = '' }) =>
   addDoc(getUserTestsRef(userId), {
     label,
     headers,
-    rows,
+    rows: encodeRows(rows),
     interpretationSummary,
     createdAt: serverTimestamp(),
   });
@@ -26,14 +32,18 @@ export const saveTest = (userId, { label, headers, rows, interpretationSummary =
 export const getTests = async (userId) => {
   const q = query(getUserTestsRef(userId), orderBy('createdAt', 'desc'));
   const snapshot = await getDocs(q);
-  return snapshot.docs.map((d) => ({ id: d.id, ...d.data() }));
+  return snapshot.docs.map((d) => {
+    const data = d.data();
+    return { id: d.id, ...data, rows: decodeRows(data.rows) };
+  });
 };
 
 export const getTest = async (userId, testId) => {
   const ref = doc(db, 'users', userId, 'tests', testId);
   const snapshot = await getDoc(ref);
   if (!snapshot.exists()) return null;
-  return { id: snapshot.id, ...snapshot.data() };
+  const data = snapshot.data();
+  return { id: snapshot.id, ...data, rows: decodeRows(data.rows) };
 };
 
 export const deleteTest = (userId, testId) =>

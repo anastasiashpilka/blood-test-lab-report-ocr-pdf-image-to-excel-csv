@@ -299,7 +299,7 @@ const UnitConverter = ({ translations: serverTranslations, allBiomarkers }) => {
             <h1 className="text-4xl font-bold text-center text-indigo-800 mb-8">
                 {t.unitConverter?.title || 'Unit Converter'}
             </h1>
-            <div className="bg-white p-8 rounded-lg shadow-lg max-w-5xl mx-auto">
+            <div className="bg-white p-8 rounded-xl shadow-md max-w-5xl mx-auto">
                 <div className="mb-6">
                     <label htmlFor="biomarkerSelect" className="block text-gray-700 text-lg font-medium mb-2">
                         {t.unitConverter?.selectBiomarkerLabel || 'Select Biomarker'}
@@ -375,24 +375,14 @@ const UnitConverter = ({ translations: serverTranslations, allBiomarkers }) => {
                     >
                         {t.unitConverter?.convertButton || 'Convert'}
                     </button>
-                     <button
+                    <button
                         onClick={handleReset}
-                       className={`
-        font-bold py-3 px-12 rounded-lg transition-colors duration-200 text-xl border-2
-        bg-indigo-100  border border-indigo-600 text-indigo-600
-        flex items-center justify-center
-        ${
-            selectedBiomarker || inputValue || sourceUnit || targetUnit || convertedResult !== null
-            ? ' hover:bg-indigo-600 hover:text-white'
-            : ' text-indigo-600 hover:bg-indigo-600 hover:text-white cursor-not-allowed '
-        }
-
-    `}
-    disabled={!(selectedBiomarker || inputValue || sourceUnit || targetUnit || convertedResult !== null)}
-    aria-label={t.unitConverter.resetButton || "Clear all fields"}
->
-    {t.unitConverter.resetButton || "Clear"}
-</button>
+                        disabled={!(selectedBiomarker || inputValue || sourceUnit || targetUnit || convertedResult !== null)}
+                        aria-label={t.unitConverter.resetButton || "Clear all fields"}
+                        className="font-bold py-3 px-8 rounded-lg transition-colors duration-200 text-xl flex items-center justify-center border border-indigo-300 bg-white text-indigo-600 hover:bg-indigo-50 disabled:opacity-40 disabled:cursor-not-allowed"
+                    >
+                        {t.unitConverter.resetButton || "Clear"}
+                    </button>
                 </div>
                 {error && (
                     <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg mb-6">
@@ -400,8 +390,14 @@ const UnitConverter = ({ translations: serverTranslations, allBiomarkers }) => {
                     </div>
                 )}
                 {convertedResult !== null && (
-                    <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg text-center text-xl font-semibold">
-                        {t.unitConverter?.resultLabel || 'Result'}: {inputValue} {t.units?.[sourceUnit] || sourceUnit} = {convertedResult.toFixed(4)} {t.units?.[targetUnit] || targetUnit}
+                    <div className="bg-green-50 border border-green-200 rounded-xl px-6 py-4 text-center">
+                        <p className="text-xs font-medium text-green-700 uppercase tracking-wide mb-1">{t.unitConverter?.resultLabel || 'Result'}</p>
+                        <p className="text-3xl font-bold text-green-800">
+                            {convertedResult.toFixed(4)} <span className="text-xl font-semibold">{t.units?.[targetUnit] || targetUnit}</span>
+                        </p>
+                        <p className="text-sm text-green-600 mt-1">
+                            {inputValue} {t.units?.[sourceUnit] || sourceUnit}
+                        </p>
                     </div>
                 )}
                 {selectedBiomarker && (
@@ -409,17 +405,16 @@ const UnitConverter = ({ translations: serverTranslations, allBiomarkers }) => {
                         <p className="text-indigo-900 text-lg font-medium mb-4">
                             {t.unitConverter?.learnMoreAboutBiomarker || 'Want to learn more about this biomarker?'}
                         </p>
-                        <Link href={`/biomarkers/${selectedBiomarker}`} passHref>
-                            <button
-                                className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-8 rounded-lg transition-colors duration-200 text-lg inline-flex items-center"
-                                onClick={() => trackEvent('view_biomarker_details', {
-                                    biomarker_name: selectedBiomarker,
-                                    page_path: router.asPath,
-                                })}
-                            >
-                                {t.unitConverter?.viewBiomarkerDetails || 'View Biomarker Details'}
-                                <ExternalLink className="ml-2 w-5 h-5" />
-                            </button>
+                        <Link
+                            href={`/biomarkers/${selectedBiomarker}`}
+                            className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-8 rounded-lg transition-colors duration-200 text-lg inline-flex items-center"
+                            onClick={() => trackEvent('view_biomarker_details', {
+                                biomarker_name: selectedBiomarker,
+                                page_path: router.asPath,
+                            })}
+                        >
+                            {t.unitConverter?.viewBiomarkerDetails || 'View Biomarker Details'}
+                            <ExternalLink className="ml-2 w-5 h-5" />
                         </Link>
                     </div>
                 )}
@@ -500,7 +495,7 @@ const UnitConverter = ({ translations: serverTranslations, allBiomarkers }) => {
                 </div>
             </section>
 
-            <section ref={faqSectionRef} className="max-w-5xl mx-auto bg-white rounded-lg shadow-lg p-8 mt-12">
+            <section ref={faqSectionRef} className="max-w-5xl mx-auto bg-white rounded-xl shadow-sm border border-gray-100 p-8 mt-12">
                 <h2 className="text-3xl font-bold text-indigo-800 mb-6 text-center">
                     {t.unitConverter?.faq?.title || 'Frequently Asked Questions'}
                 </h2>
@@ -533,11 +528,11 @@ const UnitConverter = ({ translations: serverTranslations, allBiomarkers }) => {
 
             <button
                 onClick={scrollToFaq}
-                className="fixed bottom-4 right-4 bg-indigo-600 text-white p-4 rounded-full shadow-lg hover:bg-indigo-700 transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50 z-30"
+                className="fixed bottom-5 right-5 bg-white text-indigo-600 p-3 rounded-full shadow-md border border-gray-200 hover:border-indigo-300 hover:text-indigo-700 transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:ring-opacity-50 z-30"
                 aria-label="Go to Frequently Asked Questions"
                 title="Frequently Asked Questions"
             >
-                <HelpCircle className="w-8 h-8" aria-label="FAQ Icon" />
+                <HelpCircle className="w-6 h-6" aria-label="FAQ Icon" />
             </button>
         </div>
     );

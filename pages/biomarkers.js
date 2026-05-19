@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { Ghost, Search } from 'lucide-react';
+import { SearchX, Search, ChevronRight } from 'lucide-react';
 import translations from '../translations';
 import biomarkersData from '../lib/biomarkers-data';
 
@@ -55,7 +55,7 @@ const BiomarkersPage = ({ translations: serverTranslations, biomarkers }) => {
                 <p className="text-xl text-gray-700 text-center mb-12">
                     {t.biomarker.description}
                 </p>
-                <div className="bg-white p-10 rounded-lg shadow-3xl max-w-full mx-auto border border-gray-100">
+                <div className="bg-white p-10 rounded-xl shadow-xl max-w-full mx-auto border border-gray-100">
                     <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center">
                         {t.biomarker.hubTitle}
                     </h2>
@@ -66,7 +66,7 @@ const BiomarkersPage = ({ translations: serverTranslations, biomarkers }) => {
                         <input
                             type="text"
                             placeholder={t.biomarker.searchPlaceholder}
-                            className="shadow-inner appearance-none border border-gray-300 rounded-lg w-full py-4 px-6 text-gray-700 leading-tight focus:outline-none focus:ring-3 focus:ring-blue-300 focus:border-blue-500 transition-all duration-200 pl-14 text-lg"
+                            className="appearance-none border border-gray-300 rounded-xl w-full py-4 px-6 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-indigo-500 transition-all duration-200 pl-14 text-lg"
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                         />
@@ -74,12 +74,14 @@ const BiomarkersPage = ({ translations: serverTranslations, biomarkers }) => {
                     </div>
                     <div className="min-h-[300px] flex flex-col justify-center items-center">
                         {filteredBiomarkers.length === 0 && searchTerm.trim() ? (
-                            <div className="text-center py-10">
-                                <Ghost className="mx-auto w-32 h-32 mb-6 text-gray-400 opacity-75" />
-                                <p className="text-2xl text-gray-600 font-semibold mb-2">
+                            <div className="text-center py-12">
+                                <div className="w-14 h-14 rounded-full bg-gray-100 flex items-center justify-center mx-auto mb-4">
+                                    <SearchX className="w-7 h-7 text-gray-400" />
+                                </div>
+                                <p className="text-lg text-gray-700 font-semibold mb-1">
                                     {t.biomarker.noBiomarkerFoundTitle}
                                 </p>
-                                <p className="text-lg text-gray-500">
+                                <p className="text-sm text-gray-500">
                                     {t.biomarker.noBiomarkerFoundMessage}
                                 </p>
                             </div>
@@ -89,18 +91,16 @@ const BiomarkersPage = ({ translations: serverTranslations, biomarkers }) => {
                                     {filteredBiomarkers.slice(0, visibleBiomarkerCount).map((biomarker) => (
                                         <div
                                             key={biomarker.id}
-                                            className="p-6 border border-gray-200 rounded-lg shadow-md hover:shadow-lg hover:bg-blue-50 cursor-pointer transition-all duration-200 transform hover:-translate-y-1 group flex flex-col items-start justify-between"
+                                            className="p-6 border border-gray-200 rounded-xl shadow-sm hover:shadow-md hover:bg-indigo-50 cursor-pointer transition-all duration-200 group flex flex-col items-start justify-between"
                                             onClick={() => handleBiomarkerClick(biomarker.id)}
                                         >
                                             <div>
                                                 <h3 className="text-2xl font-bold text-indigo-700 mb-2 group-hover:text-indigo-800 transition-colors duration-200">{biomarker.name}</h3>
                                                 <p className="text-gray-700 text-base mb-4">{biomarker.description}</p>
                                             </div>
-                                            <span className="text-blue-600 group-hover:text-blue-700 hover:underline text-md font-medium flex items-center">
+                                            <span className="text-indigo-600 group-hover:text-indigo-700 text-sm font-medium flex items-center mt-1">
                                                 {t.biomarkers.viewDetails}
-                                                <svg className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path>
-                                                </svg>
+                                                <ChevronRight className="w-4 h-4 ml-1 group-hover:translate-x-0.5 transition-transform duration-200" />
                                             </span>
                                         </div>
                                     ))}
@@ -121,11 +121,6 @@ const BiomarkersPage = ({ translations: serverTranslations, biomarkers }) => {
                     </div>
                 </div>
             </main>
-            <style jsx>{`
-                .shadow-3xl {
-                    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.02);
-                }
-            `}</style>
         </>
     );
 };

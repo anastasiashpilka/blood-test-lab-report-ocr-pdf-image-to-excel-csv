@@ -14,6 +14,7 @@ export default function MyTestsPage() {
   const [editingId, setEditingId] = useState(null);
   const [editLabel, setEditLabel] = useState('');
   const [deleteConfirmId, setDeleteConfirmId] = useState(null);
+  const [loadError, setLoadError] = useState(null);
 
   useEffect(() => {
     if (!currentUser) {
@@ -22,6 +23,10 @@ export default function MyTestsPage() {
     }
     getTests(currentUser.uid)
       .then(setTests)
+      .catch((err) => {
+        console.error('getTests failed:', err);
+        setLoadError(err?.message || 'Failed to load tests');
+      })
       .finally(() => setLoading(false));
   }, [currentUser]);
 
@@ -69,7 +74,13 @@ export default function MyTestsPage() {
           </Link>
         </div>
 
-        {tests.length === 0 ? (
+        {loadError ? (
+          <div className="bg-red-50 border border-red-200 rounded-xl p-8 text-center">
+            <p className="text-red-700 font-medium mb-2">Could not load your tests</p>
+            <p className="text-red-600 text-sm font-mono">{loadError}</p>
+            <p className="text-gray-500 text-sm mt-3">Check the browser console for details. This is usually a Firestore security rules issue.</p>
+          </div>
+        ) : tests.length === 0 ? (
           <div className="bg-white rounded-xl shadow p-12 text-center">
             <p className="text-gray-500 text-lg mb-4">No saved tests yet.</p>
             <Link href="/" className="text-indigo-600 hover:underline font-medium">
@@ -146,18 +157,18 @@ export default function MyTestsPage() {
                   <div className="flex items-center gap-2 flex-shrink-0" data-no-nav onClick={(e) => e.stopPropagation()}>
                     {deleteConfirmId === test.id ? (
                       <>
-                        <span className="text-sm text-gray-600">Delete?</span>
+                        <span className="text-xs text-gray-500">Delete?</span>
                         <button
                           onClick={() => handleDelete(test.id)}
-                          className="text-red-600 hover:text-red-800 text-sm font-medium"
+                          className="px-2.5 py-1 text-xs font-medium text-white bg-red-500 hover:bg-red-600 rounded-md transition-colors"
                         >
-                          Yes
+                          Delete
                         </button>
                         <button
                           onClick={() => setDeleteConfirmId(null)}
-                          className="text-gray-500 hover:text-gray-700 text-sm"
+                          className="px-2.5 py-1 text-xs text-gray-600 hover:text-gray-800 border border-gray-300 rounded-md transition-colors"
                         >
-                          No
+                          Cancel
                         </button>
                       </>
                     ) : (

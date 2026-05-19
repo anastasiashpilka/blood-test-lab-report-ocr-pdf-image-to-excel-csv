@@ -1,5 +1,5 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
-import { CheckCircle, ShieldCheck, Copy, FileCheck, Microscope, X, Ghost, Download, HelpCircle, ChevronDown, ChevronUp, Globe, Upload, Table, ArrowRight, ArrowDown, Zap, FileText, BookmarkPlus, BookmarkCheck, Loader } from 'lucide-react';
+import { CheckCircle, ShieldCheck, Copy, FileCheck, Microscope, X, AlertTriangle, Download, HelpCircle, ChevronDown, ChevronUp, Globe, Upload, Table, ArrowRight, ArrowDown, Zap, FileText, BookmarkPlus, BookmarkCheck, Loader } from 'lucide-react';
 import translations from '../translations';
 import { useRouter } from 'next/router';
 import * as ga from '../lib/gtag';
@@ -31,6 +31,7 @@ const TableConverter = () => {
     const { currentUser } = useAuth();
 
     const [showWelcome, setShowWelcome] = useState(false);
+    const [conversionSuccess, setConversionSuccess] = useState(null);
 
     // Interpretation state
     const [interpretation, setInterpretation] = useState(null);
@@ -221,6 +222,7 @@ const TableConverter = () => {
         setIsDragging(false);
         setIsErrorModalOpen(false);
         setRetryTime(null);
+        setConversionSuccess(null);
 
         const file = fileInputRef.current.files[0];
 
@@ -309,6 +311,10 @@ const handleFileUpload = async (file) => {
         console.log('Received data:', data);
         setTableData(data);
         setLoading(false);
+        if (data.rows && data.rows.length > 0) {
+            setConversionSuccess(data.rows.length);
+            setTimeout(() => setConversionSuccess(null), 4000);
+        }
 
         ga.event({
             action: 'file_conversion',
@@ -501,8 +507,14 @@ const handleFileUpload = async (file) => {
         <>
             <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-blue-100 relative">
                 {showWelcome && (
-                    <div className="fixed top-20 left-1/2 transform -translate-x-1/2 z-50 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg text-sm font-medium">
+                    <div className="fixed top-20 left-1/2 transform -translate-x-1/2 z-50 bg-green-600 text-white px-6 py-3 rounded-xl shadow-lg text-sm font-medium">
                         Welcome! Your tests will now be saved when you&apos;re signed in.
+                    </div>
+                )}
+                {conversionSuccess && (
+                    <div className="fixed top-20 left-1/2 transform -translate-x-1/2 z-50 bg-indigo-700 text-white px-6 py-3 rounded-xl shadow-lg text-sm font-medium flex items-center gap-2 animate-fade-in">
+                        <CheckCircle className="w-4 h-4" />
+                        Found {conversionSuccess} biomarker{conversionSuccess !== 1 ? 's' : ''} — results ready
                     </div>
                 )}
                 <div className="container mx-auto px-4 py-8">
@@ -514,7 +526,7 @@ const handleFileUpload = async (file) => {
                         <p className="text-slate-600 max-w-2xl mx-auto mb-4 text-base sm:text-lg">
                             {translations[currentLang].header.description || "Easily convert your blood test results into structured, editable tables. Upload PDF, DOCX, or images for instant results."}
                         </p>
-                        <div className="bg-indigo-50 border-l-4 border-indigo-400 text-indigo-800 p-4 rounded-lg flex items-start space-x-3 mt-8 max-w-5xl mx-auto shadow-md">
+                        <div className="bg-indigo-50 border border-indigo-200 text-indigo-800 p-3 rounded-lg flex items-start space-x-3 mt-6 max-w-5xl mx-auto">
                             <ShieldCheck className="w-6 h-6 flex-shrink-0 mt-0.5" aria-label="Privacy Assurance Icon" />
                             <div>
                                 <p className="text-sm font-medium" dangerouslySetInnerHTML={{ __html: translations[currentLang].header.privacyNote.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') }}></p>
@@ -525,18 +537,18 @@ const handleFileUpload = async (file) => {
 
                     <button
                         onClick={scrollToFaq}
-                        className="fixed bottom-4 right-4 bg-indigo-600 text-white p-4 rounded-full shadow-lg hover:bg-indigo-700 transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50 z-30"
+                        className="fixed bottom-5 right-5 bg-white text-indigo-600 p-3 rounded-full shadow-md border border-gray-200 hover:border-indigo-300 hover:text-indigo-700 transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:ring-opacity-50 z-30"
                         aria-label="Go to Frequently Asked Questions"
                         title="Frequently Asked Questions"
                     >
-                        <HelpCircle className="w-8 h-8" aria-label="FAQ Icon" />
+                        <HelpCircle className="w-6 h-6" aria-label="FAQ Icon" />
                     </button>
 
-                    <div className="max-w-5xl mx-auto bg-white rounded-lg shadow-lg p-8 relative z-10 mb-12">
+                    <div className="max-w-5xl mx-auto bg-white rounded-xl shadow-md p-8 relative z-10 mb-12">
                         <div
-                            className={`flex flex-col items-center justify-center border-2 border-dashed border-indigo-200 rounded-lg bg-indigo-50/50 p-6 mb-4
+                            className={`flex flex-col items-center justify-center border-2 rounded-lg p-8 mb-4
                                 ${loading ? 'opacity-50 pointer-events-none' : ''}
-                                ${isDragging ? 'border-indigo-700 bg-indigo-300 border-4 shadow-lg transition-transform duration-200' : ''}`}
+                                ${isDragging ? 'border-indigo-500 bg-indigo-50 border-dashed shadow-inner transition-transform duration-200' : 'border-indigo-300 bg-white hover:border-indigo-400 transition-colors'}`}
                             onDrop={handleDrop}
                             onDragOver={handleDragOver}
                             onDragLeave={handleDragLeave}
@@ -573,33 +585,36 @@ const handleFileUpload = async (file) => {
                         </div>
 
                         {loading && (
-                        <div className="flex items-center justify-center fixed inset-0 z-40 bg-white bg-opacity-75">
-                            <div className="animate-spin rounded-full h-24 w-24 border-b-4 border-indigo-600"></div>
+                        <div className="flex flex-col items-center justify-center fixed inset-0 z-40 bg-white bg-opacity-80 gap-4">
+                            <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-indigo-600"></div>
+                            <p className="text-sm text-indigo-700 font-medium">Processing your document…</p>
                         </div>
                     )}
 
                         {isErrorModalOpen && (
                             <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex justify-center items-center z-50">
-                                <div className="bg-white p-6 rounded-lg shadow-xl relative">
-                                    <div className="absolute top-2 right-2 cursor-pointer" onClick={closeErrorModal}>
-                                        <X className="w-7 h-7 text-gray-700 hover:text-gray-900" aria-label="Close Modal Icon" />
-                                    </div>
+                                <div className="bg-white p-6 rounded-xl shadow-xl relative max-w-sm w-full mx-4">
+                                    <button className="absolute top-3 right-3 text-gray-400 hover:text-gray-700 transition-colors" onClick={closeErrorModal} aria-label="Close">
+                                        <X className="w-5 h-5" />
+                                    </button>
                                     <div className="flex justify-center mb-4">
-                                        <Ghost className="w-20 h-20 text-indigo-900" aria-label="Error Icon" />
+                                        <div className="w-14 h-14 rounded-full bg-red-50 flex items-center justify-center">
+                                            <AlertTriangle className="w-8 h-8 text-red-500" aria-label="Error Icon" />
+                                        </div>
                                     </div>
-                                    <div className="text-center mb-4 text-indigo-900">
-                                        <div className="text-xl font-bold">{translations[currentLang].error.title}</div>
-                                        <div>{errorMessage}</div>
+                                    <div className="text-center mb-4">
+                                        <div className="text-lg font-semibold text-gray-900 mb-1">{translations[currentLang].error.title}</div>
+                                        <div className="text-sm text-gray-600">{errorMessage}</div>
                                         {retryTime && (
-                                            <p className="mt-2 text-sm text-gray-600">
+                                            <p className="mt-2 text-sm text-gray-500">
                                                 {translations[currentLang].error.retryTime(retryTime)}
                                             </p>
                                         )}
                                     </div>
-                                    <div className="flex flex-col items-center mt-6">
+                                    <div className="flex flex-col items-center mt-5">
                                         <button
                                             onClick={() => { fileInputRef.current.click(); closeErrorModal(); }}
-                                            className="inline-flex items-center justify-center px-8 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors w-full max-w-xs"
+                                            className="inline-flex items-center justify-center px-6 py-2.5 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors w-full text-sm font-medium"
                                         >
                                             {translations[currentLang].error.selectAnotherFile}
                                         </button>
@@ -617,7 +632,7 @@ const handleFileUpload = async (file) => {
                                         <thead className="bg-indigo-600 text-white">
                                             <tr>
                                                 {tableData.headers.map((header, index) => (
-                                                    <th key={index} className="px-4 py-3 text-left text-xs font-medium border-r border-gray-200">{header}</th>
+                                                    <th key={index} className="px-4 py-3 text-left text-sm font-medium border-r border-indigo-500">{header}</th>
                                                 ))}
                                             </tr>
                                         </thead>
@@ -633,7 +648,7 @@ const handleFileUpload = async (file) => {
                                                         return (
                                                             <td
                                                                 key={cellIndex}
-                                                                className={`px-4 py-3 text-sm text-gray-900 border-r border-gray-200 ${highlight ? 'bg-red-100 font-semibold' : ''}`}
+                                                                className={`px-4 py-3 text-sm text-gray-900 border-r border-gray-200 cursor-text hover:bg-indigo-50 focus:outline-none focus:bg-indigo-50 transition-colors ${highlight ? 'bg-red-100 font-semibold hover:bg-red-100' : ''}`}
                                                                 contentEditable
                                                                 suppressContentEditableWarning
                                                                 onBlur={(e) => handleCellChange(rowIndex, tableData.headers[cellIndex], e.target.innerText)}
@@ -650,8 +665,9 @@ const handleFileUpload = async (file) => {
                             )}
                             {/* AI Interpretation Panel */}
                             {(interpretationLoading || interpretation) && (
-                                <div className="bg-indigo-50 border border-indigo-200 rounded-lg p-5 mb-4">
-                                    <h3 className="text-lg font-semibold text-indigo-800 mb-3">
+                                <div className="bg-blue-50 border border-blue-200 rounded-xl p-5 mb-4">
+                                    <h3 className="text-base font-semibold text-blue-900 mb-3 flex items-center gap-2">
+                                        <Microscope className="w-4 h-4" />
                                         What do your results mean?
                                     </h3>
                                     {interpretationLoading ? (
@@ -695,7 +711,7 @@ const handleFileUpload = async (file) => {
                                     <div className="flex justify-end gap-2 mb-4">
                                         <button
                                             onClick={handleCopyTable}
-                                            className="inline-flex items-center px-4 py-2 bg-indigo-100 text-indigo-700 rounded-lg hover:bg-indigo-200 transition-colors"
+                                            className={`inline-flex items-center px-4 py-2 rounded-lg transition-colors ${copied ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
                                         >
                                             {copied ? (
                                                 <CheckCircle className="w-5 h-5 mr-2" aria-label="Copy Success Icon" />
@@ -706,7 +722,7 @@ const handleFileUpload = async (file) => {
                                         </button>
                                         <button
                                             onClick={handleDownloadTable}
-                                            className="inline-flex items-center px-4 py-2 bg-indigo-100 text-indigo-700 rounded-lg hover:bg-indigo-200 transition-colors"
+                                            className={`inline-flex items-center px-4 py-2 rounded-lg transition-colors ${downloaded ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
                                         >
                                             {downloaded ? (
                                                 <CheckCircle className="w-5 h-5 mr-2" aria-label="Download Success Icon" />
@@ -715,24 +731,23 @@ const handleFileUpload = async (file) => {
                                             )}
                                             {downloaded ? translations[currentLang].tableDisplay.downloadSuccess : translations[currentLang].tableDisplay.downloadTable}
                                         </button>
-                                        {/* Save button */}
                                         {!saved ? (
                                             <button
                                                 onClick={handleSaveClick}
-                                                className="inline-flex items-center px-4 py-2 bg-indigo-100 text-indigo-700 rounded-lg hover:bg-indigo-200 transition-colors"
+                                                className="inline-flex items-center px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
                                             >
                                                 <BookmarkPlus className="w-5 h-5 mr-2" />
                                                 Save this test
                                             </button>
                                         ) : (
-                                            <span className="inline-flex items-center px-4 py-2 text-green-700">
+                                            <span className="inline-flex items-center px-4 py-2 bg-green-100 text-green-700 rounded-lg">
                                                 <BookmarkCheck className="w-5 h-5 mr-2" />
                                                 Saved!
                                             </span>
                                         )}
                                     </div>
                                     {showSignInPrompt && (
-                                        <div className="mt-3 p-4 bg-indigo-50 border border-indigo-200 rounded-lg text-sm text-indigo-800 text-center">
+                                        <div className="mt-3 p-4 bg-gray-50 border border-gray-200 rounded-lg text-sm text-gray-700 text-center">
                                             <a href="/auth/login" className="text-indigo-600 font-medium hover:underline">
                                                 Sign in
                                             </a>{' '}
@@ -740,7 +755,7 @@ const handleFileUpload = async (file) => {
                                         </div>
                                     )}
                                     {showSaveForm && (
-                                        <div className="mt-3 p-4 bg-indigo-50 border border-indigo-200 rounded-lg">
+                                        <div className="mt-3 p-4 bg-white border border-gray-200 rounded-xl shadow-sm">
                                             <label className="block text-sm font-medium text-gray-700 mb-1">
                                                 Name this test
                                             </label>
@@ -781,7 +796,7 @@ const handleFileUpload = async (file) => {
                         </h3>
                         <div className="max-w-5xl mx-auto px-1">
                             <div className="grid grid-cols-1 md:grid-cols-[1fr_max-content_1fr_max-content_1fr] gap-8">
-                                <div className="bg-white p-6 rounded-lg shadow-lg text-center flex flex-col items-center relative transition-all duration-300 hover:shadow-xl hover:scale-[1.02] cursor-pointer">
+                                <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100 text-center flex flex-col items-center relative transition-shadow duration-300 hover:shadow-md">
                                     <div className="bg-indigo-100 text-indigo-600 rounded-full h-16 w-16 flex items-center justify-center mb-4">
                                         <Upload className="w-8 h-8" aria-label="Upload File Icon" />
                                     </div>
@@ -792,7 +807,7 @@ const handleFileUpload = async (file) => {
                                 <div className="hidden md:flex items-center justify-center">
                                     <ArrowRight className="w-10 h-10 text-indigo-400" aria-label="Next Step Arrow" />
                                 </div>
-                                <div className="bg-white p-6 rounded-lg shadow-lg text-center flex flex-col items-center relative transition-all duration-300 hover:shadow-xl hover:scale-[1.02] cursor-pointer">
+                                <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100 text-center flex flex-col items-center relative transition-shadow duration-300 hover:shadow-md">
                                     <div className="bg-indigo-100 text-indigo-600 rounded-fuull h-16 w-16 flex items-center justify-center mb-4">
                                         <Microscope className="w-8 h-8" aria-label="Conversion Process Icon" />
                                     </div>
@@ -803,7 +818,7 @@ const handleFileUpload = async (file) => {
                                 <div className="hidden md:flex items-center justify-center">
                                     <ArrowRight className="w-10 h-10 text-indigo-400" aria-label="Next Step Arrow" />
                                 </div>
-                                <div className="bg-white p-6 rounded-lg shadow-lg text-center flex flex-col items-center transition-all duration-300 hover:shadow-xl hover:scale-[1.02] cursor-pointer">
+                                <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100 text-center flex flex-col items-center transition-shadow duration-300 hover:shadow-md">
                                     <div className="bg-indigo-100 text-indigo-600 rounded-full h-16 w-16 flex items-center justify-center mb-4">
                                         <Table className="w-8 h-8" aria-label="Table Result Icon" />
                                     </div>
@@ -814,7 +829,7 @@ const handleFileUpload = async (file) => {
                         </div>
                     </section>
 
-                    <section className="max-w-5xl mx-auto bg-white rounded-lg shadow-lg p-8 mt-12">
+                    <section className="max-w-5xl mx-auto bg-white rounded-xl shadow-sm border border-gray-100 p-8 mt-12">
                         <h2 className="text-2xl font-bold text-indigo-700 mb-8 text-center">
                             {translations[currentLang].whyChooseUs.title}
                         </h2>
@@ -845,7 +860,7 @@ const handleFileUpload = async (file) => {
                         </div>
                     </section>
 
-                    <section ref={faqSectionRef} className="max-w-5xl mx-auto bg-white rounded-lg shadow-lg p-8 mt-12">
+                    <section ref={faqSectionRef} className="max-w-5xl mx-auto bg-white rounded-xl shadow-sm border border-gray-100 p-8 mt-12">
                         <h2 className="text-2xl font-bold text-indigo-700 mb-6 text-center">
                             {translations[currentLang].faq.title}
                         </h2>

@@ -117,8 +117,8 @@ export default function TestDetailPage() {
         <p className="text-sm text-gray-500 mb-6">{formatDate(test.createdAt)}</p>
 
         {(interpretationLoading || interpretation) && (
-          <div className="bg-indigo-50 border border-indigo-200 rounded-lg p-5 mb-6">
-            <h2 className="text-lg font-semibold text-indigo-800 mb-3">What do your results mean?</h2>
+          <div className="bg-blue-50 border border-blue-200 rounded-xl p-5 mb-6">
+            <h2 className="text-base font-semibold text-blue-900 mb-3">What do your results mean?</h2>
             {interpretationLoading ? (
               <div className="flex items-center space-x-2 text-indigo-600">
                 <Loader className="w-5 h-5 animate-spin" />
@@ -153,7 +153,7 @@ export default function TestDetailPage() {
             <thead className="bg-indigo-600 text-white">
               <tr>
                 {test.headers.map((h, i) => (
-                  <th key={i} className="px-4 py-3 text-left text-xs font-medium border-r border-indigo-500">
+                  <th key={i} className="px-4 py-3 text-left text-sm font-medium border-r border-indigo-500">
                     {h}
                   </th>
                 ))}

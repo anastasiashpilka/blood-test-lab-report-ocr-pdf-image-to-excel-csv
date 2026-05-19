@@ -64,13 +64,12 @@ export default async function handler(req, res) {
 
         const genAI = new GoogleGenerativeAI(apiKey);
 
-        // Free Gemini models in order of preference — fallback if rate limit exceeded
-        // Ordered: best quality first, highest daily quota last (gemini-3.1-flash-lite-preview = 500 RPD)
+        // Free Gemini models ordered by RPM (highest first) for best availability
         const FREE_MODELS = [
-            "gemini-2.5-flash",              // 5 RPM, 20 RPD — best quality
-            "gemini-3-flash-preview",        // 5 RPM, 20 RPD
-            "gemini-2.5-flash-lite",         // 10 RPM, 20 RPD
-            "gemini-3.1-flash-lite-preview", // 15 RPM, 500 RPD — largest free quota
+            "gemini-3.1-flash-lite",  // 15 RPM — highest free quota
+            "gemini-2.5-flash-lite",  // 10 RPM
+            "gemini-2.5-flash",       // 5 RPM — best quality
+            "gemini-3-flash",         // 5 RPM
         ];
 
         // Unified prompt for JSON output to Gemini API

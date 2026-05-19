@@ -82,7 +82,7 @@ const translations = {
             q12: "Can I integrate this tool into my own application or website?",
             a12: "This online converter is provided as a standalone web application for direct user use. We do not currently offer an API for third-party integrations."
         },
-        nav: { 
+        nav: {
             bloodTestConverter: "Blood Test Converter",
             unitConverter: "Unit Converter",
             biomarkers: "Biomarkers",
@@ -93,6 +93,10 @@ const translations = {
             lang_uk: "Ukrainian",
             lang_ja: "Japanese",
             lang_zh: "Chinese",
+            signIn: 'Sign In',
+            signUp: 'Sign Up',
+            myTests: 'My Tests',
+            signOut: 'Sign Out',
         },
         
         unitConverter: {
@@ -411,7 +415,11 @@ const translations = {
             lang_fr: "Français",
             lang_uk: "Українська",
             lang_ja: "日本語",
-            lang_zh: "简体中文"
+            lang_zh: "简体中文",
+            signIn: 'Sign In',
+            signUp: 'Sign Up',
+            myTests: 'My Tests',
+            signOut: 'Sign Out',
         },
         unitConverter: {
             title: "Blutbiomarker-Einheitenumrechner",
@@ -725,7 +733,11 @@ const translations = {
             lang_fr: "Français",
             lang_uk: "Українська",
             lang_ja: "日本語",
-            lang_zh: "简体中文"
+            lang_zh: "简体中文",
+            signIn: 'Sign In',
+            signUp: 'Sign Up',
+            myTests: 'My Tests',
+            signOut: 'Sign Out',
         },
         unitConverter: {
             title: "Blutbiomarker-Einheitenumrechner",
@@ -1039,7 +1051,11 @@ const translations = {
             lang_fr: "Français",
             lang_uk: "Українська",
             lang_ja: "日本語",
-            lang_zh: "简体中文"
+            lang_zh: "简体中文",
+            signIn: 'Sign In',
+            signUp: 'Sign Up',
+            myTests: 'My Tests',
+            signOut: 'Sign Out',
         },
         unitConverter: {
             title: "Convertisseur d'Unités de Biomarqueurs Sanguins",
@@ -1354,7 +1370,11 @@ const translations = {
             lang_fr: "Français",
             lang_uk: "Українська",
             lang_ja: "日本語",
-            lang_zh: "简体中文"
+            lang_zh: "简体中文",
+            signIn: 'Sign In',
+            signUp: 'Sign Up',
+            myTests: 'My Tests',
+            signOut: 'Sign Out',
         },
         unitConverter: {
             title: "Конвертер одиниць вимірювання біомаркерів крові",
@@ -1669,7 +1689,11 @@ const translations = {
             lang_fr: "Français",
             lang_uk: "Українська",
             lang_ja: "日本語",
-            lang_zh: "简体中文"
+            lang_zh: "简体中文",
+            signIn: 'Sign In',
+            signUp: 'Sign Up',
+            myTests: 'My Tests',
+            signOut: 'Sign Out',
         },
         unitConverter: {
             title: "血液バイオマーカー単位変換ツール",
@@ -1984,7 +2008,11 @@ zh: {
             lang_fr: "Français",
             lang_uk: "Українська",
             lang_ja: "日本語",
-            lang_zh: "简体中文"
+            lang_zh: "简体中文",
+            signIn: 'Sign In',
+            signUp: 'Sign Up',
+            myTests: 'My Tests',
+            signOut: 'Sign Out',
         },
        unitConverter: {
             title: "血液生物标志物单位转换器",

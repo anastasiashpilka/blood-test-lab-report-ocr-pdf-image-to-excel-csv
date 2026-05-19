@@ -2,10 +2,12 @@ import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import translations from '../translations';
-import { Globe, ScanHeart, ChevronDown, ChevronUp, Menu, X } from 'lucide-react';
+import { Globe, ScanHeart, ChevronDown, ChevronUp, Menu, X, User } from 'lucide-react';
 import Head from 'next/head';
 import Script from 'next/script';
 import { GA_MEASUREMENT_ID } from '../lib/gtag';
+import { useAuth } from '../contexts/AuthContext';
+import { signOut } from '../firebase/auth';
 
 const Layout = ({ children, title }) => {
     const router = useRouter();
@@ -17,6 +19,13 @@ const Layout = ({ children, title }) => {
     const langMenuRef = useRef(null);
     const mobileMenuButtonRef = useRef(null);
     const [isClient, setIsClient] = useState(false);
+
+    const { currentUser } = useAuth();
+
+    const handleSignOut = async () => {
+      await signOut();
+      router.push('/');
+    };
 
     useEffect(() => {
         setIsClient(true);
@@ -134,6 +143,40 @@ const Layout = ({ children, title }) => {
                                 </div>
                             )}
                         </div>
+                        {currentUser ? (
+                          <div className="flex items-center space-x-3">
+                            <Link
+                              href="/my-tests"
+                              className={`text-lg font-medium hover:text-indigo-600 transition-colors ${router.pathname.startsWith('/my-tests') ? 'text-indigo-700' : 'text-gray-600'}`}
+                            >
+                              {t.nav.myTests}
+                            </Link>
+                            <button
+                              onClick={handleSignOut}
+                              className="text-lg font-medium text-gray-600 hover:text-indigo-600 transition-colors"
+                            >
+                              {t.nav.signOut}
+                            </button>
+                            <div className="flex items-center justify-center w-8 h-8 bg-indigo-100 rounded-full">
+                              <User className="w-5 h-5 text-indigo-700" />
+                            </div>
+                          </div>
+                        ) : (
+                          <div className="flex items-center space-x-3">
+                            <Link
+                              href="/auth/login"
+                              className="text-lg font-medium text-gray-600 hover:text-indigo-600 transition-colors"
+                            >
+                              {t.nav.signIn}
+                            </Link>
+                            <Link
+                              href="/auth/signup"
+                              className="px-4 py-2 bg-indigo-600 text-white rounded-lg text-lg font-medium hover:bg-indigo-700 transition-colors"
+                            >
+                              {t.nav.signUp}
+                            </Link>
+                          </div>
+                        )}
                     </div>
                 </nav>
                 {isMobileMenuOpen && (
@@ -182,6 +225,40 @@ const Layout = ({ children, title }) => {
                                 </div>
                             )}
                         </div>
+                        {currentUser ? (
+                          <>
+                            <Link
+                              href="/my-tests"
+                              className="text-lg font-medium text-gray-600 hover:text-indigo-700"
+                              onClick={() => setIsMobileMenuOpen(false)}
+                            >
+                              {t.nav.myTests}
+                            </Link>
+                            <button
+                              onClick={() => { handleSignOut(); setIsMobileMenuOpen(false); }}
+                              className="text-lg font-medium text-gray-600 hover:text-indigo-700 text-left"
+                            >
+                              {t.nav.signOut}
+                            </button>
+                          </>
+                        ) : (
+                          <>
+                            <Link
+                              href="/auth/login"
+                              className="text-lg font-medium text-gray-600 hover:text-indigo-700"
+                              onClick={() => setIsMobileMenuOpen(false)}
+                            >
+                              {t.nav.signIn}
+                            </Link>
+                            <Link
+                              href="/auth/signup"
+                              className="text-lg font-medium text-gray-600 hover:text-indigo-700"
+                              onClick={() => setIsMobileMenuOpen(false)}
+                            >
+                              {t.nav.signUp}
+                            </Link>
+                          </>
+                        )}
                     </div>
                 )}
             </header>

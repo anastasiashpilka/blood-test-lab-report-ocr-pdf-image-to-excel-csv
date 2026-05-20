@@ -12,7 +12,7 @@ export async function getStaticProps({ locale }) {
     return {
         props: {
             translations: t,
-            biomarkers: biomarkersData,
+            biomarkers: biomarkersData.map(({ id, name, description }) => ({ id, name, description })),
         },
     };
 }

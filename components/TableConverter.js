@@ -2,6 +2,7 @@ import { useState, useRef, useCallback, useEffect } from 'react';
 import { CheckCircle, ShieldCheck, Copy, FileCheck, Microscope, X, AlertTriangle, Download, HelpCircle, ChevronDown, ChevronUp, Globe, Upload, Table, ArrowRight, ArrowDown, Zap, FileText, BookmarkPlus, BookmarkCheck, Loader } from 'lucide-react';
 import translations from '../translations';
 import { useRouter } from 'next/router';
+import Link from 'next/link';
 import * as ga from '../lib/gtag';
 import { useAuth } from '../contexts/AuthContext';
 import { saveTest } from '../firebase/tests';
@@ -748,9 +749,9 @@ const handleFileUpload = async (file) => {
                                     </div>
                                     {showSignInPrompt && (
                                         <div className="mt-3 p-4 bg-gray-50 border border-gray-200 rounded-lg text-sm text-gray-700 text-center">
-                                            <a href="/auth/login" className="text-indigo-600 font-medium hover:underline">
+                                            <Link href="/auth/login" className="text-indigo-600 font-medium hover:underline">
                                                 Sign in
-                                            </a>{' '}
+                                            </Link>{' '}
                                             to save your results and track them over time.
                                         </div>
                                     )}

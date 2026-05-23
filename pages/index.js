@@ -1,12 +1,12 @@
 import Head from 'next/head';
 import TableConverter from '../components/TableConverter';
 import translations from '../translations';
-import { useRouter } from 'next/router'; 
+import { useRouter } from 'next/router';
+import { useLanguage } from '../contexts/LanguageContext';
 
 export default function HomePage() {
   const router = useRouter();
-  const { locale } = router;
-  const currentLang = locale || 'en';
+  const { lang: currentLang } = useLanguage();
 
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://www.onlinebloodtestconverter.com/'; 
   const canonicalUrl = `${baseUrl}/${currentLang}/`; 

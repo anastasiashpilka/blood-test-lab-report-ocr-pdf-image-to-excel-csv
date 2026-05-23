@@ -3,9 +3,11 @@ import { CheckCircle, ShieldCheck, Copy, FileCheck, Microscope, X, AlertTriangle
 import translations from '../translations';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
+import { useLanguage } from '../contexts/LanguageContext';
 import * as ga from '../lib/gtag';
 import { useAuth } from '../contexts/AuthContext';
 import { saveTest } from '../firebase/tests';
+import { findBiomarkerId } from '../lib/biomarkerLookup';
 
 const TableConverter = () => {
     const [tableData, setTableData] = useState({ headers: [], rows: [] });
@@ -20,15 +22,11 @@ const TableConverter = () => {
     const [isDragging, setIsDragging] = useState(false);
     const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
     const [retryTime, setRetryTime] = useState(null);
-    const [langMenuTimeout, setLangMenuTimeout] = useState(null);
-
     const router = useRouter();
-    const currentLang = router.locale || 'en'; 
+    const { lang: currentLang } = useLanguage();
 
     const faqSectionRef = useRef(null);
     const [openFaqIndex, setOpenFaqIndex] = useState(null);
-    const [isLangMenuOpen, setIsLangMenuOpen] = useState(false);
-
     const { currentUser } = useAuth();
 
     const [showWelcome, setShowWelcome] = useState(false);
@@ -77,21 +75,6 @@ const TableConverter = () => {
             label: 'FAQ Button Click',
         });
     };
-
-    const handleLangMenuOpen = () => {
-        setIsLangMenuOpen(true);
-        ga.event({
-            action: 'language_menu_open',
-            category: 'Language Selection',
-            label: 'Open Language Menu',
-        });
-    };
-
-    useEffect(() => {
-        if (router.locale && router.locale !== currentLang) {
-            setCurrentLang(router.locale);
-        }
-    }, [router.locale]);
 
     useEffect(() => {
         if (!tableData.headers.length || !tableData.rows.length) {
@@ -271,7 +254,6 @@ const TableConverter = () => {
                 setTableData(data);
                 setImageDescription('');
             } else {
-                console.log("Received unexpected JSON structure:", data);
                 setErrorMessage(translations[currentLang].error.unexpectedData);
                 setTableData({ headers: [], rows: [] });
                 setImageDescription('');
@@ -296,7 +278,6 @@ const handleFileUpload = async (file) => {
     formData.append('file', file);
 
     try {
-        console.log('Sending request to /api/convert-to-table');
         const response = await fetch('/api/convert-to-table', {
             method: 'POST',
             body: formData,
@@ -309,7 +290,6 @@ const handleFileUpload = async (file) => {
         }
 
         const data = await response.json();
-        console.log('Received data:', data);
         setTableData(data);
         setLoading(false);
         if (data.rows && data.rows.length > 0) {
@@ -506,7 +486,7 @@ const handleFileUpload = async (file) => {
 
     return (
         <>
-            <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-blue-100 relative">
+            <div className="min-h-screen bg-gray-50 relative">
                 {showWelcome && (
                     <div className="fixed top-20 left-1/2 transform -translate-x-1/2 z-50 bg-green-600 text-white px-6 py-3 rounded-xl shadow-lg text-sm font-medium">
                         Welcome! Your tests will now be saved when you&apos;re signed in.
@@ -527,7 +507,7 @@ const handleFileUpload = async (file) => {
                         <p className="text-slate-600 max-w-2xl mx-auto mb-4 text-base sm:text-lg">
                             {translations[currentLang].header.description || "Easily convert your blood test results into structured, editable tables. Upload PDF, DOCX, or images for instant results."}
                         </p>
-                        <div className="bg-indigo-50 border border-indigo-200 text-indigo-800 p-3 rounded-lg flex items-start space-x-3 mt-6 max-w-5xl mx-auto">
+                        <div id="privacy" className="bg-indigo-50 border border-indigo-200 text-indigo-800 p-3 rounded-lg flex items-start space-x-3 mt-6 max-w-5xl mx-auto">
                             <ShieldCheck className="w-6 h-6 flex-shrink-0 mt-0.5" aria-label="Privacy Assurance Icon" />
                             <div>
                                 <p className="text-sm font-medium" dangerouslySetInnerHTML={{ __html: translations[currentLang].header.privacyNote.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') }}></p>
@@ -538,7 +518,7 @@ const handleFileUpload = async (file) => {
 
                     <button
                         onClick={scrollToFaq}
-                        className="fixed bottom-5 right-5 bg-white text-indigo-600 p-3 rounded-full shadow-md border border-gray-200 hover:border-indigo-300 hover:text-indigo-700 transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:ring-opacity-50 z-30"
+                        className="fixed bottom-5 right-5 bg-white text-indigo-600 p-3 rounded-full shadow-lg border border-gray-200 hover:border-indigo-300 hover:text-indigo-700 transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:ring-opacity-50 z-30"
                         aria-label="Go to Frequently Asked Questions"
                         title="Frequently Asked Questions"
                     >
@@ -649,9 +629,10 @@ const handleFileUpload = async (file) => {
                                                         return (
                                                             <td
                                                                 key={cellIndex}
-                                                                className={`px-4 py-3 text-sm text-gray-900 border-r border-gray-200 cursor-text hover:bg-indigo-50 focus:outline-none focus:bg-indigo-50 transition-colors ${highlight ? 'bg-red-100 font-semibold hover:bg-red-100' : ''}`}
+                                                                className={`px-4 py-3 text-sm text-gray-900 border-r border-gray-200 cursor-text transition-all hover:ring-1 hover:ring-inset hover:ring-indigo-200 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-400 focus-within:bg-indigo-50 ${highlight ? 'bg-red-100 font-semibold hover:bg-red-50' : 'hover:bg-indigo-50'}`}
                                                                 contentEditable
                                                                 suppressContentEditableWarning
+                                                                title="Click to edit"
                                                                 onBlur={(e) => handleCellChange(rowIndex, tableData.headers[cellIndex], e.target.innerText)}
                                                             >
                                                                 <div dangerouslySetInnerHTML={{ __html: formatCellContent(cell) }} />
@@ -666,8 +647,8 @@ const handleFileUpload = async (file) => {
                             )}
                             {/* AI Interpretation Panel */}
                             {(interpretationLoading || interpretation) && (
-                                <div className="bg-blue-50 border border-blue-200 rounded-xl p-5 mb-4">
-                                    <h3 className="text-base font-semibold text-blue-900 mb-3 flex items-center gap-2">
+                                <div className="bg-indigo-50 border border-indigo-100 rounded-xl p-5 mb-4">
+                                    <h3 className="text-base font-semibold text-indigo-900 mb-3 flex items-center gap-2">
                                         <Microscope className="w-4 h-4" />
                                         What do your results mean?
                                     </h3>
@@ -685,7 +666,21 @@ const handleFileUpload = async (file) => {
                                                         <li key={i} className="flex items-start space-x-2 text-sm">
                                                             <span className="mt-0.5 w-2 h-2 rounded-full bg-red-400 flex-shrink-0" />
                                                             <span>
-                                                                <strong className="text-gray-800">{fv.name}</strong>
+                                                                {(() => {
+                                                                    const id = findBiomarkerId(fv.name);
+                                                                    return id ? (
+                                                                        <Link
+                                                                            href={`/biomarkers/${id}`}
+                                                                            target="_blank"
+                                                                            rel="noopener noreferrer"
+                                                                            className="font-semibold text-indigo-700 hover:underline"
+                                                                        >
+                                                                            {fv.name}
+                                                                        </Link>
+                                                                    ) : (
+                                                                        <strong className="text-gray-800">{fv.name}</strong>
+                                                                    );
+                                                                })()}
                                                                 {fv.value ? ` (${fv.value})` : ''} — {fv.note}
                                                             </span>
                                                         </li>
@@ -748,11 +743,34 @@ const handleFileUpload = async (file) => {
                                         )}
                                     </div>
                                     {showSignInPrompt && (
-                                        <div className="mt-3 p-4 bg-gray-50 border border-gray-200 rounded-lg text-sm text-gray-700 text-center">
-                                            <Link href="/auth/login" className="text-indigo-600 font-medium hover:underline">
-                                                Sign in
-                                            </Link>{' '}
-                                            to save your results and track them over time.
+                                        <div className="fixed inset-0 bg-gray-900/50 flex items-center justify-center z-50 px-4">
+                                            <div className="bg-white rounded-2xl shadow-xl max-w-sm w-full p-6 relative">
+                                                <button
+                                                    className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors"
+                                                    onClick={() => setShowSignInPrompt(false)}
+                                                    aria-label="Close"
+                                                >
+                                                    <X className="w-5 h-5" />
+                                                </button>
+                                                <h3 className="text-lg font-bold text-gray-900 mb-2">Save &amp; track your health</h3>
+                                                <p className="text-sm text-gray-600 mb-6">
+                                                    Sign in or create a free account to save this test and compare your results over time.
+                                                </p>
+                                                <div className="flex flex-col gap-3">
+                                                    <Link
+                                                        href="/auth/signup"
+                                                        className="w-full text-center px-4 py-2.5 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors font-medium text-sm"
+                                                    >
+                                                        Create Account
+                                                    </Link>
+                                                    <Link
+                                                        href="/auth/login"
+                                                        className="w-full text-center px-4 py-2.5 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium text-sm"
+                                                    >
+                                                        Sign In
+                                                    </Link>
+                                                </div>
+                                            </div>
                                         </div>
                                     )}
                                     {showSaveForm && (
@@ -777,12 +795,26 @@ const handleFileUpload = async (file) => {
                                                 </button>
                                                 <button
                                                     onClick={() => setShowSaveForm(false)}
-                                                    className="px-3 py-2 text-sm text-gray-600 hover:text-gray-800"
+                                                    className="px-3 py-2 text-sm text-gray-600 hover:text-gray-800 border border-gray-300 rounded-lg transition-colors"
                                                 >
                                                     Cancel
                                                 </button>
                                             </div>
                                             {saveError && <p className="mt-2 text-red-600 text-xs">{saveError}</p>}
+                                        </div>
+                                    )}
+                                    {!interpretationLoading && interpretation?.flaggedValues?.length > 0 && (
+                                        <div className="mt-4 bg-indigo-50 border border-indigo-100 rounded-xl p-5 flex flex-col sm:flex-row items-center justify-between gap-4">
+                                            <div>
+                                                <p className="text-sm font-medium text-indigo-900">Want to understand your results?</p>
+                                                <p className="text-xs text-indigo-600 mt-0.5">Our biomarker reference database explains what each value means.</p>
+                                            </div>
+                                            <Link
+                                                href="/biomarkers"
+                                                className="flex-shrink-0 px-4 py-2 bg-indigo-600 text-white text-sm rounded-lg hover:bg-indigo-700 transition-colors font-medium whitespace-nowrap"
+                                            >
+                                                Explore biomarkers →
+                                            </Link>
                                         </div>
                                     )}
                                 </>
@@ -834,7 +866,7 @@ const handleFileUpload = async (file) => {
                         <h2 className="text-2xl font-bold text-indigo-700 mb-8 text-center">
                             {translations[currentLang].whyChooseUs.title}
                         </h2>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                        <div className="flex flex-wrap justify-center gap-5">
                             {[
                                 { key: 'accuracySpeed', Icon: Zap },
                                 { key: 'formatSupport', Icon: FileText },
@@ -847,7 +879,7 @@ const handleFileUpload = async (file) => {
                                 const title = colonIdx !== -1 ? text.substring(0, colonIdx) : text;
                                 const desc = colonIdx !== -1 ? text.substring(colonIdx + 2) : '';
                                 return (
-                                    <div key={key} className="flex flex-col gap-3 p-5 rounded-xl bg-indigo-50 border border-indigo-100">
+                                    <div key={key} className="flex flex-col gap-3 p-5 rounded-xl bg-indigo-50 border border-indigo-100 w-full sm:w-[calc(50%-10px)] lg:w-[calc(33.333%-14px)]">
                                         <div className="bg-white w-10 h-10 rounded-lg flex items-center justify-center shadow-sm border border-indigo-100">
                                             <Icon className="w-5 h-5 text-indigo-600" />
                                         </div>
@@ -869,7 +901,7 @@ const handleFileUpload = async (file) => {
                             <div key={index} className="mb-4 bg-indigo-50 rounded-lg border border-indigo-200">
                                 <button
                                     onClick={() => toggleFaq(index)}
-                                    className="w-full text-left p-4 flex justify-between items-center text-xl font-semibold text-indigo-700 focus:outline-none"
+                                    className="w-full text-left p-4 flex justify-between items-center text-base font-medium text-indigo-700 focus:outline-none"
                                     aria-expanded={openFaqIndex === index}
                                     aria-controls={`faq-answer-${index}`}
                                 >

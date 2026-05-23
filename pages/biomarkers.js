@@ -4,23 +4,22 @@ import { useRouter } from 'next/router';
 import { SearchX, Search, ChevronRight } from 'lucide-react';
 import translations from '../translations';
 import biomarkersData from '../lib/biomarkers-data';
+import { useLanguage } from '../contexts/LanguageContext';
 
 const BIOMARKERS_PER_LOAD = 9;
 
-export async function getStaticProps({ locale }) {
-    const t = translations[locale] || translations['en'];
+export async function getStaticProps() {
     return {
         props: {
-            translations: t,
             biomarkers: biomarkersData.map(({ id, name, description }) => ({ id, name, description })),
         },
     };
 }
 
-const BiomarkersPage = ({ translations: serverTranslations, biomarkers }) => {
+const BiomarkersPage = ({ biomarkers }) => {
     const router = useRouter();
-    const currentLang = router.locale || 'en';
-    const t = serverTranslations;
+    const { lang: currentLang } = useLanguage();
+    const t = translations[currentLang] || translations['en'];
     const [searchTerm, setSearchTerm] = useState('');
     const [visibleBiomarkerCount, setVisibleBiomarkerCount] = useState(BIOMARKERS_PER_LOAD);
 
@@ -49,13 +48,13 @@ const BiomarkersPage = ({ translations: serverTranslations, biomarkers }) => {
                 <meta name="keywords" content="biomarkers, medical insights, health information" />
             </Head>
             <main className="mx-auto px-4 py-12 w-full">
-                <h1 className="text-5xl lg:text-5xl font-extrabold text-indigo-800 text-center mb-6">
+                <h1 className="text-4xl sm:text-5xl font-extrabold text-indigo-900 text-center mb-6">
                     {t.biomarker.title}
                 </h1>
                 <p className="text-xl text-gray-700 text-center mb-12">
                     {t.biomarker.description}
                 </p>
-                <div className="bg-white p-10 rounded-xl shadow-xl max-w-full mx-auto border border-gray-100">
+                <div className="bg-white p-10 rounded-xl shadow-md max-w-full mx-auto border border-gray-100">
                     <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center">
                         {t.biomarker.hubTitle}
                     </h2>

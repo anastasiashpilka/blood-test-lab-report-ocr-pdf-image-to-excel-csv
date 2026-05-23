@@ -55,31 +55,56 @@ export const updateTestLabel = (userId, testId, label) =>
 export const updateTestInterpretation = (userId, testId, interpretationSummary) =>
   updateDoc(doc(db, 'users', userId, 'tests', testId), { interpretationSummary });
 
-export const countOutOfRange = (headers, rows) => {
-  const resultIdx = headers.findIndex((h) =>
-    ['result', 'результат'].includes(h.toLowerCase())
-  );
-  const rangeIdx = headers.findIndex((h) =>
-    ['reference range', 'референтні інтервали', 'normal range'].includes(h.toLowerCase())
-  );
-  if (resultIdx === -1 || rangeIdx === -1) return 0;
+const isRowOutOfRange = (result, range) => {
+  if (!result || !range) return false;
+  try {
+    const val = parseFloat(String(result).replace(',', '.'));
+    if (isNaN(val)) return false;
+    const rangeStr = String(range).trim();
 
-  return rows.reduce((count, row) => {
-    const result = row[resultIdx];
-    const range = row[rangeIdx];
-    if (!result || !range) return count;
+    // operator-based: < 5.0, >= 3.5, > 10, etc.
+    const operatorMatch = rangeStr.match(/^([<>]=?)\s*(.+)/);
+    if (operatorMatch) {
+      const op = operatorMatch[1];
+      const limit = parseFloat(operatorMatch[2].replace(',', '.'));
+      if (isNaN(limit)) return false;
+      if (op === '<')  return val >= limit;
+      if (op === '<=') return val > limit;
+      if (op === '>')  return val <= limit;
+      if (op === '>=') return val < limit;
+    }
 
-    const resultVal = parseFloat(String(result).replace(',', '.'));
-    if (isNaN(resultVal)) return count;
-
-    const parts = String(range).split('-').map((p) => p.trim());
+    // min-max: 3.5-5.0 or 3.5 - 5.0
+    const parts = rangeStr.split('-').map((p) => p.trim());
     if (parts.length === 2) {
       const min = parseFloat(parts[0].replace(',', '.'));
       const max = parseFloat(parts[1].replace(',', '.'));
-      if (!isNaN(min) && !isNaN(max) && (resultVal < min || resultVal > max)) {
-        return count + 1;
-      }
+      if (!isNaN(min) && !isNaN(max)) return val < min || val > max;
     }
-    return count;
+  } catch { /* unparseable range — treat as in-range */ }
+  return false;
+};
+
+const RESULT_KEYWORDS = ['result', 'value', 'результат', 'значення', 'показник'];
+const RANGE_KEYWORDS = ['range', 'interval', 'норма', 'референт', 'reference', 'normal'];
+
+const matchesKeywords = (header, keywords) => {
+  const lower = header.toLowerCase();
+  return keywords.some((kw) => lower.includes(kw));
+};
+
+export const findResultIdx = (headers) =>
+  headers.findIndex((h) => matchesKeywords(h, RESULT_KEYWORDS));
+
+export const findRangeIdx = (headers) =>
+  headers.findIndex((h) => matchesKeywords(h, RANGE_KEYWORDS));
+
+export const countOutOfRange = (headers, rows) => {
+  const resultIdx = findResultIdx(headers);
+  const rangeIdx = findRangeIdx(headers);
+  if (resultIdx === -1 || rangeIdx === -1) return null;
+
+  return rows.reduce((count, row) => {
+    return count + (isRowOutOfRange(row[resultIdx], row[rangeIdx]) ? 1 : 0);
   }, 0);
 };

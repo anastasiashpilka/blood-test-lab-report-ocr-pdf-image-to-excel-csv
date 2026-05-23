@@ -8,18 +8,18 @@ import Script from 'next/script';
 import { GA_MEASUREMENT_ID } from '../lib/gtag';
 import { useAuth } from '../contexts/AuthContext';
 import { signOut } from '../firebase/auth';
+import { useLanguage } from '../contexts/LanguageContext';
 
 const Layout = ({ children, title }) => {
     const router = useRouter();
-    const currentLang = router.locale || 'en';
-    const t = translations[currentLang];
+    const { lang: currentLang, setLang } = useLanguage();
+    const t = translations[currentLang] || translations['en'];
 
     const [isLangMenuOpen, setIsLangMenuOpen] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
     const langMenuRef = useRef(null);
     const userMenuRef = useRef(null);
-    const mobileMenuButtonRef = useRef(null);
     const [isClient, setIsClient] = useState(false);
 
     const { currentUser } = useAuth();
@@ -38,25 +38,13 @@ const Layout = ({ children, title }) => {
             if (userMenuRef.current && !userMenuRef.current.contains(event.target)) {
                 setIsUserMenuOpen(false);
             }
-            if (isMobileMenuOpen) {
-                const clickedOutsideMobileMenu = (
-                    !mobileMenuButtonRef.current ||
-                    !mobileMenuButtonRef.current.contains(event.target)
-                ) && (
-                    !document.querySelector('.mobile-menu') ||
-                    !document.querySelector('.mobile-menu').contains(event.target)
-                );
-                if (clickedOutsideMobileMenu) {
-                    setIsMobileMenuOpen(false);
-                }
-            }
         };
         document.addEventListener('mousedown', handleClickOutside);
         return () => document.removeEventListener('mousedown', handleClickOutside);
-    }, [isMobileMenuOpen]);
+    }, []);
 
     const changeLanguage = (newLocale) => {
-        router.push(router.asPath, router.asPath, { locale: newLocale });
+        setLang(newLocale);
         setIsLangMenuOpen(false);
     };
 
@@ -106,11 +94,11 @@ const Layout = ({ children, title }) => {
                     </Link>
                     <div className="md:hidden">
                         <button
-                            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                            onClick={() => setIsMobileMenuOpen(true)}
                             className="text-gray-600 hover:text-indigo-600 focus:outline-none"
-                            aria-label="Toggle mobile menu"
+                            aria-label="Open menu"
                         >
-                            {isMobileMenuOpen ? <X className="w-8 h-8" /> : <Menu className="w-8 h-8" />}
+                            <Menu className="w-8 h-8" />
                         </button>
                     </div>
                     <div className="hidden md:flex space-x-6 items-center">
@@ -192,95 +180,120 @@ const Layout = ({ children, title }) => {
                         )}
                     </div>
                 </nav>
-                {isMobileMenuOpen && (
-                    <div className="md:hidden mobile-menu fixed inset-0 bg-white bg-opacity-95 z-40 p-4 flex flex-col space-y-4">
+            </header>
+
+            {/* Mobile drawer backdrop */}
+            <div
+                className={`md:hidden fixed inset-0 bg-black/30 z-40 transition-opacity duration-300 ${isMobileMenuOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
+                onClick={() => setIsMobileMenuOpen(false)}
+            />
+            {/* Mobile drawer */}
+            <div className={`md:hidden fixed right-0 top-0 h-full w-72 bg-white shadow-2xl z-50 flex flex-col overflow-y-auto transform transition-transform duration-300 ease-in-out ${isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}>
+                <div className="flex justify-between items-center p-5 border-b border-gray-100">
+                    <span className="font-semibold text-gray-800">{t.nav.menu}</span>
+                    <button
+                        onClick={() => setIsMobileMenuOpen(false)}
+                        className="text-gray-400 hover:text-gray-600 transition-colors"
+                        aria-label="Close menu"
+                    >
+                        <X className="w-6 h-6" />
+                    </button>
+                </div>
+                <nav className="flex flex-col p-5 space-y-1">
+                    <Link href="/" className="text-base font-medium text-gray-600 hover:text-indigo-700 hover:bg-indigo-50 rounded-lg px-3 py-2.5 transition-colors" onClick={() => setIsMobileMenuOpen(false)}>
+                        {t.nav.bloodTestConverter}
+                    </Link>
+                    <Link href="/unit-converter" className="text-base font-medium text-gray-600 hover:text-indigo-700 hover:bg-indigo-50 rounded-lg px-3 py-2.5 transition-colors" onClick={() => setIsMobileMenuOpen(false)}>
+                        {t.nav.unitConverter}
+                    </Link>
+                    <Link href="/biomarkers" className="text-base font-medium text-gray-600 hover:text-indigo-700 hover:bg-indigo-50 rounded-lg px-3 py-2.5 transition-colors" onClick={() => setIsMobileMenuOpen(false)}>
+                        {t.nav.biomarkers}
+                    </Link>
+                    <div className="pt-2 border-t border-gray-100 mt-2" ref={langMenuRef}>
                         <button
-                            onClick={() => setIsMobileMenuOpen(false)}
-                            className="self-end text-gray-600 hover:text-indigo-600 focus:outline-none"
-                            aria-label="Close mobile menu"
+                            onClick={() => setIsLangMenuOpen(!isLangMenuOpen)}
+                            className="flex items-center justify-between w-full text-base font-medium text-gray-600 hover:text-indigo-600 rounded-lg px-3 py-2.5 transition-colors"
                         >
-                            <X className="w-8 h-8" />
+                            <span className="flex items-center gap-2">
+                                <Globe className="w-5 h-5" />
+                                {t.nav[`lang_${currentLang}`]}
+                            </span>
+                            {isLangMenuOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
                         </button>
-                        <Link href="/" className="text-lg font-medium text-gray-600 hover:text-indigo-700" onClick={() => setIsMobileMenuOpen(false)}>
-                            {t.nav.bloodTestConverter}
-                        </Link>
-                        <Link href="/unit-converter" className="text-lg font-medium text-gray-600 hover:text-indigo-700" onClick={() => setIsMobileMenuOpen(false)}>
-                            {t.nav.unitConverter}
-                        </Link>
-                        <Link href="/biomarkers" className="text-lg font-medium text-gray-600 hover:text-indigo-700" onClick={() => setIsMobileMenuOpen(false)}>
-                            {t.nav.biomarkers}
-                        </Link>
-                        <div className="relative" ref={langMenuRef}>
-                            <button
-                                onClick={() => setIsLangMenuOpen(!isLangMenuOpen)}
-                                className="flex items-center space-x-2 text-lg font-medium text-gray-600 hover:text-indigo-600 focus:outline-none w-full justify-between"
-                            >
-                                <span className="flex items-center">
-                                    <Globe className="w-5 h-5 mr-2" />
-                                    {t.nav[`lang_${currentLang}`]}
-                                </span>
-                                {isLangMenuOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-                            </button>
-                            {isLangMenuOpen && (
-                                <div className="mt-2 w-full bg-white border border-gray-200 rounded-lg shadow-lg py-1">
-                                    {availableLocales.map((locale) => (
-                                        <button
-                                            key={locale}
-                                            onClick={() => {
-                                                changeLanguage(locale);
-                                                setIsMobileMenuOpen(false);
-                                            }}
-                                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
-                                        >
-                                            {t.nav[`lang_${locale}`]}
-                                        </button>
-                                    ))}
-                                </div>
-                            )}
-                        </div>
-                        {currentUser ? (
-                          <>
-                            <Link
-                              href="/my-tests"
-                              className="text-lg font-medium text-gray-600 hover:text-indigo-700"
-                              onClick={() => setIsMobileMenuOpen(false)}
-                            >
-                              {t.nav.myTests}
-                            </Link>
-                            <button
-                              onClick={() => { handleSignOut(); setIsMobileMenuOpen(false); }}
-                              className="text-lg font-medium text-gray-600 hover:text-indigo-700 text-left"
-                            >
-                              {t.nav.signOut}
-                            </button>
-                          </>
-                        ) : (
-                          <>
-                            <Link
-                              href="/auth/login"
-                              className="text-lg font-medium text-gray-600 hover:text-indigo-700"
-                              onClick={() => setIsMobileMenuOpen(false)}
-                            >
-                              {t.nav.signIn}
-                            </Link>
-                            <Link
-                              href="/auth/signup"
-                              className="inline-block px-5 py-2.5 bg-indigo-600 text-white rounded-lg text-base font-medium hover:bg-indigo-700 transition-colors text-center"
-                              onClick={() => setIsMobileMenuOpen(false)}
-                            >
-                              {t.nav.signUp}
-                            </Link>
-                          </>
+                        {isLangMenuOpen && (
+                            <div className="mt-1 ml-3 space-y-0.5">
+                                {availableLocales.map((locale) => (
+                                    <button
+                                        key={locale}
+                                        onClick={() => { changeLanguage(locale); setIsMobileMenuOpen(false); }}
+                                        className="block w-full text-left px-3 py-2 text-sm text-gray-600 hover:text-indigo-700 hover:bg-indigo-50 rounded-lg transition-colors"
+                                    >
+                                        {t.nav[`lang_${locale}`]}
+                                    </button>
+                                ))}
+                            </div>
                         )}
                     </div>
-                )}
-            </header>
+                    <div className="pt-2 border-t border-gray-100 mt-2">
+                        {currentUser ? (
+                            <>
+                                <Link href="/my-tests" className="text-base font-medium text-gray-600 hover:text-indigo-700 hover:bg-indigo-50 rounded-lg px-3 py-2.5 transition-colors block" onClick={() => setIsMobileMenuOpen(false)}>
+                                    {t.nav.myTests}
+                                </Link>
+                                <button
+                                    onClick={() => { handleSignOut(); setIsMobileMenuOpen(false); }}
+                                    className="w-full text-left text-base font-medium text-gray-600 hover:text-red-600 hover:bg-red-50 rounded-lg px-3 py-2.5 transition-colors"
+                                >
+                                    {t.nav.signOut}
+                                </button>
+                            </>
+                        ) : (
+                            <div className="flex flex-col gap-2 mt-1">
+                                <Link href="/auth/login" className="text-base font-medium text-gray-600 hover:text-indigo-700 hover:bg-indigo-50 rounded-lg px-3 py-2.5 transition-colors" onClick={() => setIsMobileMenuOpen(false)}>
+                                    {t.nav.signIn}
+                                </Link>
+                                <Link href="/auth/signup" className="mx-3 text-center py-2.5 bg-indigo-600 text-white rounded-lg text-base font-medium hover:bg-indigo-700 transition-colors" onClick={() => setIsMobileMenuOpen(false)}>
+                                    {t.nav.signUp}
+                                </Link>
+                            </div>
+                        )}
+                    </div>
+                </nav>
+            </div>
+
             <main className="flex-grow">
                 {children}
             </main>
-            <footer className="bg-indigo-950 text-white py-8 mt-12">
-                <div className="max-w-5xl mx-auto px-4 text-center">
-                    <p dangerouslySetInnerHTML={{ __html: t.footer.copyright.replace('{year}', currentYear) }} />
+            <footer className="bg-indigo-950 text-white py-10 mt-12">
+                <div className="max-w-5xl mx-auto px-6">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+                        <div>
+                            <div className="flex items-center space-x-2 mb-3">
+                                <ScanHeart className="w-6 h-6 text-indigo-300" />
+                                <span className="text-lg font-bold text-white">BloodTestConverter</span>
+                            </div>
+                            <p className="text-indigo-200 text-sm leading-relaxed">{t.footerSection.tagline}</p>
+                            <p className="text-indigo-300 text-xs mt-2">{t.footerSection.privacy}</p>
+                        </div>
+                        <div>
+                            <h3 className="text-sm font-semibold text-indigo-300 uppercase tracking-wider mb-3">{t.footerSection.toolsHeading}</h3>
+                            <ul className="space-y-2">
+                                <li><Link href="/" className="text-indigo-200 hover:text-white text-sm transition-colors">{t.footerSection.bloodTestConverter}</Link></li>
+                                <li><Link href="/unit-converter" className="text-indigo-200 hover:text-white text-sm transition-colors">{t.footerSection.unitConverter}</Link></li>
+                                <li><Link href="/biomarkers" className="text-indigo-200 hover:text-white text-sm transition-colors">{t.footerSection.biomarkerHub}</Link></li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h3 className="text-sm font-semibold text-indigo-300 uppercase tracking-wider mb-3">{t.footerSection.infoHeading}</h3>
+                            <ul className="space-y-2">
+                                <li><Link href="/about" className="text-indigo-200 hover:text-white text-sm transition-colors">{t.footerSection.about}</Link></li>
+                                <li><Link href="/#privacy" className="text-indigo-200 hover:text-white text-sm transition-colors">{t.footerSection.privacyData}</Link></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div className="border-t border-indigo-800 pt-6 text-center">
+                        <p className="text-indigo-300 text-xs" dangerouslySetInnerHTML={{ __html: t.footer.copyright.replace('{year}', currentYear) }} />
+                    </div>
                 </div>
             </footer>
         </div>

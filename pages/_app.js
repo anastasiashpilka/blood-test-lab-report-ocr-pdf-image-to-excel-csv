@@ -6,11 +6,11 @@ import { useEffect } from 'react';
 import * as ga from '../lib/gtag';
 import Layout from '../components/Layout';
 import { AuthProvider } from '../contexts/AuthContext';
+import { LanguageProvider, useLanguage } from '../contexts/LanguageContext';
 
-export default function App({ Component, pageProps }) {
+function AppContent({ Component, pageProps }) {
   const router = useRouter();
-  const { locale } = router;
-  const currentLang = locale || 'en';
+  const { lang: currentLang } = useLanguage();
 
   useEffect(() => {
     const handleRouteChange = (url) => ga.pageview(url);
@@ -34,5 +34,14 @@ export default function App({ Component, pageProps }) {
         </Layout>
       </AuthProvider>
     </>
+  );
+}
+
+export default function App({ Component, pageProps }) {
+  const router = useRouter();
+  return (
+    <LanguageProvider defaultLang={router.locale || 'en'}>
+      <AppContent Component={Component} pageProps={pageProps} />
+    </LanguageProvider>
   );
 }

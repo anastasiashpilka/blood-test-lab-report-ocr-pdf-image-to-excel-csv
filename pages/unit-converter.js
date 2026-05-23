@@ -3,12 +3,13 @@ import { useRouter } from 'next/router';
 import Head from 'next/head';
 import Link from 'next/link';
 import translations from '../translations';
+import { useLanguage } from '../contexts/LanguageContext';
 import {
     convertUnit,
     biomarkerUnitCategories,
     getUnitsForBiomarker,
 } from '../lib/unitConversions';
-import {ExternalLink, ChevronDown, ChevronUp, HelpCircle } from 'lucide-react';
+import { ExternalLink, ChevronDown, ChevronUp, HelpCircle, Search, ArrowLeftRight, CheckCircle } from 'lucide-react';
 
 const faqItems = [
     { questionKey: 'q1_question', answerKey: 'q1_answer' },
@@ -22,22 +23,20 @@ const faqItems = [
     { questionKey: 'q9_question', answerKey: 'q9_answer' },
 ];
 
-export async function getStaticProps({ locale }) {
-    const t = translations[locale] || translations['en'];
+export async function getStaticProps() {
     const allBiomarkers = Object.keys(biomarkerUnitCategories).sort();
 
     return {
         props: {
-            translations: t,
             allBiomarkers,
         },
     };
 }
 
-const UnitConverter = ({ translations: serverTranslations, allBiomarkers }) => {
+const UnitConverter = ({ allBiomarkers }) => {
     const router = useRouter();
-    const currentLang = router.locale || 'en';
-    const t = serverTranslations;
+    const { lang: currentLang } = useLanguage();
+    const t = translations[currentLang] || translations['en'];
 
     const [inputValue, setInputValue] = useState('');
     const [selectedBiomarker, setSelectedBiomarker] = useState('');
@@ -296,7 +295,7 @@ const UnitConverter = ({ translations: serverTranslations, allBiomarkers }) => {
         })}
     </script>
             </Head>
-            <h1 className="text-4xl font-bold text-center text-indigo-800 mb-8">
+            <h1 className="text-4xl sm:text-5xl font-extrabold text-center text-indigo-900 mb-8">
                 {t.unitConverter?.title || 'Unit Converter'}
             </h1>
             <div className="bg-white p-8 rounded-xl shadow-md max-w-5xl mx-auto">
@@ -454,11 +453,11 @@ const UnitConverter = ({ translations: serverTranslations, allBiomarkers }) => {
                 <div className="max-w-5xl mx-auto px-1">
                     <div className="grid grid-cols-1 md:grid-cols-[1fr_max-content_1fr_max-content_1fr] gap-8">
                         <div
-                            className="bg-white p-6 rounded-lg shadow-lg text-center flex flex-col items-center relative transition-all duration-300 hover:shadow-xl hover:scale-105 cursor-pointer"
+                            className="bg-white p-6 rounded-lg shadow-sm text-center flex flex-col items-center relative transition-shadow duration-300 hover:shadow-md cursor-pointer"
                             onClick={() => trackEvent('how_it_works_step_click', { step: 1, description: t.unitConverter?.howItWorks?.step1?.title || 'Step 1', page_path: router.asPath })}
                         >
-                            <div className="bg-indigo-100 text-indigo-600 rounded-full h-16 w-16 flex items-center justify-center mb-4 text-3xl font-bold border-2 border-indigo-600">
-                                1
+                            <div className="bg-indigo-100 text-indigo-600 rounded-full h-16 w-16 flex items-center justify-center mb-4">
+                                <Search className="w-8 h-8" />
                             </div>
                             <h4 className="text-xl font-semibold text-gray-800 mb-2">{t.unitConverter?.howItWorks?.step1?.title || 'Step 1'}</h4>
                             <p className="text-gray-600 text-sm" dangerouslySetInnerHTML={{ __html: t.unitConverter?.howItWorks?.step1?.description || 'Select a biomarker from the dropdown.' }}></p>
@@ -468,11 +467,11 @@ const UnitConverter = ({ translations: serverTranslations, allBiomarkers }) => {
                             &rarr;
                         </div>
                         <div
-                            className="bg-white p-6 rounded-lg shadow-lg text-center flex flex-col items-center relative transition-all duration-300 hover:shadow-xl hover:scale-105 cursor-pointer"
+                            className="bg-white p-6 rounded-lg shadow-sm text-center flex flex-col items-center relative transition-shadow duration-300 hover:shadow-md cursor-pointer"
                             onClick={() => trackEvent('how_it_works_step_click', { step: 2, description: t.unitConverter?.howItWorks?.step2?.title || 'Step 2', page_path: router.asPath })}
                         >
-                            <div className="bg-indigo-100 text-indigo-600 rounded-full h-16 w-16 flex items-center justify-center mb-4 text-3xl font-bold border-2 border-indigo-600">
-                                2
+                            <div className="bg-indigo-100 text-indigo-600 rounded-full h-16 w-16 flex items-center justify-center mb-4">
+                                <ArrowLeftRight className="w-8 h-8" />
                             </div>
                             <h4 className="text-xl font-semibold text-gray-800 mb-2">{t.unitConverter?.howItWorks?.step2?.title || 'Step 2'}</h4>
                             <p className="text-gray-600 text-sm" dangerouslySetInnerHTML={{ __html: t.unitConverter?.howItWorks?.step2?.description || 'Enter a value and select units.' }}></p>
@@ -482,11 +481,11 @@ const UnitConverter = ({ translations: serverTranslations, allBiomarkers }) => {
                             &rarr;
                         </div>
                         <div
-                            className="bg-white p-6 rounded-lg shadow-lg text-center flex flex-col items-center transition-all duration-300 hover:shadow-xl hover:scale-105 cursor-pointer"
+                            className="bg-white p-6 rounded-lg shadow-sm text-center flex flex-col items-center transition-shadow duration-300 hover:shadow-md cursor-pointer"
                             onClick={() => trackEvent('how_it_works_step_click', { step: 3, description: t.unitConverter?.howItWorks?.step3?.title || 'Step 3', page_path: router.asPath })}
                         >
-                            <div className="bg-indigo-100 text-indigo-600 rounded-full h-16 w-16 flex items-center justify-center mb-4 text-3xl font-bold border-2 border-indigo-600">
-                                3
+                            <div className="bg-indigo-100 text-indigo-600 rounded-full h-16 w-16 flex items-center justify-center mb-4">
+                                <CheckCircle className="w-8 h-8" />
                             </div>
                             <h4 className="text-xl font-semibold text-gray-800 mb-2">{t.unitConverter?.howItWorks?.step3?.title || 'Step 3'}</h4>
                             <p className="text-gray-600 text-sm" dangerouslySetInnerHTML={{ __html: t.unitConverter?.howItWorks?.step3?.description || 'Click convert to see the result.' }}></p>

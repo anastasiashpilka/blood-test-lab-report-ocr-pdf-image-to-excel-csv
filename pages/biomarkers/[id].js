@@ -3,6 +3,7 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import biomarkersData from '../../lib/biomarkers-data';
 import translations from '../../translations';
+import { useLanguage } from '../../contexts/LanguageContext';
 
 export async function getStaticPaths({ locales }) {
     const paths = biomarkersData.flatMap(biomarker =>
@@ -17,9 +18,8 @@ export async function getStaticPaths({ locales }) {
     };
 }
 
-export async function getStaticProps({ params, locale }) {
+export async function getStaticProps({ params }) {
     const biomarker = biomarkersData.find(b => b.id === params.id);
-    const t = translations[locale] || translations['en'];
 
     if (!biomarker) {
         return {
@@ -35,15 +35,14 @@ export async function getStaticProps({ params, locale }) {
         props: {
             biomarker,
             relatedBiomarkers,
-            translations: t,
         },
     };
 }
 
-const BiomarkerDetailPage = ({ biomarker, relatedBiomarkers, translations: serverTranslations }) => {
+const BiomarkerDetailPage = ({ biomarker, relatedBiomarkers }) => {
     const router = useRouter();
-    const currentLang = router.locale || 'en';
-    const t = serverTranslations;
+    const { lang: currentLang } = useLanguage();
+    const t = translations[currentLang] || translations['en'];
 
     if (!biomarker) {
         return (

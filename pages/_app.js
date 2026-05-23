@@ -1,5 +1,6 @@
 import '@/styles/globals.css';
 import Head from 'next/head';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 import translations from '../translations';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
@@ -33,6 +34,7 @@ function AppContent({ Component, pageProps }) {
           <Component {...pageProps} />
         </Layout>
       </AuthProvider>
+      <SpeedInsights />
     </>
   );
 }

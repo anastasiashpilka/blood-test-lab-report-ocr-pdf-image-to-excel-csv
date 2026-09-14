@@ -2,9 +2,9 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import Head from 'next/head';
-import { Trash2, Pencil, Check, ChevronRight, AlertCircle, ArrowLeft, GitCompare } from 'lucide-react';
+import { Trash2, Pencil, Check, ChevronRight, AlertCircle, ArrowLeft, GitCompare, Download, Loader, LineChart, Activity } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
-import { getTests, deleteTest, updateTestLabel } from '../../firebase/tests';
+import { getTests, deleteTest, updateTestLabel, countOutOfRange } from '../../firebase/tests';
 import translations from '../../translations';
 import { useLanguage } from '../../contexts/LanguageContext';
 
@@ -22,6 +22,9 @@ export default function MyTestsPage() {
   const [loadError, setLoadError] = useState(null);
   const [compareMode, setCompareMode] = useState(false);
   const [selectedForCompare, setSelectedForCompare] = useState([]);
+  const [exporting, setExporting] = useState(false);
+  const [exportingPro, setExportingPro] = useState(false);
+  const [exportError, setExportError] = useState('');
 
   useEffect(() => {
     if (!currentUser) {
@@ -71,6 +74,38 @@ export default function MyTestsPage() {
     setSelectedForCompare([]);
   };
 
+  const handleExportDashboard = async () => {
+    setExportError('');
+    setExporting(true);
+    try {
+      // Dynamic import: exportHealthDashboard itself lazy-loads exceljs,
+      // so nothing extra is fetched until this exact click happens.
+      const { exportHealthDashboard } = await import('../../lib/exportHealthDashboard');
+      await exportHealthDashboard(tests, 'health-dashboard.xlsx');
+    } catch (err) {
+      console.error('Export failed:', err);
+      setExportError(err?.message || 'Failed to generate the dashboard. Please try again.');
+    } finally {
+      setExporting(false);
+    }
+  };
+
+  const handleExportProDashboard = async () => {
+    setExportError('');
+    setExportingPro(true);
+    try {
+      // Dynamic import: exportProDashboard lazy-loads xlsx-populate itself,
+      // so nothing extra is fetched until this exact click happens.
+      const { exportProDashboard } = await import('../../lib/exportProDashboard');
+      await exportProDashboard(tests, 'My_Health_Dashboard.xlsx');
+    } catch (err) {
+      console.error('Pro dashboard export failed:', err);
+      setExportError(err?.message || 'Failed to generate the Pro Dashboard. Please try again.');
+    } finally {
+      setExportingPro(false);
+    }
+  };
+
 
   const formatDate = (ts) => {
     if (!ts) return '';
@@ -99,13 +134,49 @@ export default function MyTestsPage() {
           <ArrowLeft className="w-4 h-4 mr-1" />
           {t.back}
         </button>
-        <div className="flex items-center justify-between mb-8">
-          <h1 className="text-3xl font-bold text-indigo-900">{t.heading}</h1>
-          <div className="flex items-center gap-2">
+        <div className="flex items-center justify-between flex-wrap gap-y-3 mb-8">
+          <h1 className="text-3xl font-bold text-indigo-900 whitespace-nowrap">{t.heading}</h1>
+          <div className="flex items-center gap-2 flex-wrap justify-end">
+            {tests.length >= 1 && !compareMode && (
+              <Link
+                href="/my-tests/trends"
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium bg-white text-indigo-700 border border-indigo-300 hover:bg-indigo-50 transition-colors whitespace-nowrap"
+                title="Interactive multi-biomarker trend dashboard"
+              >
+                <Activity className="w-4 h-4" />
+                Trend Dashboard
+              </Link>
+            )}
+            {tests.length >= 1 && !compareMode && (
+              <button
+                onClick={handleExportDashboard}
+                disabled={exporting}
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium bg-indigo-50 text-indigo-700 border border-indigo-200 hover:bg-indigo-100 transition-colors disabled:opacity-60 disabled:cursor-not-allowed whitespace-nowrap"
+                title={
+                  tests.length >= 2
+                    ? 'Export all your saved tests as a spreadsheet with trend charts'
+                    : 'Export this test as a spreadsheet (add more saved tests to unlock trend charts)'
+                }
+              >
+                {exporting ? <Loader className="w-4 h-4 animate-spin" /> : <Download className="w-4 h-4" />}
+                {exporting ? 'Generating…' : 'Export to Health Dashboard'}
+              </button>
+            )}
+            {tests.length >= 1 && !compareMode && (
+              <button
+                onClick={handleExportProDashboard}
+                disabled={exportingPro}
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium bg-white text-indigo-700 border border-indigo-300 hover:bg-indigo-50 transition-colors disabled:opacity-60 disabled:cursor-not-allowed whitespace-nowrap"
+                title="Download a polished spreadsheet with live, editable trend charts (Excel/Google Sheets)"
+              >
+                {exportingPro ? <Loader className="w-4 h-4 animate-spin" /> : <LineChart className="w-4 h-4" />}
+                {exportingPro ? 'Generating…' : 'Export Pro Dashboard'}
+              </button>
+            )}
             {tests.length >= 2 && !compareMode && (
               <button
                 onClick={handleEnterCompareMode}
-                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium bg-indigo-50 text-indigo-700 border border-indigo-200 hover:bg-indigo-100 transition-colors"
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium bg-indigo-50 text-indigo-700 border border-indigo-200 hover:bg-indigo-100 transition-colors whitespace-nowrap"
               >
                 <GitCompare className="w-4 h-4" />
                 {t.compareMode}
@@ -113,12 +184,18 @@ export default function MyTestsPage() {
             )}
             <Link
               href="/"
-              className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors text-sm font-medium"
+              className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors text-sm font-medium whitespace-nowrap"
             >
               {t.newConversion}
             </Link>
           </div>
         </div>
+
+        {exportError && (
+          <div className="mb-6 px-4 py-3 bg-red-50 border border-red-200 text-red-700 rounded-lg text-sm">
+            {exportError}
+          </div>
+        )}
 
         {compareMode && (
           <div className="bg-indigo-50 border border-indigo-200 rounded-xl p-4 mb-6 flex items-center gap-3">

@@ -1,10 +1,31 @@
-import Layout from '../components/Layout';
+import Head from 'next/head';
 import Link from 'next/link';
 import { ShieldCheck, Microscope, FileText, Globe } from 'lucide-react';
 
+const BASE_URL = 'https://www.onlinebloodtestconverter.com';
+
 export default function AboutPage() {
+    const title = 'About — Online Blood Test Converter';
+    const description =
+        'Learn how the free AI-powered blood test converter works. Upload a PDF, image, or DOCX and get a structured table with out-of-range highlights in seconds. Your data is never stored.';
+    const canonicalUrl = `${BASE_URL}/about`;
+
     return (
-        <Layout title="About — BloodTestConverter">
+        <>
+            <Head>
+                <title>{title}</title>
+                <meta name="description" content={description} />
+                <link rel="canonical" href={canonicalUrl} />
+                <meta name="robots" content="index, follow" />
+                <meta property="og:title" content={title} />
+                <meta property="og:description" content={description} />
+                <meta property="og:type" content="website" />
+                <meta property="og:url" content={canonicalUrl} />
+                <meta property="og:image" content={`${BASE_URL}/favicon-96x96.png`} />
+                <meta name="twitter:card" content="summary" />
+                <meta name="twitter:title" content={title} />
+                <meta name="twitter:description" content={description} />
+            </Head>
             <div className="bg-gray-50 min-h-screen py-12 px-4">
                 <div className="max-w-3xl mx-auto">
                     <div className="text-center mb-10">
@@ -80,6 +101,6 @@ export default function AboutPage() {
                     </div>
                 </div>
             </div>
-        </Layout>
+        </>
     );
 }

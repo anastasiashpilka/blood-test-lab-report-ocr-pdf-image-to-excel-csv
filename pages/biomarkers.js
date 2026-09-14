@@ -98,7 +98,7 @@ const BiomarkersPage = ({ biomarkers }) => {
                                                 <p className="text-gray-700 text-base mb-4">{biomarker.description}</p>
                                             </div>
                                             <span className="text-indigo-600 group-hover:text-indigo-700 text-sm font-medium flex items-center mt-1">
-                                                {t.biomarkers.viewDetails}
+                                                {t.biomarker.viewDetails}
                                                 <ChevronRight className="w-4 h-4 ml-1 group-hover:translate-x-0.5 transition-transform duration-200" />
                                             </span>
                                         </div>
@@ -110,7 +110,7 @@ const BiomarkersPage = ({ biomarkers }) => {
                                             onClick={handleLoadMore}
                                             className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-8 rounded-lg shadow-lg transition-all duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-indigo-300 text-lg"
                                         >
-                                            {t.biomarkers.showMoreButton}
+                                            {t.biomarker.showMoreButton}
                                             {` (${filteredBiomarkers.length - visibleBiomarkerCount} ${t.biomarker.remainingText})`}
                                         </button>
                                     </div>

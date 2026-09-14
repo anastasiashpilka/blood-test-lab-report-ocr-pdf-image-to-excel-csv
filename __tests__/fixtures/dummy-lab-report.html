@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Lab Report - DEMO SAMPLE (Not a Real Medical Document)</title>
+<style>
+  @page {
+    size: letter;
+    margin: 0.4in 0.5in;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: #f2f2f2;
+    color: #000;
+    font-family: Arial, Helvetica, sans-serif;
+  }
+  .page {
+    width: 8.5in;
+    min-height: 11in;
+    margin: 20px auto;
+    background: #fff;
+    padding: 0.4in 0.5in;
+    box-shadow: 0 0 6px rgba(0,0,0,0.25);
+  }
+  .demo-banner {
+    background: #fffbcc;
+    border: 1px dashed #999;
+    color: #555;
+    font-size: 9px;
+    text-align: center;
+    padding: 3px 0;
+    margin-bottom: 6px;
+    letter-spacing: 0.5px;
+  }
+  /* ===== HEADER ===== */
+  .report-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    border-bottom: 3px solid #000;
+    padding-bottom: 6px;
+  }
+  .lab-identity {
+    display: flex;
+    flex-direction: column;
+  }
+  .lab-name {
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+  }
+  .lab-name span { font-weight: 400; }
+  .lab-address {
+    font-size: 9.5px;
+    line-height: 1.35;
+    margin-top: 2px;
+    color: #111;
+  }
+  .header-right {
+    text-align: right;
+    font-size: 9.5px;
+    line-height: 1.4;
+  }
+  .header-right .title {
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+  }
+  .barcode {
+    display: flex;
+    align-items: flex-end;
+    height: 34px;
+    gap: 1px;
+    margin: 4px 0 2px auto;
+    width: 190px;
+  }
+  .barcode div {
+    background: #000;
+    width: 2px;
+    height: 100%;
+  }
+  .barcode-number {
+    font-family: 'Courier New', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-align: center;
+  }
+
+  /* ===== INFO GRID ===== */
+  .info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 0;
+    border: 1px solid #000;
+    margin-top: 8px;
+    font-size: 9.5px;
+  }
+  .info-col {
+    padding: 6px 8px;
+    border-right: 1px solid #000;
+  }
+  .info-col:last-child { border-right: none; }
+  .info-col-title {
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 9px;
+    border-bottom: 1px solid #000;
+    margin-bottom: 4px;
+    padding-bottom: 2px;
+    letter-spacing: 0.5px;
+  }
+  .info-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 1px 0;
+  }
+  .info-label { color: #333; }
+  .info-value { font-weight: 700; text-align: right; }
+
+  .patient-strip {
+    display: flex;
+    justify-content: space-between;
+    border: 1px solid #000;
+    border-top: none;
+    padding: 5px 8px;
+    font-size: 10px;
+    background: #fafafa;
+  }
+  .patient-strip b { font-size: 11px; }
+
+  /* ===== RESULTS TABLE ===== */
+  .panel-title {
+    font-size: 12px;
+    font-weight: 800;
+    text-transform: uppercase;
+    margin-top: 16px;
+    padding-bottom: 2px;
+    border-bottom: 2px solid #000;
+    letter-spacing: 0.5px;
+  }
+  table.results {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 4px;
+    font-size: 10px;
+  }
+  table.results thead th {
+    text-align: left;
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    border-bottom: 1px solid #000;
+    border-top: 1px solid #000;
+    padding: 3px 4px;
+    background: #ececec;
+  }
+  table.results th.num, table.results td.num { text-align: right; }
+  table.results td {
+    padding: 3px 4px;
+    border-bottom: 1px solid #ccc;
+    vertical-align: top;
+  }
+  table.results tr.section-row td {
+    border-bottom: 1px solid #000;
+    border-top: 1px solid #000;
+    background: #f5f5f5;
+    font-weight: 700;
+    font-size: 9.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 3px 4px;
+  }
+  .flag {
+    font-weight: 800;
+  }
+  .flag-high::after { content: " H"; }
+  .flag-low::after { content: " L"; }
+  td.flag-cell { text-align: center; font-weight: 800; }
+  tr.abnormal td.result-cell { font-weight: 800; }
+
+  .ref-note {
+    font-size: 8.5px;
+    color: #333;
+    margin-top: 3px;
+  }
+
+  /* ===== FOOTER ===== */
+  .report-footer {
+    margin-top: 22px;
+    border-top: 1px solid #000;
+    padding-top: 6px;
+    font-size: 8.5px;
+    color: #222;
+    line-height: 1.5;
+  }
+  .report-footer .signoff {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 6px;
+  }
+  .end-of-report {
+    text-align: center;
+    font-size: 9px;
+    letter-spacing: 1px;
+    margin-top: 10px;
+    color: #444;
+  }
+
+  @media print {
+    body { background: #fff; }
+    .page { box-shadow: none; margin: 0; }
+    .demo-banner { display: none; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="demo-banner">
+    SYNTHETIC SAMPLE DATA — FOR SOFTWARE DEMONSTRATION ONLY — NOT A REAL PATIENT RECORD
+  </div>
+
+  <!-- HEADER -->
+  <div class="report-header">
+    <div class="lab-identity">
+      <div class="lab-name">MERIDIAN <span>CLINICAL LABORATORIES</span></div>
+      <div class="lab-address">
+        4820 Corporate Center Drive, Suite 200 &middot; Raleigh, NC 27607<br/>
+        Toll-Free (800) 555-0199 &middot; Fax (800) 555-0142<br/>
+        Lab Director: Sarah J. Whitfield, M.D. &middot; CLIA#: 34D0998812
+      </div>
+    </div>
+    <div class="header-right">
+      <div class="title">Laboratory Report</div>
+      <div class="barcode" id="barcode"></div>
+      <div class="barcode-number">4471 0298 6635</div>
+    </div>
+  </div>
+
+  <!-- INFO GRID -->
+  <div class="info-grid">
+    <div class="info-col">
+      <div class="info-col-title">Patient</div>
+      <div class="info-row"><span class="info-label">Name</span><span class="info-value">DOE, JOHN</span></div>
+      <div class="info-row"><span class="info-label">DOB</span><span class="info-value">01/01/1985</span></div>
+      <div class="info-row"><span class="info-label">Age / Sex</span><span class="info-value">41 Y / M</span></div>
+      <div class="info-row"><span class="info-label">Patient ID</span><span class="info-value">PT-8827364</span></div>
+      <div class="info-row"><span class="info-label">Phone</span><span class="info-value">(555) 012-3456</span></div>
+    </div>
+    <div class="info-col">
+      <div class="info-col-title">Physician</div>
+      <div class="info-row"><span class="info-label">Ordering</span><span class="info-value">R. ANDERSON, M.D.</span></div>
+      <div class="info-row"><span class="info-label">NPI</span><span class="info-value">1780293845</span></div>
+      <div class="info-row"><span class="info-label">Client #</span><span class="info-value">44930</span></div>
+      <div class="info-row"><span class="info-label">Clinic</span><span class="info-value">Westside Family Med.</span></div>
+      <div class="info-row"><span class="info-label">Fasting</span><span class="info-value">YES</span></div>
+    </div>
+    <div class="info-col">
+      <div class="info-col-title">Specimen</div>
+      <div class="info-row"><span class="info-label">Accession #</span><span class="info-value">MC26-0817734</span></div>
+      <div class="info-row"><span class="info-label">Collected</span><span class="info-value">08/28/2026 07:42</span></div>
+      <div class="info-row"><span class="info-label">Received</span><span class="info-value">08/28/2026 10:15</span></div>
+      <div class="info-row"><span class="info-label">Reported</span><span class="info-value">08/29/2026 06:03</span></div>
+      <div class="info-row"><span class="info-label">Specimen</span><span class="info-value">Serum / Whole Blood</span></div>
+    </div>
+  </div>
+
+  <div class="patient-strip">
+    <span><b>DOE, JOHN</b> &nbsp; DOB: 01/01/1985 (Age 41) &nbsp; Sex: M</span>
+    <span>Req #: R-2608179934 &nbsp; Page 1 of 1</span>
+  </div>
+
+  <!-- RESULTS -->
+  <div class="panel-title">Comprehensive Metabolic Panel (14) &amp; Complete Blood Count (CBC) w/ Differential</div>
+
+  <table class="results">
+    <thead>
+      <tr>
+        <th style="width:26%">Test Name</th>
+        <th class="num" style="width:12%">Result</th>
+        <th style="width:8%; text-align:center;">Flag</th>
+        <th style="width:14%">Units</th>
+        <th style="width:22%">Reference Interval</th>
+        <th style="width:18%">Lab</th>
+      </tr>
+    </thead>
+    <tbody>
+
+      <tr class="section-row"><td colspan="6">Metabolic Panel</td></tr>
+
+      <tr class="abnormal">
+        <td>Glucose</td>
+        <td class="num result-cell">126</td>
+        <td class="flag-cell flag flag-high"></td>
+        <td>mg/dL</td>
+        <td>65&ndash;99</td>
+        <td>01</td>
+      </tr>
+      <tr>
+        <td>BUN (Urea Nitrogen)</td>
+        <td class="num result-cell">14</td>
+        <td class="flag-cell"></td>
+        <td>mg/dL</td>
+        <td>6&ndash;20</td>
+        <td>01</td>
+      </tr>
+      <tr>
+        <td>Creatinine, Serum</td>
+        <td class="num result-cell">0.92</td>
+        <td class="flag-cell"></td>
+        <td>mg/dL</td>
+        <td>0.60&ndash;1.35</td>
+        <td>01</td>
+      </tr>
+      <tr>
+        <td>eGFR (Non-African American)</td>
+        <td class="num result-cell">98</td>
+        <td class="flag-cell"></td>
+        <td>mL/min/1.73m&sup2;</td>
+        <td>&gt; 60</td>
+        <td>01</td>
+      </tr>
+      <tr>
+        <td>Sodium</td>
+        <td class="num result-cell">139</td>
+        <td class="flag-cell"></td>
+        <td>mmol/L</td>
+        <td>134&ndash;144</td>
+        <td>01</td>
+      </tr>
+      <tr>
+        <td>Potassium</td>
+        <td class="num result-cell">4.1</td>
+        <td class="flag-cell"></td>
+        <td>mmol/L</td>
+        <td>3.5&ndash;5.2</td>
+        <td>01</td>
+      </tr>
+      <tr>
+        <td>Chloride</td>
+        <td class="num result-cell">102</td>
+        <td class="flag-cell"></td>
+        <td>mmol/L</td>
+        <td>97&ndash;108</td>
+        <td>01</td>
+      </tr>
+      <tr>
+        <td>Calcium</td>
+        <td class="num result-cell">9.6</td>
+        <td class="flag-cell"></td>
+        <td>mg/dL</td>
+        <td>8.7&ndash;10.2</td>
+        <td>01</td>
+      </tr>
+      <tr>
+        <td>Protein, Total</td>
+        <td class="num result-cell">7.1</td>
+        <td class="flag-cell"></td>
+        <td>g/dL</td>
+        <td>6.0&ndash;8.5</td>
+        <td>01</td>
+      </tr>
+      <tr>
+        <td>Albumin</td>
+        <td class="num result-cell">4.4</td>
+        <td class="flag-cell"></td>
+        <td>g/dL</td>
+        <td>3.5&ndash;5.5</td>
+        <td>01</td>
+      </tr>
+      <tr>
+        <td>AST (SGOT)</td>
+        <td class="num result-cell">21</td>
+        <td class="flag-cell"></td>
+        <td>U/L</td>
+        <td>0&ndash;40</td>
+        <td>01</td>
+      </tr>
+      <tr>
+        <td>ALT (SGPT)</td>
+        <td class="num result-cell">23</td>
+        <td class="flag-cell"></td>
+        <td>U/L</td>
+        <td>0&ndash;44</td>
+        <td>01</td>
+      </tr>
+
+      <tr class="section-row"><td colspan="6">Complete Blood Count</td></tr>
+
+      <tr>
+        <td>WBC</td>
+        <td class="num result-cell">6.5</td>
+        <td class="flag-cell"></td>
+        <td>x10<sup>3</sup>/&micro;L</td>
+        <td>3.4&ndash;10.8</td>
+        <td>02</td>
+      </tr>
+      <tr>
+        <td>RBC</td>
+        <td class="num result-cell">4.85</td>
+        <td class="flag-cell"></td>
+        <td>x10<sup>6</sup>/&micro;L</td>
+        <td>4.14&ndash;5.80</td>
+        <td>02</td>
+      </tr>
+      <tr>
+        <td>Hemoglobin</td>
+        <td class="num result-cell">14.2</td>
+        <td class="flag-cell"></td>
+        <td>g/dL</td>
+        <td>13.0&ndash;17.7</td>
+        <td>02</td>
+      </tr>
+      <tr>
+        <td>Hematocrit</td>
+        <td class="num result-cell">42.1</td>
+        <td class="flag-cell"></td>
+        <td>%</td>
+        <td>37.5&ndash;51.0</td>
+        <td>02</td>
+      </tr>
+      <tr>
+        <td>Platelet Count</td>
+        <td class="num result-cell">245</td>
+        <td class="flag-cell"></td>
+        <td>x10<sup>3</sup>/&micro;L</td>
+        <td>150&ndash;450</td>
+        <td>02</td>
+      </tr>
+
+      <tr class="section-row"><td colspan="6">Additional Studies</td></tr>
+
+      <tr class="abnormal">
+        <td>Vitamin D, 25-Hydroxy</td>
+        <td class="num result-cell">18</td>
+        <td class="flag-cell flag flag-low"></td>
+        <td>ng/mL</td>
+        <td>30&ndash;100</td>
+        <td>03</td>
+      </tr>
+      <tr class="abnormal">
+        <td>TSH</td>
+        <td class="num result-cell">6.85</td>
+        <td class="flag-cell flag flag-high"></td>
+        <td>&micro;IU/mL</td>
+        <td>0.45&ndash;4.50</td>
+        <td>03</td>
+      </tr>
+      <tr>
+        <td>Cholesterol, Total</td>
+        <td class="num result-cell">198</td>
+        <td class="flag-cell"></td>
+        <td>mg/dL</td>
+        <td>&lt; 200</td>
+        <td>01</td>
+      </tr>
+      <tr class="abnormal">
+        <td>LDL Cholesterol (calc)</td>
+        <td class="num result-cell">168</td>
+        <td class="flag-cell flag flag-high"></td>
+        <td>mg/dL</td>
+        <td>&lt; 100</td>
+        <td>01</td>
+      </tr>
+
+    </tbody>
+  </table>
+
+  <div class="ref-note">
+    H = Above High Normal &nbsp;&nbsp; L = Below Low Normal &nbsp;&nbsp; Reference intervals apply to adults age 18&ndash;65 unless otherwise noted.
+    Lab: 01 = Meridian Central Lab, Raleigh NC &middot; 02 = Meridian Hematology Div. &middot; 03 = Meridian Endocrine/Vitamin Div.
+  </div>
+
+  <!-- FOOTER -->
+  <div class="report-footer">
+    <div class="signoff">
+      <span>Electronically signed by: Sarah J. Whitfield, M.D., Laboratory Director</span>
+      <span>Report generated: 08/29/2026 06:03 AM EST</span>
+    </div>
+    <div>
+      Results relate only to the specimen submitted. This report shall not be reproduced except in full without written
+      approval of the laboratory. Values may vary from previous reports due to changes in methodology, reagent lots,
+      or biological variability. Contact the ordering physician regarding interpretation of these results.
+    </div>
+    <div class="end-of-report">&mdash; END OF REPORT &mdash;</div>
+  </div>
+
+</div>
+
+<script>
+  // Generate a pseudo-random barcode pattern purely for visual realism.
+  var bar = document.getElementById('barcode');
+  var pattern = [2,1,3,1,1,2,3,1,2,1,1,3,2,1,3,2,1,1,2,3,1,2,1,3,1,2,1,1,3,2,1,2,3,1,1,2,3,1,2,1];
+  pattern.forEach(function(w){
+    var d = document.createElement('div');
+    d.style.width = w + 'px';
+    bar.appendChild(d);
+  });
+</script>
+
+</body>
+</html>

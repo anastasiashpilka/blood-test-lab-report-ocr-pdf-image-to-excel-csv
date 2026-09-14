@@ -19,8 +19,8 @@ const Layout = ({ children, title }) => {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
     const langMenuRef = useRef(null);
+    const mobileLangMenuRef = useRef(null);
     const userMenuRef = useRef(null);
-    const [isClient, setIsClient] = useState(false);
 
     const { currentUser } = useAuth();
 
@@ -30,9 +30,10 @@ const Layout = ({ children, title }) => {
     };
 
     useEffect(() => {
-        setIsClient(true);
         const handleClickOutside = (event) => {
-            if (langMenuRef.current && !langMenuRef.current.contains(event.target)) {
+            const insideDesktopMenu = langMenuRef.current && langMenuRef.current.contains(event.target);
+            const insideMobileMenu = mobileLangMenuRef.current && mobileLangMenuRef.current.contains(event.target);
+            if (!insideDesktopMenu && !insideMobileMenu) {
                 setIsLangMenuOpen(false);
             }
             if (userMenuRef.current && !userMenuRef.current.contains(event.target)) {
@@ -50,8 +51,6 @@ const Layout = ({ children, title }) => {
 
     const availableLocales = ['en', 'es', 'de', 'fr', 'uk', 'ja', 'zh'];
     const currentYear = new Date().getFullYear();
-
-    if (!isClient) return null;
 
     return (
         <div className="min-h-screen bg-gray-50 font-sans text-gray-800 flex flex-col">
@@ -82,7 +81,7 @@ const Layout = ({ children, title }) => {
                     />
                 </>
             )}
-            <header className="bg-white shadow-sm p-4 sticky top-0 z-50">
+            <header className="bg-white shadow-sm p-4 sticky top-0 z-50 print:hidden">
                 <nav className="max-w-7xl mx-auto flex justify-between items-center">
                     <Link href="/" className="flex items-center space-x-2">
                         <ScanHeart className="w-8 h-8 text-indigo-700" aria-label="Flask icon for Blood Test Converter" />
@@ -172,7 +171,7 @@ const Layout = ({ children, title }) => {
                             </Link>
                             <Link
                               href="/auth/signup"
-                              className="px-4 py-2 bg-indigo-600 text-white rounded-lg text-lg font-medium hover:bg-indigo-700 transition-colors"
+                              className="px-4 py-2 border border-indigo-300 text-indigo-700 rounded-lg text-lg font-medium hover:bg-indigo-50 transition-colors"
                             >
                               {t.nav.signUp}
                             </Link>
@@ -209,7 +208,7 @@ const Layout = ({ children, title }) => {
                     <Link href="/biomarkers" className="text-base font-medium text-gray-600 hover:text-indigo-700 hover:bg-indigo-50 rounded-lg px-3 py-2.5 transition-colors" onClick={() => setIsMobileMenuOpen(false)}>
                         {t.nav.biomarkers}
                     </Link>
-                    <div className="pt-2 border-t border-gray-100 mt-2" ref={langMenuRef}>
+                    <div className="pt-2 border-t border-gray-100 mt-2" ref={mobileLangMenuRef}>
                         <button
                             onClick={() => setIsLangMenuOpen(!isLangMenuOpen)}
                             className="flex items-center justify-between w-full text-base font-medium text-gray-600 hover:text-indigo-600 rounded-lg px-3 py-2.5 transition-colors"
@@ -252,7 +251,7 @@ const Layout = ({ children, title }) => {
                                 <Link href="/auth/login" className="text-base font-medium text-gray-600 hover:text-indigo-700 hover:bg-indigo-50 rounded-lg px-3 py-2.5 transition-colors" onClick={() => setIsMobileMenuOpen(false)}>
                                     {t.nav.signIn}
                                 </Link>
-                                <Link href="/auth/signup" className="mx-3 text-center py-2.5 bg-indigo-600 text-white rounded-lg text-base font-medium hover:bg-indigo-700 transition-colors" onClick={() => setIsMobileMenuOpen(false)}>
+                                <Link href="/auth/signup" className="mx-3 text-center py-2.5 border border-indigo-300 text-indigo-700 rounded-lg text-base font-medium hover:bg-indigo-50 transition-colors" onClick={() => setIsMobileMenuOpen(false)}>
                                     {t.nav.signUp}
                                 </Link>
                             </div>
@@ -264,7 +263,7 @@ const Layout = ({ children, title }) => {
             <main className="flex-grow">
                 {children}
             </main>
-            <footer className="bg-indigo-950 text-white py-10 mt-12">
+            <footer className="bg-indigo-950 text-white py-10 mt-12 print:hidden">
                 <div className="max-w-5xl mx-auto px-6">
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
                         <div>
@@ -287,7 +286,7 @@ const Layout = ({ children, title }) => {
                             <h3 className="text-sm font-semibold text-indigo-300 uppercase tracking-wider mb-3">{t.footerSection.infoHeading}</h3>
                             <ul className="space-y-2">
                                 <li><Link href="/about" className="text-indigo-200 hover:text-white text-sm transition-colors">{t.footerSection.about}</Link></li>
-                                <li><Link href="/#privacy" className="text-indigo-200 hover:text-white text-sm transition-colors">{t.footerSection.privacyData}</Link></li>
+                                <li><Link href="/privacy-policy" className="text-indigo-200 hover:text-white text-sm transition-colors">{t.footerSection.privacyData}</Link></li>
                             </ul>
                         </div>
                     </div>

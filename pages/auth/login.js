@@ -16,6 +16,11 @@ export default function LoginPage() {
 
   const redirectTarget = router.query.from || '/';
 
+  const gatedRouteContext = {
+    '/my-tests': 'Sign in to view your saved test results.',
+  };
+  const contextMessage = gatedRouteContext[redirectTarget];
+
   if (currentUser) {
     router.replace(redirectTarget);
     return null;
@@ -69,7 +74,11 @@ export default function LoginPage() {
       </Head>
       <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-blue-100 flex items-center justify-center px-4 py-12">
         <div className="bg-white rounded-xl shadow-lg p-8 w-full max-w-md">
-          <h1 className="text-2xl font-bold text-indigo-900 mb-6 text-center">Sign In</h1>
+          <h1 className="text-2xl font-bold text-indigo-900 text-center">Sign In</h1>
+          {contextMessage && (
+            <p className="text-sm text-gray-600 text-center mt-1 mb-6">{contextMessage}</p>
+          )}
+          {!contextMessage && <div className="mb-6" />}
 
           {error && (
             <div className="bg-red-50 border border-red-300 text-red-700 rounded-lg px-4 py-3 mb-4 text-sm">

@@ -16,7 +16,7 @@ jest.mock('@google/generative-ai', () => ({
   })),
 }));
 
-const mockReq = (body) => ({ method: 'POST', body });
+const mockReq = (body) => ({ method: 'POST', body, headers: {}, socket: {} });
 const mockRes = () => {
   const res = {};
   res.status = jest.fn().mockReturnValue(res);

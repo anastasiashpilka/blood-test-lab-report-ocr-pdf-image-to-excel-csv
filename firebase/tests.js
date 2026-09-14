@@ -11,6 +11,7 @@ import {
   serverTimestamp,
 } from 'firebase/firestore';
 import { db } from './config';
+import { isOutOfRange, findResultColumnIndex, findRangeColumnIndex } from '../lib/anomalyDetection';
 
 const getUserTestsRef = (userId) => collection(db, 'users', userId, 'tests');
 
@@ -55,56 +56,18 @@ export const updateTestLabel = (userId, testId, label) =>
 export const updateTestInterpretation = (userId, testId, interpretationSummary) =>
   updateDoc(doc(db, 'users', userId, 'tests', testId), { interpretationSummary });
 
-const isRowOutOfRange = (result, range) => {
-  if (!result || !range) return false;
-  try {
-    const val = parseFloat(String(result).replace(',', '.'));
-    if (isNaN(val)) return false;
-    const rangeStr = String(range).trim();
-
-    // operator-based: < 5.0, >= 3.5, > 10, etc.
-    const operatorMatch = rangeStr.match(/^([<>]=?)\s*(.+)/);
-    if (operatorMatch) {
-      const op = operatorMatch[1];
-      const limit = parseFloat(operatorMatch[2].replace(',', '.'));
-      if (isNaN(limit)) return false;
-      if (op === '<')  return val >= limit;
-      if (op === '<=') return val > limit;
-      if (op === '>')  return val <= limit;
-      if (op === '>=') return val < limit;
-    }
-
-    // min-max: 3.5-5.0 or 3.5 - 5.0
-    const parts = rangeStr.split('-').map((p) => p.trim());
-    if (parts.length === 2) {
-      const min = parseFloat(parts[0].replace(',', '.'));
-      const max = parseFloat(parts[1].replace(',', '.'));
-      if (!isNaN(min) && !isNaN(max)) return val < min || val > max;
-    }
-  } catch { /* unparseable range — treat as in-range */ }
-  return false;
-};
-
-const RESULT_KEYWORDS = ['result', 'value', 'результат', 'значення', 'показник'];
-const RANGE_KEYWORDS = ['range', 'interval', 'норма', 'референт', 'reference', 'normal'];
-
-const matchesKeywords = (header, keywords) => {
-  const lower = header.toLowerCase();
-  return keywords.some((kw) => lower.includes(kw));
-};
-
-export const findResultIdx = (headers) =>
-  headers.findIndex((h) => matchesKeywords(h, RESULT_KEYWORDS));
-
-export const findRangeIdx = (headers) =>
-  headers.findIndex((h) => matchesKeywords(h, RANGE_KEYWORDS));
+// Kept as re-exports so existing callers (e.g. pages/my-tests) don't need
+// to change their imports — the actual logic now lives in lib/anomalyDetection,
+// shared with the table-highlighting in FileUploaderWidget.
+export const findResultIdx = findResultColumnIndex;
+export const findRangeIdx = findRangeColumnIndex;
 
 export const countOutOfRange = (headers, rows) => {
-  const resultIdx = findResultIdx(headers);
-  const rangeIdx = findRangeIdx(headers);
+  const resultIdx = findResultColumnIndex(headers);
+  const rangeIdx = findRangeColumnIndex(headers);
   if (resultIdx === -1 || rangeIdx === -1) return null;
 
   return rows.reduce((count, row) => {
-    return count + (isRowOutOfRange(row[resultIdx], row[rangeIdx]) ? 1 : 0);
+    return count + (isOutOfRange(row[resultIdx], row[rangeIdx]) ? 1 : 0);
   }, 0);
 };

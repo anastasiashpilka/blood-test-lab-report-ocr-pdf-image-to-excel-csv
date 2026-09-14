@@ -3,8 +3,9 @@ const translations = {
         header: {
             title: "Online Blood Test Converter: PDF & Image to Spreadsheets",
             description: "Instantly convert blood test results (PDF, Word, photos) into clear, editable spreadsheets. Easily copy to Excel/Google Sheets or download your data.",
-            privacyNote: "Your medical data is private. <strong>Your file is never stored on our servers</strong> — it is processed in memory and immediately discarded. File content is sent to Google Gemini AI for extraction.",
+            privacyNote: "Your file is processed securely and <strong>never stored</strong> — it's discarded right after conversion.",
             googleCloudVision: "We use <strong>Google Gemini AI</strong> to extract and interpret your results. Your file content is transmitted to Google's servers for processing and is subject to Google's privacy policy. We do not store files on our own servers.",
+            learnMore: "See how we protect your data",
         },
         fileUpload: {
             fileAdded: "File {fileName} added!",
@@ -53,7 +54,7 @@ const translations = {
             formatSupport: "Wide Format Support: Work with files in PDF, DOCX and popular image formats (JPG, PNG, WebP), making our tool versatile for any medical document.",
             convenientExport: "Convenient Export for Analysis: Get a ready-to-use table that can be easily copied and pasted into Excel, Google Sheets, or directly downloaded. This is ideal for monitoring your health dynamics.",
             dataSecurity: "Data Transparency: Your file is never stored on our servers. File content is processed by Google Gemini AI and immediately discarded. Saved results are stored securely in your private account.",
-            freeOnline: "Completely Free & Online: Use our converter anytime, anywhere without the need for registration, downloads, or software installation."
+            freeOnline: "Completely Free & Online: Convert your results anytime, anywhere — no registration, downloads, or software installation needed. Creating a free account is optional, only for saving your results to revisit later in My Tests."
         },
         faq: {
             title: "Frequently Asked Questions (FAQ)",
@@ -64,7 +65,7 @@ const translations = {
             q3: "In what format will I receive the table after conversion?",
             a3: "After successful conversion, you will see a clear, structured table directly on the page. You'll have several convenient options: you can easily <strong>copy the entire table</strong> with a single click to paste it <strong>directly into Microsoft Excel, Google Sheets, or any other compatible spreadsheet editor</strong>. Additionally, you can <strong>download the ready-to-use table file</strong> to your computer in CSV (Comma Separated Values) or XLSX (for Excel) format.",
             q4: "Do I need to register or install software to use it?",
-            a4: "No, absolutely not! Our blood test converter works completely online. You do not need to create an account, register, download, or install any additional software. Simply visit the page, upload your file, and start the conversion!",
+            a4: "No — not to convert your results. Our blood test converter works completely online: simply visit the page, upload your file, and start the conversion. An account is only needed if you want to save your results and access them later from My Tests.",
             q5: "How often do you update your tool?",
             a5: "We are constantly working to improve our converter, adding support for new formats, increasing recognition accuracy, and expanding functionality. Updates are released regularly to ensure the best experience for our users.",
             q6: "What if my document has multiple tables or mixed content?",
@@ -369,6 +370,17 @@ const translations = {
             hideRawData: "Hide raw data",
             comparingWith: "Comparing with",
         },
+        trendsPage: {
+            pageTitle: "Biomarker Trends — Blood Test Converter",
+            back: "Back to My Tests",
+            heading: "Biomarker Trends",
+            subheading: "Track how your biomarkers move across every saved test.",
+            loadSample: "Load sample data",
+            usingSampleData: "Showing sample data",
+            backToMyTests: "Back to my real tests",
+            noTests: "No saved tests yet.",
+            uploadFirst: "Upload your first blood test →",
+        },
     },
     es: {
         header: {
@@ -376,6 +388,7 @@ const translations = {
             description: "Convierta instantáneamente los resultados de análisis de sangre (PDF, Word, fotos) en hojas de cálculo claras y editables. Copie fácilmente a Excel/Google Sheets o descargue sus datos.",
             privacyNote: "Su información médica es privada. <strong>Su archivo nunca se almacena en nuestros servidores</strong> — se procesa en memoria y se descarta inmediatamente. El contenido del archivo se envía a Google Gemini AI para su extracción.",
             googleCloudVision: "Utilizamos <strong>Google Gemini AI</strong> para extraer e interpretar sus resultados. El contenido de su archivo se transmite a los servidores de Google para su procesamiento y está sujeto a la política de privacidad de Google. No almacenamos archivos en nuestros propios servidores.",
+            learnMore: "Más información sobre la protección de datos",
         },
         fileUpload: {
             fileAdded: "¡Archivo {fileName} añadido!",
@@ -424,7 +437,7 @@ const translations = {
             formatSupport: "Amplio Soporte de Formatos: Trabaje con archivos en PDF, DOCX y formatos de imagen populares (JPG, PNG, WebP), lo que hace que nuestra herramienta sea versátil para cualquier documento médico.",
             convenientExport: "Exportación Conveniente para el Análisis: Obtenga una tabla lista para usar que se puede copiar y pegar fácilmente en Excel, Google Sheets o descargar directamente. Esto es ideal para monitorear la dinámica de su salud.",
             dataSecurity: "Transparencia de Datos: Su archivo nunca se almacena en nuestros servidores. El contenido del archivo es procesado por Google Gemini AI y descartado inmediatamente. Los resultados guardados se almacenan de forma segura en su cuenta privada.",
-            freeOnline: "Completamente Gratuito y Online: Use nuestro convertidor en cualquier momento y lugar sin necesidad de registro, descargas o instalación de software."
+            freeOnline: "Completamente Gratuito y Online: Convierta sus resultados en cualquier momento y lugar, sin necesidad de registro, descargas ni instalación de software. Crear una cuenta gratuita es opcional, solo para guardar sus resultados y consultarlos más tarde en Mis análisis."
         },
         faq: {
             title: "Preguntas Frecuentes (FAQ)",
@@ -435,7 +448,7 @@ const translations = {
             q3: "¿En qué formato recibiré la tabla después de la conversión?",
             a3: "Después de una conversión exitosa, verá una tabla clara y estructurada directamente en la página. Tendrá varias opciones convenientes: puede <strong>copiar fácilmente la tabla completa</strong> con un solo clic para pegarla <strong>directamente en Microsoft Excel, Google Sheets o cualquier otro editor de hojas de cálculo compatible</strong>. Además, puede <strong>descargar el archivo de tabla listo para usar</strong> a su computadora en formato CSV (valores separados por comas) o XLSX (para Excel).",
             q4: "¿Necesito registrarme o instalar software para usarlo?",
-            a4: "¡No, en absoluto! Nuestro convertidor de análisis de sangre funciona completamente en línea. No necesita crear una cuenta, registrarse, descargar ni instalar ningún software adicional. ¡Simplemente visite la página, cargue su archivo y comience la conversión!",
+            a4: "No, no para convertir sus resultados. Nuestro convertidor de análisis de sangre funciona completamente en línea: simplemente visite la página, cargue su archivo y comience la conversión. Solo necesita una cuenta si desea guardar sus resultados y acceder a ellos más tarde desde Mis análisis.",
             q5: "¿Con qué frecuencia actualizan su herramienta?",
             a5: "Estamos constantemente trabajando para mejorar nuestro convertidor, agregando soporte para nuevos formatos, aumentando la precisión del reconocimiento y expandiendo la funcionalidad. Las actualizaciones se lanzan regularmente para garantizar la mejor experiencia para nuestros usuarios.",
             q6: "¿Qué pasa si mi documento tiene varias tablas o contenido mixto?",
@@ -743,6 +756,7 @@ const translations = {
             description: "Konvertieren Sie Bluttestergebnisse (PDF, Word, Fotos) sofort in klare, bearbeitbare Tabellen. Einfach in Excel/Google Sheets kopieren oder Ihre Daten herunterladen.",
             privacyNote: "Ihre medizinischen Daten sind privat. <strong>Ihre Datei wird niemals auf unseren Servern gespeichert</strong> — sie wird im Arbeitsspeicher verarbeitet und sofort verworfen. Der Dateiinhalt wird zur Extraktion an Google Gemini AI übermittelt.",
             googleCloudVision: "Wir verwenden <strong>Google Gemini AI</strong> zur Extraktion und Interpretation Ihrer Ergebnisse. Ihr Dateiinhalt wird zur Verarbeitung an die Server von Google übertragen und unterliegt den Datenschutzbestimmungen von Google. Wir speichern keine Dateien auf unseren eigenen Servern.",
+            learnMore: "Mehr über unseren Datenschutz erfahren",
         },
         fileUpload: {
             fileAdded:"Datei „{fileName}“ hinzugefügt!",
@@ -791,7 +805,7 @@ const translations = {
             formatSupport: "Breite Formatunterstützung: Arbeiten Sie mit Dateien im PDF-, DOCX- und gängigen Bildformaten (JPG, PNG, WebP), wodurch unser Tool vielseitig für jedes medizinische Dokument ist.",
             convenientExport: "Bequemer Export zur Analyse: Erhalten Sie eine fertige Tabelle, die einfach in Excel, Google Sheets kopiert oder direkt heruntergeladen werden kann. Dies ist ideal zur Überwachung Ihrer Gesundheitsdynamik.",
             dataSecurity: "Datentransparenz: Ihre Datei wird niemals auf unseren Servern gespeichert. Der Dateiinhalt wird von Google Gemini AI verarbeitet und sofort verworfen. Gespeicherte Ergebnisse werden sicher in Ihrem privaten Konto aufbewahrt.",
-            freeOnline: "Komplett kostenlos und online: Nutzen Sie unseren Konverter jederzeit und überall ohne Registrierung, Downloads oder Softwareinstallation."
+            freeOnline: "Komplett kostenlos und online: Konvertieren Sie Ihre Ergebnisse jederzeit und überall – ohne Registrierung, Downloads oder Softwareinstallation. Ein kostenloses Konto ist optional und nur nötig, um Ihre Ergebnisse zu speichern und später unter Meine Tests wiederzufinden."
         },
         faq: {
             title: "Häufig gestellte Fragen (FAQ)",
@@ -802,7 +816,7 @@ const translations = {
             q3: "In welchem Format erhalte ich die Tabelle nach der Konvertierung?",
             a3: "Nach erfolgreicher Konvertierung sehen Sie eine klare, strukturierte Tabelle direkt auf der Seite. Sie haben mehrere praktische Optionen: Sie können die <strong>gesamte Tabelle</strong> einfach mit einem Klick <strong>kopieren</strong>, um sie <strong>direkt in Microsoft Excel, Google Sheets oder einen anderen kompatiblen Tabellenkalkulationseditor</strong> einzufügen. Zusätzlich können Sie die <strong>fertige Tabellendatei</strong> (im CSV- oder XLSX-Format) auf Ihren Computer herunterladen, um sie offline zu verwenden.",
             q4: "Muss ich mich registrieren oder Software installieren, um es zu nutzen?",
-            a4: "Nein, absolut nicht! Unser Bluttest-Konverter funktioniert vollständig online. Sie müssen kein Konto erstellen, sich registrieren, herunterladen oder zusätzliche Software installieren. Besuchen Sie einfach die Seite, laden Sie Ihre Datei hoch und starten Sie die Konvertierung!",
+            a4: "Nein – nicht zum Konvertieren Ihrer Ergebnisse. Unser Bluttest-Konverter funktioniert vollständig online: Besuchen Sie einfach die Seite, laden Sie Ihre Datei hoch und starten Sie die Konvertierung. Ein Konto benötigen Sie nur, wenn Sie Ihre Ergebnisse speichern und später unter Meine Tests abrufen möchten.",
             q5: "Wie oft aktualisieren Sie Ihr Tool?",
             a5: "Wir arbeiten ständig daran, unseren Konverter zu verbessern, neue Formate zu unterstützen, die Erkennungsgenauigkeit zu erhöhen und die Funktionalität zu erweitern. Updates werden regelmäßig veröffentlicht, um die beste Erfahrung für unsere Benutzer zu gewährleisten.",
             q6: "Was, wenn mein Dokument mehrere Tabellen oder gemischte Inhalte hat?",
@@ -1108,6 +1122,7 @@ const translations = {
             description: "Convertissez instantanément les résultats de tests sanguins (PDF, Word, photos) en feuilles de calcul claires et modifiables. Copiez facilement vers Excel/Google Sheets ou téléchargez vos données.",
             privacyNote: "Vos données médicales sont privées. <strong>Votre fichier n'est jamais stocké sur nos serveurs</strong> — il est traité en mémoire et supprimé immédiatement. Le contenu du fichier est envoyé à Google Gemini AI pour extraction.",
             googleCloudVision: "Nous utilisons <strong>Google Gemini AI</strong> pour extraire et interpréter vos résultats. Le contenu de votre fichier est transmis aux serveurs de Google pour traitement et est soumis à la politique de confidentialité de Google. Nous ne stockons pas de fichiers sur nos propres serveurs.",
+            learnMore: "En savoir plus sur la protection de vos données",
         },
         fileUpload: {
             fileAdded: "Fichier {fileName} ajouté !",
@@ -1156,7 +1171,7 @@ const translations = {
             formatSupport: "Large prise en charge des formats : Travaillez avec des fichiers aux formats PDF, DOCX et des formats d'image courants (JPG, PNG, WebP), rendant notre outil polyvalent pour tout document médical.",
             convenientExport: "Exportation pratique pour l'analyse : Obtenez un tableau prêt à l'emploi qui peut être facilement copié et collé dans Excel, Google Sheets ou téléchargé directement. C'est idéal pour suivre la dynamique de votre santé.",
             dataSecurity: "Transparence des données : Votre fichier n'est jamais stocké sur nos serveurs. Le contenu du fichier est traité par Google Gemini AI et supprimé immédiatement. Les résultats sauvegardés sont stockés en toute sécurité dans votre compte privé.",
-            freeOnline: "Entièrement gratuit et en ligne : Utilisez notre convertisseur à tout moment, n'importe où, sans inscription, téléchargement ou installation de logiciel."
+            freeOnline: "Entièrement gratuit et en ligne : Convertissez vos résultats à tout moment, n'importe où — sans inscription, téléchargement ni installation de logiciel. La création d'un compte gratuit est facultative, uniquement pour enregistrer vos résultats et les retrouver plus tard dans Mes analyses."
         },
         faq: {
             title: "Foire aux questions (FAQ)",
@@ -1167,7 +1182,7 @@ const translations = {
             q3: "Sous quel format recevrai-je le tableau après la conversion ?",
             a3: "Après une conversion réussie, vous verrez un tableau clair et structuré directement sur la page. Vous aurez plusieurs options pratiques : vous pouvez facilement <strong>copier l'intégralité du tableau</strong> en un seul clic pour le coller <strong>directement dans Microsoft Excel, Google Sheets ou tout autre éditeur de feuille de calcul compatible</strong>. De plus, vous pouvez <strong>télécharger le fichier de tableau prêt à l'emploi</strong> sur votre ordinateur au format CSV (valeurs séparées par des virgules) ou XLSX (pour Excel).",
             q4: "Dois-je m'inscrire ou installer un logiciel pour l'utiliser ?",
-            a4: "Non, absolument pas ! Notre convertisseur de tests sanguins fonctionne entièrement en ligne. Vous n'avez pas besoin de créer un compte, de vous inscrire, de télécharger ou d'installer un logiciel supplémentaire. Il suffit de visiter la page, de télécharger votre fichier et de commencer la conversion !",
+            a4: "Non, pas pour convertir vos résultats. Notre convertisseur de tests sanguins fonctionne entièrement en ligne : il suffit de visiter la page, de télécharger votre fichier et de lancer la conversion. Un compte n'est nécessaire que si vous souhaitez enregistrer vos résultats et y accéder plus tard depuis Mes analyses.",
             q5: "À quelle fréquence mettez-vous à jour votre outil ?",
             a5: "Nous travaillons constamment à l'amélioration de notre convertisseur, en ajoutant la prise en charge de nouveaux formats, en augmentant la précision de la reconnaissance et en étendant les fonctionnalités. Les mises à jour sont publiées régulièrement pour garantir la meilleure expérience à nos utilisateurs.",
             q6: "Que se passe-t-il si mon document contient plusieurs tableaux ou du contenu mixte ?",
@@ -1475,6 +1490,7 @@ const translations = {
             description: "Миттєво перетворюйте результати аналізів крові (PDF, Word, фото) на чіткі, редаговані електронні таблиці. Легко копіюйте в Excel/Google Таблиці або завантажуйте свої дані.",
             privacyNote: "Ваші медичні дані конфіденційні. <strong>Ваш файл ніколи не зберігається на наших серверах</strong> — він обробляється в оперативній пам'яті та негайно видаляється. Вміст файлу передається Google Gemini AI для вилучення даних.",
             googleCloudVision: "Ми використовуємо <strong>Google Gemini AI</strong> для вилучення та інтерпретації ваших результатів. Вміст вашого файлу передається на сервери Google для обробки та підпадає під політику конфіденційності Google. Ми не зберігаємо файли на власних серверах.",
+            learnMore: "Дізнатися більше про захист ваших даних",
         },
         fileUpload: {
             fileAdded: "Файл {fileName} додано!",
@@ -1523,7 +1539,7 @@ const translations = {
             formatSupport: "Широка підтримка форматів: Працюйте з файлами у форматах PDF, DOCX та популярних форматах зображень (JPG, PNG, WebP), що робить наш інструмент універсальним для будь-якого медичного документа.",
             convenientExport: "Зручний експорт для аналізу: Отримайте готову до використання таблицю, яку можна легко скопіювати та вставити в Excel, Google Таблиці або завантажити безпосередньо. Це ідеально підходить для моніторингу динаміки вашого здоров'я.",
             dataSecurity: "Прозорість даних: Ваш файл ніколи не зберігається на наших серверах. Вміст файлу обробляється Google Gemini AI та негайно видаляється. Збережені результати надійно зберігаються у вашому приватному обліковому записі.",
-            freeOnline: "Повністю безкоштовно та онлайн: Використовуйте наш конвертер будь-коли та будь-де без необхідності реєстрації, завантажень чи встановлення програмного забезпечення."
+            freeOnline: "Повністю безкоштовно та онлайн: Конвертуйте свої результати будь-коли й будь-де — без реєстрації, завантажень чи встановлення програмного забезпечення. Створення безкоштовного облікового запису — опційне і потрібне лише для збереження результатів і перегляду їх пізніше в розділі Мої аналізи."
         },
         faq: {
             title: "Часті запитання (FAQ)",
@@ -1534,7 +1550,7 @@ const translations = {
             q3: "У якому форматі я отримаю таблицю після конвертації?",
             a3: "Після успішної конвертації ви побачите чітку, структуровану таблицю безпосередньо на сторінці. У вас буде кілька зручних варіантів: ви можете легко <strong>скопіювати всю таблицю</strong> одним натисканням, щоб вставити її <strong>безпосередньо в Microsoft Excel, Google Таблиці або будь-який інший сумісний редактор електронних таблиць</strong>. Крім того, ви можете <strong>завантажити готовий файл таблиці</strong> на свій комп'ютер у форматі CSV (значення, розділені комами) або XLSX (для Excel).",
             q4: "Чи потрібно реєструватися або встановлювати програмне забезпечення для використання?",
-            a4: "Ні, абсолютно ні! Наш конвертер аналізів крові працює повністю онлайн. Вам не потрібно створювати обліковий запис, реєструватися, завантажувати або встановлювати додаткове програмне забезпечення. Просто відвідайте сторінку, завантажте свій файл і почніть конвертацію!",
+            a4: "Ні — не для конвертації результатів. Наш конвертер аналізів крові працює повністю онлайн: просто відвідайте сторінку, завантажте файл і почніть конвертацію. Обліковий запис потрібен лише якщо ви хочете зберегти результати та отримати доступ до них пізніше в розділі Мої аналізи.",
             q5: "Як часто ви оновлюєте свій інструмент?",
             a5: "Ми постійно працюємо над покращенням нашого конвертера, додаючи підтримку нових форматів, підвищуючи точність розпізнавання та розширюючи функціонал. Оновлення випускаються регулярно, щоб забезпечити найкращий досвід для наших користувачів.",
             q6: "Що робити, якщо мій документ містить кілька таблиць або змішаний вміст?",
@@ -1842,6 +1858,7 @@ const translations = {
             description: "血液検査結果（PDF、Word、写真）を瞬時に明確で編集可能なスプレッドシートに変換します。ExcelやGoogleスプレッドシートに簡単にコピーしたり、データをダウンロードできます。",
             privacyNote: "あなたの医療データはプライベートです。<strong>ファイルは当社のサーバーに保存されません</strong> — メモリ内で処理され、すぐに破棄されます。ファイルの内容はデータ抽出のためGoogle Gemini AIに送信されます。",
             googleCloudVision: "結果の抽出と解釈には<strong>Google Gemini AI</strong>を使用しています。ファイルの内容は処理のためGoogleのサーバーに送信され、Googleのプライバシーポリシーが適用されます。当社のサーバーにファイルを保存することはありません。",
+            learnMore: "データ保護について詳しく見る",
         },
         fileUpload: {
             fileAdded: "ファイル{fileName}が追加されました！",
@@ -1890,7 +1907,7 @@ const translations = {
             formatSupport: "幅広い形式サポート：PDF、DOCX、および一般的な画像形式（JPG、PNG、WebP）で動作し、あらゆる医療ドキュメントに対応する多用途のツールです。",
             convenientExport: "分析に便利なエクスポート：Excel、Googleスプレッドシートに簡単にコピー＆ペーストしたり、直接ダウンロードできるすぐに使用可能なテーブルを取得します。これは健康状態のモニタリングに最適です。",
             dataSecurity: "データの透明性：ファイルは当社のサーバーに保存されません。ファイルの内容はGoogle Gemini AIで処理後すぐに破棄されます。保存された結果はプライベートアカウントに安全に保管されます。",
-            freeOnline: "完全無料＆オンライン：登録、ダウンロード、ソフトウェアのインストールなしで、いつでもどこでもコンバーターを使用できます。"
+            freeOnline: "完全無料＆オンライン：登録、ダウンロード、ソフトウェアのインストールなしで、いつでもどこでも結果を変換できます。無料アカウントの作成は任意で、結果を保存して後で「マイテスト」で確認したい場合のみ必要です。"
         },
         faq: {
             title: "よくある質問（FAQ）",
@@ -1901,7 +1918,7 @@ const translations = {
             q3: "変換後、テーブルはどのような形式で受け取れますか？",
             a3: "変換が成功すると、ページ上に明確で構造化されたテーブルが直接表示されます。いくつかの便利なオプションがあります：ワンクリックで簡単に<strong>テーブル全体をコピー</strong>して、<strong>Microsoft Excel、Googleスプレッドシート、またはその他の互換性のあるスプレッドシートエディタに直接貼り付ける</strong>ことができます。また、<strong>すぐに使用できるテーブルファイル</strong>をCSV（カンマ区切り値）またはXLSX（Excel用）形式でコンピューターにダウンロードできます。",
             q4: "使用するために登録またはソフトウェアをインストールする必要がありますか？",
-            a4: "いいえ、まったく必要ありません！当社の血液検査コンバーターは完全にオンラインで動作します。アカウントの作成、登録、追加のソフトウェアのダウンロードやインストールは不要です。ページにアクセスし、ファイルをアップロードして変換を開始するだけです！",
+            a4: "いいえ、結果を変換するためには不要です。当社の血液検査コンバーターは完全にオンラインで動作します。ページにアクセスし、ファイルをアップロードして変換を開始するだけです。アカウントが必要になるのは、結果を保存して後で「マイテスト」から確認したい場合のみです。",
             q5: "ツールの更新頻度はどのくらいですか？",
             a5: "当社はコンバーターの改善に常に取り組んでおり、新しい形式のサポート、認識精度の向上、機能の拡張を追加しています。ユーザーにとって最高の体験を保証するために、定期的に更新がリリースされます。",
             q6: "ドキュメントに複数のテーブルや混合コンテンツがある場合はどうなりますか？",
@@ -2209,7 +2226,8 @@ zh: {
             description: "即时将血液检测结果（PDF、Word、照片）转换为清晰、可编辑的电子表格。轻松复制到Excel/Google Sheets或下载您的数据。支持PDF、DOCX、JPG、PNG、WebP。",
             privacyNote: "您的医疗数据是私密的。**您的文件永远不会存储在我们的服务器上** — 在内存中处理后立即丢弃。文件内容将发送至Google Gemini AI进行提取。",
             googleCloudVision: "我们使用<strong>Google Gemini AI</strong>来提取和解释您的结果。您的文件内容将传输到Google的服务器进行处理，并受Google隐私政策约束。我们不会在自己的服务器上存储任何文件。",
-            privacyPolicyLink: "隐私政策"
+            privacyPolicyLink: "隐私政策",
+            learnMore: "了解我们如何保护您的数据"
         },
         fileUpload: {
             fileAdded:"文件{fileName}已添加！",
@@ -2258,7 +2276,7 @@ zh: {
             formatSupport: "广泛的格式支持：支持PDF、DOCX和流行的图像格式（JPG、PNG、WebP）文件，使我们的工具适用于任何医疗文档。",
             convenientExport: "方便的导出分析：获取一个可以轻松复制并粘贴到Excel、Google Sheets或直接下载的现成表格。这对于监测您的健康动态非常理想。",
             dataSecurity: "数据透明度：您的文件永远不会存储在我们的服务器上。文件内容由Google Gemini AI处理后立即丢弃。保存的结果安全存储在您的私人账户中。",
-            freeOnline: "完全免费和在线：无需注册、下载或安装软件，随时随地使用我们的转换器。"
+            freeOnline: "完全免费和在线：随时随地转换您的结果，无需注册、下载或安装软件。创建免费账户是可选的，仅在您想保存结果并稍后在「我的检测」中查看时才需要。"
         },
         faq: {
             title: "常见问题 (FAQ)",
@@ -2269,7 +2287,7 @@ zh: {
             q3: "转换后我将以什么格式接收表格？",
             a3: "成功转换后，您将在页面上直接看到一个清晰、结构化的表格。您将有几种便捷的选择：您可以轻松**一键复制整个表格**，并将其**直接粘贴到Microsoft Excel、Google Sheets或任何其他兼容的电子表格编辑器中**。此外，您可以将**可用的表格文件**下载到您的计算机，格式为CSV（逗号分隔值）或XLSX（适用于Excel）。",
             q4: "我需要注册或安装软件才能使用吗？",
-            a4: "不，绝对不需要！我们的血液检测转换器完全在线运行。您无需创建帐户、注册、下载或安装任何额外的软件。只需访问页面，上传您的文件，即可开始转换！",
+            a4: "不需要——转换结果不需要账户。我们的血液检测转换器完全在线运行：只需访问页面，上传文件，即可开始转换。只有当您想保存结果并稍后从「我的检测」中查看时，才需要创建账户。",
             q5: "您多久更新一次工具？",
             a5: "我们不断致力于改进转换器，增加对新格式的支持，提高识别准确性，并扩展功能。我们会定期发布更新，以确保为用户提供最佳体验。",
             q6: "如果我的文档有多个表格或混合内容怎么办？",

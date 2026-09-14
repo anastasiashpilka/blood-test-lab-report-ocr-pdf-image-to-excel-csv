@@ -39,17 +39,17 @@ export default function HomePage() {
           "blood test converter, PDF to Excel, medical data to spreadsheet, convert blood test results, health data analysis"
         } />
         <meta name="robots" content="index, follow" />
-        <meta name="author" content="TableConverter Team" />
+        <meta name="author" content="Online Blood Test Converter" />
 
         <meta property="og:title" content={translations[currentLang]?.header?.title || translations.en.header.title} />
         <meta property="og:description" content={translations[currentLang]?.header?.description || translations.en.header.description} />
         <meta property="og:type" content="website" />
         <meta property="og:url" content={canonicalUrl} />
-        <meta property="og:image" content="/favicon.ico" />
+        <meta property="og:image" content={`${baseUrl}favicon-96x96.png`} />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={translations[currentLang]?.header?.title || translations.en.header.title} />
         <meta name="twitter:description" content={translations[currentLang]?.header?.description || translations.en.header.description} />
-        <meta name="twitter:image" content="/favicon.ico" />
+        <meta name="twitter:image" content={`${baseUrl}favicon-96x96.png`} />
 
         <link rel="icon" type="image/png" href="/favicon.ico" />
 

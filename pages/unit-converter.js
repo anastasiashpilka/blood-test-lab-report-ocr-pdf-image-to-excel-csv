@@ -78,7 +78,7 @@ const UnitConverter = ({ allBiomarkers }) => {
 
     const possibleTargetUnits = useMemo(() => {
         if (!selectedBiomarker || !sourceUnit) return allPossibleUnitsForBiomarker;
-        let validTargetUnits = new Set([sourceUnit]);
+        const validTargetUnits = new Set([sourceUnit]);
         allPossibleUnitsForBiomarker.forEach(targetU => {
             if (targetU !== sourceUnit && convertUnit(selectedBiomarker, 1, sourceUnit, targetU) !== null) {
                 validTargetUnits.add(targetU);
@@ -502,7 +502,7 @@ const UnitConverter = ({ allBiomarkers }) => {
                     <div key={index} className="mb-4 bg-indigo-50 rounded-lg border border-indigo-200">
                         <button
                             onClick={() => toggleFaq(index)}
-                            className="w-full text-left p-4 flex justify-between items-center text-xl font-semibold text-indigo-700 focus:outline-none"
+                            className="w-full text-left p-4 flex justify-between items-center text-xl font-semibold text-gray-800 focus:outline-none"
                             aria-expanded={openFaqIndex === index}
                             aria-controls={`faq-answer-${index}`}
                         >

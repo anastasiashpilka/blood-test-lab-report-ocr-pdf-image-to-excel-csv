@@ -6,26 +6,20 @@ import { Loader, ArrowLeft, Copy, Download, CheckCircle, Microscope, ChevronDown
 import { useAuth } from '../../contexts/AuthContext';
 import { getTest, updateTestInterpretation, findResultIdx, findRangeIdx } from '../../firebase/tests';
 import { findBiomarkerId } from '../../lib/biomarkerLookup';
+import { isOutOfRange as checkOutOfRange, parseReferenceRange } from '../../lib/anomalyDetection';
 import translations from '../../translations';
 import { useLanguage } from '../../contexts/LanguageContext';
 
+// Thin wrapper over the shared range parser: this one needs a *finite*
+// visual span even for open-ended ranges ("> 5" has no real upper bound,
+// but the bar chart still needs something to draw), so it synthesizes one.
 function parseRangeStr(rangeStr) {
-  if (!rangeStr) return null;
-  const s = String(rangeStr).trim();
-  const opMatch = s.match(/^([<>]=?)\s*([\d.,]+)/);
-  if (opMatch) {
-    const op = opMatch[1];
-    const val = parseFloat(opMatch[2].replace(',', '.'));
-    if (isNaN(val)) return null;
-    if (op === '<' || op === '<=') return { normMin: 0, normMax: val };
-    if (op === '>' || op === '>=') return { normMin: val, normMax: val * 2.5 };
-  }
-  const parts = s.split('-').map((p) => p.trim());
-  if (parts.length === 2) {
-    const min = parseFloat(parts[0].replace(',', '.'));
-    const max = parseFloat(parts[1].replace(',', '.'));
-    if (!isNaN(min) && !isNaN(max) && min <= max) return { normMin: min, normMax: max };
-  }
+  const bounds = parseReferenceRange(rangeStr);
+  if (!bounds) return null;
+  const { min, max } = bounds;
+  if (min !== null && max !== null) return { normMin: min, normMax: max };
+  if (max !== null) return { normMin: 0, normMax: max }; // "< 5" / "up to 5"
+  if (min !== null) return { normMin: min, normMax: min * 2.5 }; // "> 5" / "at least 5"
   return null;
 }
 
@@ -148,8 +142,14 @@ export default function TestDetailPage() {
     }
     if (!testId) return;
 
+    // Guards against a response for a test the user has since navigated
+    // away from resolving late and applying its state (or, worse, its
+    // Firestore interpretation write) to the wrong test id.
+    let ignore = false;
+
     getTest(currentUser.uid, testId)
       .then((data) => {
+        if (ignore) return;
         if (!data) { setNotFound(true); return; }
         setTest(data);
         if (data.interpretationSummary) {
@@ -167,16 +167,23 @@ export default function TestDetailPage() {
           })
             .then((r) => r.json())
             .then((parsed) => {
-              if (parsed.summary) {
-                setInterpretation(parsed);
-                updateTestInterpretation(currentUser.uid, testId, JSON.stringify(parsed)).catch(() => {});
-              }
+              if (ignore || !parsed.summary) return;
+              setInterpretation(parsed);
+              updateTestInterpretation(currentUser.uid, testId, JSON.stringify(parsed)).catch(() => {});
             })
             .catch(() => {})
-            .finally(() => setInterpretationLoading(false));
+            .finally(() => {
+              if (!ignore) setInterpretationLoading(false);
+            });
         }
       })
-      .finally(() => setLoading(false));
+      .finally(() => {
+        if (!ignore) setLoading(false);
+      });
+
+    return () => {
+      ignore = true;
+    };
   }, [currentUser, testId]);
 
   useEffect(() => {
@@ -194,31 +201,7 @@ export default function TestDetailPage() {
       .catch(() => setCompareTest(null));
   }, [router.query.compare, currentUser]);
 
-  const isOutOfRange = (result, range) => {
-    if (!result || !range) return false;
-    try {
-      const val = parseFloat(String(result).replace(',', '.'));
-      if (isNaN(val)) return false;
-      const rangeStr = String(range).trim();
-      const operatorMatch = rangeStr.match(/^([<>]=?)\s*(.+)/);
-      if (operatorMatch) {
-        const op = operatorMatch[1];
-        const limit = parseFloat(operatorMatch[2].replace(',', '.'));
-        if (isNaN(limit)) return false;
-        if (op === '<')  return val >= limit;
-        if (op === '<=') return val > limit;
-        if (op === '>')  return val <= limit;
-        if (op === '>=') return val < limit;
-      }
-      const parts = rangeStr.split('-').map((p) => p.trim());
-      if (parts.length === 2) {
-        const min = parseFloat(parts[0].replace(',', '.'));
-        const max = parseFloat(parts[1].replace(',', '.'));
-        if (!isNaN(min) && !isNaN(max)) return val < min || val > max;
-      }
-    } catch { return false; }
-    return false;
-  };
+  const isOutOfRange = checkOutOfRange;
 
   const formatDate = (ts) => {
     if (!ts) return '';
